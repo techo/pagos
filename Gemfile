@@ -6,9 +6,6 @@ gem 'rails', '4.0.2'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
 
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
-
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -33,6 +30,12 @@ gem 'devise'
 group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
+end
+
+gem 'less-rails'
+gem 'twitter-bootstrap-rails'
+
+group :assets do
 end
 
 group :doc do
