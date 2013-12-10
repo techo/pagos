@@ -46,8 +46,12 @@
           </a>
           <%= link_to "Pagos", root_path, class: 'brand' %>
           <div class="container nav-collapse">
-            <ul class="nav">
-              <li><%= link_to "Registrarse", new_user_registration_path unless current_user %></li>
+            <ul class="nav pull-right">
+              <% unless current_user %>
+                <li><%= link_to "Registrarse", new_user_registration_path %></li>
+                <li><%= link_to "Entrar", new_user_session_path %></li>
+              <% end %>
+              <li><%= link_to "Salir", destroy_user_session_path, method: 'delete'  if current_user %></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
