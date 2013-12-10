@@ -10,6 +10,8 @@
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
 
+<%= link_to "Registrarse", new_user_registration_path unless current_user %>
+
 <%= yield %>
 
 </body>
