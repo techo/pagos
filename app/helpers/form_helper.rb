@@ -1,8 +1,7 @@
-module DeviseHelper
-  def devise_error_messages!
+module FormHelper
+  def form_error_messages
     return '' if resource.errors.empty?
 
-    p resource.errors
     messages = resource.errors.messages.map { |field, msg| content_tag(:li, msg.join(', ')) }.join
 
     html = <<-HTML
