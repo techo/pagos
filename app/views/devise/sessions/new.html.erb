@@ -1,15 +1,23 @@
-<h2>Entrar</h2>
+<h2>Inicio de sesión</h2>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :email, "Correo electronico"%><br />
-  <%= f.email_field :email, :autofocus => true %></div>
+  <div class="control-group">
+    <%= f.label :email, 'Correo electrónico:' %>
+    <div clas="controls">
+      <%= f.email_field :email, :autofocus => true %>
+    </div>
+  </div>
 
-  <div><%= f.label :password, "Contraseña" %><br />
-  <%= f.password_field :password %></div>
+  <div class="control-group">
+    <%= f.label :password, 'Contraseña:' %>
+    <div clas="controls">
+      <%= f.password_field :password %>
+      <% if devise_mapping.rememberable? -%>
+        <div><%= f.check_box :remember_me %> <%= f.label :remember_me, 'Recordarme', class: 'checkbox inline' %></div>
+      <% end -%>
+    </div>
+  </div>
 
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me, "Recuerdame" %></div>
-  <% end -%>
 
-  <div><%= f.submit "Entrar" %></div>
+  <%= f.submit "Entrar", class: 'btn btn-primary' %>
 <% end %>
