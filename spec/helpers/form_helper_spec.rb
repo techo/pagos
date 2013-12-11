@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe FormHelper do
-  include Devise::TestHelpers
-
   describe ".form_error_messages" do
     it "creates a list of error messages" do
       user = User.new
