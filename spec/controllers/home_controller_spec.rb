@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe HomeController do
-  include Devise::TestHelpers
-
   describe 'GET #index' do
     it 'redirects to edit_users if user can manage users' do
       @request.env["devise.mapping"] = Devise.mappings[:user]
