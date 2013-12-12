@@ -14,4 +14,8 @@ class User < ActiveRecord::Base
   validates :email, presence: { message: 'El campo Correo electrónico es mandatorio' },
                     uniqueness: { case_insensitive: true, message: 'El Correo electrónico ingresado ya está registrado' },
                     format: { with: Devise.email_regexp, message: "Debe ingresar una dirección de correo válida", if: "email.present?" }
+
+  def can_manage_users?
+    role == "administrator"
+  end
 end

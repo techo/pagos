@@ -4,7 +4,6 @@ require 'spec_helper'
 describe User do
 
   describe 'validations' do
-
     EMAIL_FORMAT_ERROR_MSG = 'Debe ingresar una dirección de correo válida'
     PASSWORD_LENGTH_ERROR_MSG = 'El campo Contraseña debe tener al menos 10 caracteres de longitud'
 
@@ -32,6 +31,18 @@ describe User do
       user = User.new
       user.valid?
       user.errors.messages[:password].should_not include PASSWORD_LENGTH_ERROR_MSG
+    end
+  end
+
+  describe '#can_manage_users?' do
+    it 'is true if the user is an administrator' do
+      user = FactoryGirl.build(:administrator_user)
+      user.can_manage_users?.should be_true
+    end
+
+    it 'is false if the user is a volunteer' do
+      user = FactoryGirl.build(:volunteer_user)
+      user.can_manage_users?.should be_false
     end
   end
 end
