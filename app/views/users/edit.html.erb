@@ -1,0 +1,17 @@
+<%= form_for :user, url: {action: 'update'} do |form| %>
+
+  <table>
+    <% @users.each do |user| %>
+      <%= fields_for "user[]", user do |user_fields| %>
+        <tr>
+          <td><%= "#{user.first_name} #{user.last_name}" %></td>
+          <td><%= "#{user.email}" %></td>
+          <td><%= user_fields.collection_select :role, User::ROLES, :to_s, :humanize, prompt: true %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+
+  <%= submit_tag "Gravar" %>
+
+<% end %>

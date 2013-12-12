@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   validates :role, inclusion: { in: ROLES, message: 'No es un rol válido' }, allow_nil: true
   validates :first_name, presence: { message: "El campo Nombre es mandatorio" }
   validates :last_name, presence: { message: "El campo Apellido es mandatorio" }
-  validates :password, presence: { message: "El campo Contraseña es mandatorio" },
+  validates :password, presence: { message: "El campo Contraseña es mandatorio" }, on: :create,
                        confirmation: { message: "Las contraseñas no coinciden"},
                        length: { minimum: 10, message: 'El campo Contraseña debe tener al menos 10 caracteres de longitud', if: "password.present?"}
   validates :email, presence: { message: 'El campo Correo electrónico es mandatorio' },

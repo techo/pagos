@@ -15,6 +15,7 @@ describe User do
     it { should validate_presence_of(:password).with_message('El campo Contraseña es mandatorio') }
     it { should ensure_length_of(:password).is_at_least(10).with_message(PASSWORD_LENGTH_ERROR_MSG) }
     it { should validate_confirmation_of(:password).with_message('Las contraseñas no coinciden') }
+    it { should validate_presence_of(:password).on(:create).with_message('El campo Contraseña es mandatorio') }
     it { should_not allow_value('test@test').for(:email).with_message(EMAIL_FORMAT_ERROR_MSG) }
     it { should_not allow_value('fake_role').for(:role).with_message('No es un rol válido') }
     it { should allow_value('volunteer').for(:role) }
