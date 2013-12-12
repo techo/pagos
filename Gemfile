@@ -30,6 +30,7 @@ gem 'devise'
 group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
 end
 
 gem 'less-rails'
