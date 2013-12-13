@@ -1,6 +1,9 @@
 <%= form_for :user, url: {action: 'update'} do |form| %>
 
   <table>
+    <th>Nombre</th>
+    <th>Correo electrónico</th>
+    <th>Perfil</th>
     <% @users.each do |user| %>
       <%= fields_for "user[]", user do |user_fields| %>
         <tr>
@@ -12,6 +15,6 @@
     <% end %>
   </table>
 
-  <%= submit_tag "Gravar" %>
+  <%= submit_tag "Grabar" %>
 
 <% end %>
