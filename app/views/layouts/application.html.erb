@@ -53,8 +53,8 @@
           <div class="container nav-collapse">
             <ul class="nav pull-right">
               <% unless current_user %>
-                <li><%= link_to "Registrarse", new_user_registration_path %></li>
-                <li><%= link_to "Entrar", new_user_session_path %></li>
+                <li><%= link_to "Registrarse", new_user_registration_path, class: 'novecento' %></li>
+                <li><%= link_to "Entrar", new_user_session_path, class: 'novecento' %></li>
               <% end %>
               <li><%= link_to "Salir", destroy_user_session_path, method: 'delete'  if current_user %></li>
             </ul>
