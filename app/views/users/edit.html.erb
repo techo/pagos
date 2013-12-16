@@ -1,9 +1,14 @@
 <%= form_for :user, url: {action: 'update'} do |form| %>
 
-  <table>
-    <th>Nombre</th>
-    <th>Correo electrónico</th>
-    <th>Perfil</th>
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo electrónico</th>
+        <th>Perfil</th>
+      </tr>
+    </thead>
+    <tbody>
     <% @users.each do |user| %>
       <%= fields_for "user[]", user do |user_fields| %>
         <tr>
@@ -13,8 +18,9 @@
         </tr>
       <% end %>
     <% end %>
+    </tbody>
   </table>
 
-  <%= submit_tag "Grabar" %>
+  <%= submit_tag "Grabar", class: 'btn btn-primary' %>
 
 <% end %>
