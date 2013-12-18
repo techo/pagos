@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131212154813) do
+ActiveRecord::Schema.define(version: 20131218171924) do
+
+  create_table "payments", force: true do |t|
+    t.integer  "family_id"
+    t.decimal  "amount",    precision: 8, scale: 2
+    t.datetime "date"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
