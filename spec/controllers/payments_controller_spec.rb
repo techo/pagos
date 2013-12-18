@@ -1,15 +1,12 @@
 require 'spec_helper'
 
 describe PaymentsController do
-  describe "GET new" do
-    it "should assign a payment instance to payment" do
-      get :new
-      assigns(:payment).should be_an_instance_of Payment
-    end
-
-    it "should assign the family id" do
-      get :new, family_id: "1"
-      assigns(:family_id).should == "1"
+  describe "GET index" do
+    it "should assign the families from the Pilote API" do
+      pilote_response = { id_familia: "1", jefe_de_hogar: "Juan" }
+      PiloteHelper.stub(:get_families).and_return(pilote_response)
+      get :index
+      assigns(:families).should == pilote_response
     end
   end
 
@@ -20,14 +17,19 @@ describe PaymentsController do
       }.to change{ Payment.count }.by(1)
     end
 
-    it "should redirect to home on success" do
+    it "should redirect to payments on success" do
       post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
-      response.should redirect_to root_path
+      response.should redirect_to payments_path
     end
 
-    it "should not redirect for invalid Payment" do
+    it "re-renders the index action for invalid Payment" do
       post :create, payment: { family_id:1, amount: "" }
-      response.should_not redirect_to root_path
+      response.should render_template("index")
+    end
+
+    it "assigns payment if Payment is invalid" do
+      post :create, payment: { family_id:1, amount: "" }
+      assigns(:payment).should_not be_nil
     end
   end
 end

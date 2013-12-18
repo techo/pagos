@@ -1,16 +1,17 @@
 class PaymentsController < ApplicationController
 
-  def new
-    @payment = Payment.new
-    @family_id = params[:family_id]
+  def index
+    @families = PiloteHelper.get_families
   end
 
   def create
     payment = Payment.new(payment_params)
     if payment.save
-      redirect_to root_path
+      redirect_to payments_path
     else
-      render action: "new"
+      @families = PiloteHelper.get_families
+      @payment = payment
+      render action: "index"
     end
   end
 
