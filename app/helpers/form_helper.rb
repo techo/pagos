@@ -1,8 +1,9 @@
 module FormHelper
-  def form_error_messages
-    return '' if resource.errors.empty?
+  def form_error_messages(form_resource = nil)
+    resource_with_errors = form_resource ? form_resource : resource
+    return '' if resource_with_errors.errors.empty?
 
-    messages = resource.errors.messages.map { |field, msg| content_tag(:li, msg.join(', ')) }.join
+    messages = resource_with_errors.errors.messages.map { |field, msg| content_tag(:li, msg.join(', ')) }.join
 
     html = <<-HTML
     <div class="alert alert-error alert-block">
