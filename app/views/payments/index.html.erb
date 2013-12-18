@@ -1,0 +1,7 @@
+<% if @payment && @payment.errors.any? %>
+    <%= form_error_messages @payment %>
+<% end %>
+
+<% @families.each do |family| %>
+  <%= render partial: "payment_form", locals: { family: family } %>
+<% end %>

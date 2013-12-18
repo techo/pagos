@@ -1,0 +1,10 @@
+<%= form_for :payment, method: "post" do |f| %>
+  <%= family[:jefeHogar] %>
+  <div class="family-drawer">
+    <%= f.label :amount, "Monto: ", class: "pull-left" %>
+    <%= f.text_field :amount %>
+    <%= f.hidden_field(:family_id, value: family[:idFamilia]) %>
+    <%= f.hidden_field(:date, value: DateTime.now) %>
+    <%= f.submit "Confirma" %>
+  </div>
+<% end %>
