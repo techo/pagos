@@ -45,5 +45,17 @@ describe User do
       user.can_manage_users?.should be_false
     end
   end
+
+  describe '#can_manage_payments?' do
+    it 'is true if the user is a volunteer' do
+      user = FactoryGirl.build(:volunteer_user)
+      user.can_manage_payments?.should be_true
+    end
+
+    it 'is false if the user is a administrator' do
+      user = FactoryGirl.build(:administrator_user)
+      user.can_manage_payments?.should be_false
+    end
+  end
 end
 

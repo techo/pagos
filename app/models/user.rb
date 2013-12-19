@@ -18,4 +18,8 @@ class User < ActiveRecord::Base
   def can_manage_users?
     role == "administrator"
   end
+  
+  def can_manage_payments?
+    role == "volunteer"
+  end
 end

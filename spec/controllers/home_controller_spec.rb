@@ -15,6 +15,13 @@ describe HomeController do
       get :index
       response.should_not redirect_to users_path
     end
+
+    it "redirects to payments if user can manage payments" do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in FactoryGirl.create(:volunteer_user)
+      get :index
+      response.should redirect_to payments_path
+    end
   end
 
 end
