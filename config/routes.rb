@@ -6,5 +6,5 @@ Pagos::Application.routes.draw do
   get 'users', to: 'users#edit'
   post 'update_users', to: 'users#update'
 
-  resources :payments, only: [ :new, :create ]
+  resources :payments, only: [ :index, :create ]
 end

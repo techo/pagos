@@ -22,6 +22,11 @@ describe PaymentsController do
       response.should redirect_to payments_path
     end
 
+    it "displays a flash message on success" do
+      post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
+      flash[:success].should == "El pago ha sido registrado!"
+    end
+
     it "re-renders the index action for invalid Payment" do
       post :create, payment: { family_id:1, amount: "" }
       response.should render_template("index")
