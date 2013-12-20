@@ -46,7 +46,7 @@ describe UsersController do
     end
 
     it "updates a user's role according to the parameters" do
-      user = User.create(id: 1, first_name: "R", last_name: "S", email: "r@s.com", password: "1234567890", password_confirmation: "1234567890", role: nil)
+      user = FactoryGirl.create(:user_without_role, email: "n@n.com")
 
       expect {
         post :update, { "user" => { "#{user.id}" => { "role" => "volunteer" } } }
