@@ -28,4 +28,6 @@ Pagos::Application.configure do
   config.assets.debug = true
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+
+  ENV["PILOTE_ROOT"] = "http://pilotes.ec:8888"
 end

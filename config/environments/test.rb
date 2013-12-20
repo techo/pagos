@@ -33,4 +33,6 @@ Pagos::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  ENV["PILOTE_ROOT"] = "http://pilotes.ec:8888"
 end
