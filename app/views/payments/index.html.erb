@@ -1,6 +1,3 @@
-<% if @payment && @payment.errors.any? %>
-    <%= form_error_messages @payment %>
-<% end %>
 <div id="accordion" class="accordion" >
 <% @families.each do |family| %>
   <%= render partial: "payment_form", locals: { family: family } %>
