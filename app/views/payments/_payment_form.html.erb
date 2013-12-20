@@ -1,22 +1,20 @@
 <div class="accordion-group">
-  <div class="panel-heading">
-    <h4 class="panel-title">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-toggle="true" href="#collapse<%=family[:idFamilia]%>">
-        <%= family[:jefeHogar] %> 
-      </a>
-    </h4>
+  <div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-toggle="true" href="#collapse<%=family["id_de_familia"]%>">
+      <%= family["jefe_de_familia"] %>
+    </a>
   </div>
-  <div id="collapse<%=family[:idFamilia]%>"  class="family-drawer accordion-body collapse">
+  <div id="collapse<%=family["id_de_familia"]%>"  class="family-drawer accordion-body collapse">
     <div class="accordion-inner">
       <%= form_for :payment, method: "post", html: {class: "form-inline", rol: "form"}  do |f| %>
         <div class="form-group">
-        <%= f.label :amount, "Monto: ", class: "sr-only" %>
-        <%= f.text_field :amount, class: "input-mini form-control" %>
-        <%= f.hidden_field(:family_id, value: family[:idFamilia]) %>
-        <%= f.hidden_field(:date, value: DateTime.now) %>
-        <%= f.submit "Confirmar", class: "btn btn-primary" %>
-      </div>
-    <% end %>
+          <%= f.label :amount, "Monto: ", class: "sr-only" %>
+          <%= f.number_field(:amount, step: 0.01, min:0, class: "input-small form-control") %>
+          <%= f.hidden_field(:family_id, value: family["id_de_familia"]) %>
+          <%= f.hidden_field(:date, value: DateTime.now) %>
+          <%= f.submit "Confirmar", class: "btn btn-primary" %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
