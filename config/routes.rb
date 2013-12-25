@@ -7,4 +7,5 @@ Pagos::Application.routes.draw do
   post 'update_users', to: 'users#update'
 
   resources :payments, only: [ :index, :create ]
+  resources :geographies, only: [ :index ]
 end
