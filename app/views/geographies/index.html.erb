@@ -1,0 +1,13 @@
+<div class = "well span4">
+  <div>
+    <%= select_tag 'provincia',
+      options_for_select(@geographies.uniq{|g| g["provincia"]}
+                         .collect{ |g| [ encode_utf_8(g["provincia"]), g["provincia"]] }), {:class => 'span4'}%>
+   </div>
+
+    <div style="width:400px; overflow:auto">
+    <%= select_tag 'asentamiento', 
+      options_for_select(@geographies.select { |geography| geography["provincia"] != "asdfa" }
+                         .collect{|c| [encode_utf_8( c["provincia"]+ "-" + c["ciudad"] + "-" + c["asentamiento"]), c["idAsentamiento"]]}), {:multiple => :multiple, :size => 30, :class => 'span4'}%>
+   </div>
+ </div>
