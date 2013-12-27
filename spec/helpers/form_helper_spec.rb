@@ -35,5 +35,10 @@ describe FormHelper do
       text = helper.encode_utf_8 original_text
       text.should == "áó"
     end
+
+    it "should returns nil for nil" do
+      text = helper.encode_utf_8 nil
+      text.should == nil
+    end
   end
 end
