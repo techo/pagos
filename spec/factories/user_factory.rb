@@ -1,17 +1,17 @@
 FactoryGirl.define do
   factory :administrator_user, class: User do
-    first_name "Suzy"
-    last_name "V"
-    email "suzy@v.com"
+    first_name "SuzyA"
+    last_name "A"
+    email "suzyA@v.com"
     role "administrator"
     password "1234567890"
     password_confirmation "1234567890"
   end
 
   factory :volunteer_user, class: User do
-    first_name "Suzy"
+    first_name "SuzyV"
     last_name "V"
-    email "suzy@v.com"
+    email "suzyV@v.com"
     role "volunteer"
     password "1234567890"
     password_confirmation "1234567890"
@@ -19,10 +19,20 @@ FactoryGirl.define do
 
   factory :user_without_role, class: User do
     first_name "Suzy"
-    last_name "V"
-    email "suzy@v.com"
+    last_name "W"
+    email "suzyW@v.com"
     role nil
     password "1234567890"
     password_confirmation "1234567890"
   end
+  
+  factory :volunteer_additional_user, class: User do
+    first_name "JuanV"
+    last_name "V"
+    email "juanV@v.com"
+    role "volunteer"
+    password "1234567890"
+    password_confirmation "1234567890"
+  end
+
 end

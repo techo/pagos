@@ -56,6 +56,21 @@ describe User do
       user = FactoryGirl.build(:administrator_user)
       user.can_manage_payments?.should be_false
     end
+
+  end
+  
+  describe '#volunteers' do
+    let!(:volunteer_user) { FactoryGirl.build(:volunteer_user, first_name: "pedro") }
+    let!(:volunteer_additional_user) { FactoryGirl.build(:volunteer_additional_user, first_name: "maria") }
+    let!(:administrator_user) { FactoryGirl.build(:administrator_user, first_name: "juan") }
+
+    it 'orders by ascending name' do
+      volunteer_user.save
+      administrator_user.save
+      volunteer_additional_user.save
+      User.volunteers.should == [volunteer_user, volunteer_additional_user]
+    end
+
   end
 end
 
