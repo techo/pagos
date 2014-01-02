@@ -12,6 +12,14 @@ describe PiloteHelper do
       Net::HTTP.stub(:get).and_raise(Errno::ECONNREFUSED)
       PiloteHelper.get_families.should == JSON.parse("{}")
     end
+
+    it "should return sorted families by jefe_de_familia" do
+      uri = URI.parse(PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH)
+      families = '[{"jefe_de_familia":"Juan"}, {"jefe_de_familia":"Angel"}, {"jefe_de_familia":"Raul"}]'
+      sorted_families = '[{"jefe_de_familia":"Angel"}, {"jefe_de_familia":"Juan"}, {"jefe_de_familia":"Raul"}]'
+      Net::HTTP.should_receive(:get).with(uri).and_return(families)
+      PiloteHelper.get_families.should == JSON.parse(sorted_families)
+    end
   end
 
   describe "geographies" do

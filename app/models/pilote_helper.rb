@@ -5,7 +5,7 @@ class PiloteHelper
   def self.get_families
     begin
       response = Net::HTTP.get(URI.parse(GET_FAMILIES_FOR_GEOGRAPHIES_PATH ))
-      JSON.parse(response)
+      JSON.parse(response).sort_by { |family| family["jefe_de_familia"]}
     rescue
       JSON.parse("{}")
     end
