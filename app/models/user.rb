@@ -5,7 +5,6 @@ class User < ActiveRecord::Base
 
   ROLES = %w[volunteer administrator]
 
-  scope :volunteers, -> { where(role:"volunteer")}
 
   validates :role, inclusion: { in: ROLES, message: 'No es un rol válido' }, allow_nil: true
   validates :first_name, presence: { message: "El campo Nombre es mandatorio" }

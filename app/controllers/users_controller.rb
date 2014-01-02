@@ -5,6 +5,10 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
+  def volunteers
+    render :json => Volunteer.all
+  end
+
   def update
     User.update(params[:user].keys, update_role_params.values)
     redirect_to action: 'edit'

@@ -58,4 +58,21 @@ describe UsersController do
       response.should redirect_to action: 'edit'
     end
   end
+
+  describe "GET #get_volunteers" do
+    it "displays the list of registered volunteers" do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in FactoryGirl.create(:administrator_user)
+      
+      user = FactoryGirl.create(:volunteer_user)
+
+      users = [user.becomes(Volunteer)]
+      Volunteer.stub(:all).and_return(users)
+      users.stub_chain(:where).and_return(user) # Disgusting stub for current_user
+
+      get :volunteers
+
+      response.body.should == users.to_json
+    end
+  end
 end
