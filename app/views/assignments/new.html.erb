@@ -1,0 +1,31 @@
+# encoding: UTF-8
+<ul class="unstyled" data-bind='template: {name: "errorsTemplate", foreach: errors}'></ul>
+<script id="errorsTemplate" type="text/html">
+  <li>
+    <b><span data-bind="text: $data"/></b>
+  </li>
+</script>
+<span data-bind='text: flash'></span>
+
+<div class = "well span4">
+  <h4>Geografías</h4>
+  <select id="provinces" class="span4" data-bind="options: provinces(), value: selectedProvince"></select>
+  <select id="localities" size=20 class="span4" 
+    data-bind="options: localities(), optionsValue: 'idAsentamiento', value: selectedVillage,
+    optionsText:function (item) { return item['ciudad'] + ' - ' + item['asentamiento'] } ">
+  </select>
+</div>
+
+<div class = "well span4" style = "height: 440px">
+  <h4>Voluntarios</h4>
+  <div style="height:40px">
+    <input type="text" class="search-query span3" placeholder="Buscar&hellip;"><span class="fornav"><i class="icon-search"></i></span>
+    <div class="panel" style="border:2px solid #ccc; height: 349px; overflow-y: scroll; background-color:#ffffff">
+      <ul class="unstyled" data-bind="foreach: volunteers()">
+        <li>
+        <input type="checkbox" data-bind="value: id, event: { change: $root.createAction }"><span data-bind="text: [first_name() + ' ' + last_name()]"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
