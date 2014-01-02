@@ -2,8 +2,7 @@ class GeographiesController < ApplicationController
   before_action :verify_can_manage_users
 
   def index
-    @geographies = PiloteHelper.get_geographies
-    @volunteers = User.volunteers
+    render :json => PiloteHelper.get_geographies
   end
 
   def verify_can_manage_users

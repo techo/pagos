@@ -26,7 +26,7 @@ describe GeographiesController do
   end
 
   describe "GET index" do
-    it "should assign the geographies from the Pilote API" do
+    it "should return geographies from the Pilote API in json format" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:administrator_user)
 
@@ -34,18 +34,8 @@ describe GeographiesController do
       PiloteHelper.stub(:get_geographies).and_return(pilote_response)
 
       get :index
-      assigns(:geographies).should == pilote_response
-    end
-
-    it "should assign the volunteers from Users" do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in FactoryGirl.create(:administrator_user)
-
-      volunteer = {first_name:"juan", role:"volunteer"}
-      User.stub(:volunteers).and_return([volunteer])
-
-      get :index
-      assigns(:volunteers).should == [volunteer]
+      PiloteHelper.get_geographies
+      response.body.should == {idAsentamiento:"1"}.to_json
     end
   end
 end
