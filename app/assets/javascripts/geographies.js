@@ -67,7 +67,7 @@ var viewModel = {
     var json_data = ko.toJS(itemToCreate);
     $.ajax({
       type: 'POST',
-      url: '/geographies',
+      url: '/assignments',
       data: {
         assingment: json_data
       },

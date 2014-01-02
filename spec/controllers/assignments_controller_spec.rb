@@ -23,4 +23,16 @@ describe AssignmentsController do
       response.should_not be_redirect
     end
   end
+
+  describe "POST create" do
+    before (:each) do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      sign_in FactoryGirl.create(:administrator_user)
+    end
+
+    it "should return a json with a success message" do
+      post :create,  :format => :json
+      JSON.parse(response.body)["success"].should == true
+    end
+  end
 end
