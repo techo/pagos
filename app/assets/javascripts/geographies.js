@@ -7,7 +7,7 @@ var viewModel = {
   selectedProvince: ko.observable(),
   selectedVillage: ko.observable(),
   localities: ko.observableArray(),
-  volunteers: ko.observableArray(),
+  volunteers: ko.observable(),
   flash: ko.observable(),
   shownOnce: ko.observable(),
   currentPage: ko.observable(),
@@ -60,9 +60,16 @@ var viewModel = {
     this.checkFlash();
     $.getJSON('/volunteers', function(data) {
 
-      viewModel.volunteers(ko.mapping.fromJS(data));
-    });
-  },
+    var mapping = {
+      create: function (options) {
+        var innerModel = ko.mapping.fromJS(options.data);
+        innerModel.assigned = ko.observable(false);
+        return innerModel;
+      }
+    };
+    viewModel.volunteers(ko.mapping.fromJS(data, mapping));
+  })},
+
   createAction: function(volunteer) {
     var json_data =
         {
@@ -128,6 +135,12 @@ var viewModel = {
     }
   }
 };
+
+viewModel.selectedVillage.subscribe(function(newValue) {
+  ko.utils.arrayForEach(viewModel.volunteers()(), function(volunteer) {
+    volunteer.assigned(false);
+  })
+});
 
 viewModel.localities = ko.computed(function() {
     return ko.utils.arrayFilter(viewModel.geographies(), function(geography) {

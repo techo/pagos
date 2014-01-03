@@ -23,7 +23,7 @@
     <div class="panel" style="border:2px solid #ccc; height: 349px; overflow-y: scroll; background-color:#ffffff">
       <ul class="unstyled" data-bind="foreach: volunteers()">
         <li>
-        <input type="checkbox" data-bind="value: id, event: { change: $root.createAction }"><span data-bind="text: [first_name() + ' ' + last_name()]"></span>
+        <input type="checkbox" data-bind="value: id, checked: assigned ,event: { change: $root.createAction }"><span data-bind="text: [first_name() + ' ' + last_name()]"></span>
         </li>
       </ul>
     </div>
