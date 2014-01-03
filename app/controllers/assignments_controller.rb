@@ -1,6 +1,6 @@
 class AssignmentsController < ApplicationController
   before_action :verify_can_manage_users
-  
+
   def new
 
   end
@@ -21,6 +21,17 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def show
+    village_id = params[:id]
+    @geography = Geography.where(:village_id => village_id).first
+    if ( @geography  )
+      volunteerIds = @geography.volunteers.map{|volunteer| volunteer.id}
+      render :json => volunteerIds.to_json
+    else
+      render :json => [].to_json
+    end
+  end
+
   def verify_can_manage_users
     redirect_to root_url unless current_user && current_user.can_manage_users?
   end
@@ -29,5 +40,4 @@ class AssignmentsController < ApplicationController
   def assignments_params
     params.require("data").permit("village_id", "volunteer_id")
   end
-
 end

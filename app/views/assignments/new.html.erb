@@ -9,8 +9,8 @@
 
 <div class = "well span4">
   <h4>Geografías</h4>
-  <select id="provinces" class="span4" data-bind="options: provinces(), value: selectedProvince"></select>
-  <select id="localities" size=20 class="span4" 
+  <select id="provinces" class="span4 required" data-bind="options: provinces(), value: selectedProvince"></select>
+  <select id="localities" size=20 class="span4 required" 
     data-bind="options: localities(), optionsValue: 'idAsentamiento', value: selectedVillage,
     optionsText:function (item) { return item['ciudad'] + ' - ' + item['asentamiento'] } ">
   </select>

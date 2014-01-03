@@ -24,6 +24,40 @@ describe AssignmentsController do
     end
   end
 
+  describe "GET show" do
+    let!(:geography) { FactoryGirl.build(:geography, village_id: 1234) }
+    let!(:volunteer_user) { FactoryGirl.build(:volunteer_user, id: 1) }
+
+    before (:each) do
+        @request.env["devise.mapping"] = Devise.mappings[:user]
+        sign_in FactoryGirl.create(:administrator_user)
+        
+        @join = double(ActiveRecord::Relation)
+        @join.stub(:first).and_return(geography)
+        Geography.stub(:where).with(:village_id => geography.village_id.to_s).and_return(@join)
+    end
+
+    it "should assign a geography by village id" do
+      get :show, :format => :json, id: geography.village_id
+      assigns(:geography).should eq(geography)
+    end
+
+    it "should return all ids of volunteers for a geography" do
+      Geography.any_instance.should_receive(:volunteers).and_return([volunteer_user])
+      get :show, :format => :json, id: geography.village_id
+
+      response.body.should == [volunteer_user.id].to_json
+    end
+
+    it "should return empty json if geography is not registered" do
+      @join.stub(:first).and_return(nil)
+      Geography.any_instance.should_not_receive(:volunteers).and_return([volunteer_user])
+      get :show, :format => :json, id: geography.village_id
+
+      response.body.should == [].to_json
+    end
+  end
+
   describe "POST create" do
     let!(:volunteer_user) { FactoryGirl.build(:volunteer_user, id: 1) }
     let!(:geography) { FactoryGirl.build(:geography, village_id: 1234) }
