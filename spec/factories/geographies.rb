@@ -2,6 +2,7 @@
 
 FactoryGirl.define do
   factory :geography do
-    village_id 1
+    id 1
+    village_id 1234
   end
 end

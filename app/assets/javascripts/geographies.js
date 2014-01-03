@@ -63,13 +63,17 @@ var viewModel = {
       viewModel.volunteers(ko.mapping.fromJS(data));
     });
   },
-  createAction: function(itemToCreate) {
-    var json_data = ko.toJS(itemToCreate);
+  createAction: function(volunteer) {
+    var json_data =
+        {
+              volunteer_id: volunteer.id,
+              village_id:viewModel.selectedVillage()
+          };
     $.ajax({
       type: 'POST',
       url: '/assignments',
       data: {
-        assingment: json_data
+        data: json_data
       },
       dataType: "json",
       success: function(createdItem) {
