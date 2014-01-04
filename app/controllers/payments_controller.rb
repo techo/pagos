@@ -2,7 +2,7 @@ class PaymentsController < ApplicationController
   before_action :verify_can_manage_payments
 
   def index
-    @families = PiloteHelper.get_families
+    @families = PiloteHelper.get_families current_user
   end
 
   def create
@@ -10,7 +10,7 @@ class PaymentsController < ApplicationController
     if payment.save
       redirect_to payments_path, flash: { success: "El pago ha sido registrado!" }
     else
-      @families = PiloteHelper.get_families
+      @families = PiloteHelper.get_families current_user
       @payment = payment
       render action: "index"
     end
