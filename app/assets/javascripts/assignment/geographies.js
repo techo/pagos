@@ -10,32 +10,19 @@ var viewModel = {
   volunteers: ko.observable(),
   flash: ko.observable(),
   shownOnce: ko.observable(),
-  currentPage: ko.observable(),
   errors: ko.observableArray(),
-  items: ko.observableArray(),
-  selectedItem: ko.observable(),
-  myMessage: ko.observableArray([
-    { name: "Bungle", type: "Bear" },
-    { name: "George", type: "Hippo" },
-    { name: "Zippy", type: "Unknown" }
-  ]),
-  tempItem: {
-    id: ko.observable(),
-    title: ko.observable(),
-    body: ko.observable(),
-    updated_at: ko.observable(),
-    created_at: ko.observable()
-  },
     
   setFlash: function(flash) {
     this.flash(flash);
     this.shownOnce(false);
   },
+
   checkFlash: function() {
     if (this.shownOnce() == true) {
       this.flash('');
     }
   },
+
   indexAction: function() {
     this.checkFlash();
     $.getJSON('/geographies', function(data) {
@@ -56,10 +43,10 @@ var viewModel = {
       viewModel.selectedProvince(categories[0]);
     });
   },
+
   indexVolunteersAction: function() {
     this.checkFlash();
     $.getJSON('/volunteers', function(data) {
-
       var mapping = {
         create: function (options) {
           var innerModel = ko.mapping.fromJS(options.data);
@@ -67,46 +54,47 @@ var viewModel = {
           return innerModel;
         }
       };
-      viewModel.volunteers(ko.mapping.fromJS(data, mapping));
+      viewModel.volunteers(ko.mapping.fromJS(data, mapping)());
     })},
 
-    createAction: function(volunteer) {
-      var json_data =
-        {
-        volunteer_id: volunteer.id,
-        village_id:viewModel.selectedVillage()
-      };
-      $.ajax({
-        type: 'POST',
-        url: '/assignments',
-        data: {
-          data: json_data
-        },
-        dataType: "json",
-        success: function(createdItem) {
-          viewModel.errors([]);
-          viewModel.setFlash('Post successfully created.');
-        },
-        error: function(msg) {
-          viewModel.errors([msg.statusText]);
-        }
-      });
-    },
-    showAction: function(itemToShow) {
-      $.ajax({
-        type: 'GET',
-        url: '/assignments/' + itemToShow,
-        scriptCharset: "utf-8" ,
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-        dataType: "json",
+  createAction: function(volunteer) {
+    var json_data =
+      {
+      volunteer_id: volunteer.id,
+      village_id:viewModel.selectedVillage()
+    };
+    $.ajax({
+      type: 'POST',
+      url: '/assignments',
+      data: {
+        data: json_data
+      },
+      dataType: "json",
+      success: function(createdItem) {
+        viewModel.volunteers( viewModel.volunteers().sort(viewModel.assignedComparator) );
+        viewModel.errors([]);
+        viewModel.setFlash('Post successfully created.');
+      },
+      error: function(msg) {
+        viewModel.errors([msg.statusText]);
+      }
+    });
+  },
+
+  showAction: function(itemToShow) {
+    $.ajax({
+      type: 'GET',
+      url: '/assignments/' + itemToShow,
+      scriptCharset: "utf-8" ,
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      dataType: "json",
         success: function(volunteers) {
-          ko.utils.arrayForEach(viewModel.volunteers()(), function(volunteer) {
+          ko.utils.arrayForEach(viewModel.volunteers(), function(volunteer) {
             indice = volunteers.indexOf(parseInt(volunteer.id()));
             isAssignedUser = indice>=0;
-            //if ( isAssignedUser)
-            //  alert(volunteer.first_name());
             volunteer.assigned(isAssignedUser);
           })
+          viewModel.volunteers( viewModel.volunteers().sort(viewModel.assignedComparator) );
           viewModel.errors([]);
           viewModel.setFlash('Post successfully updated.');
         },
@@ -115,23 +103,22 @@ var viewModel = {
         }
       });
     },
-    destroyAction: function(itemToDestroy) {
-      if (confirm('Are you sure?')) {
-        $.ajax({
-          type: "DELETE",
-          url: '/posts/' + itemToDestroy.id + '.json',
-          dataType: "json",
-          success: function(){
-            viewModel.errors([]);
-            viewModel.setFlash('Post successfully deleted.');
-            viewModel.indexAction();
-          },
-          error: function(msg) {
-            viewModel.errors(JSON.parse(msg.responseText));
-          }
-        });
-      }
+
+  assignedComparator: function(left, right) {
+    var nameLeft=left.first_name().toLowerCase(), nameRight=right.first_name().toLowerCase();
+    var nameorder = nameLeft === nameRight ? 0 : (nameLeft < nameRight ? -1 : 1);
+    
+    if(
+        (left.assigned() && right.assigned()) || 
+        (!left.assigned() && !right.assigned())
+    ) {
+        return nameorder;
+    } else if(left.assigned()) {
+        return -1;
+    } else {
+        return 1;
     }
+  }
 };
 
 viewModel.selectedVillage.subscribe(function(newValue) {
@@ -145,18 +132,13 @@ viewModel.localities = ko.computed(function() {
     } catch (e) {
       dato = geography["provincia"]
     }
-
     return dato.toUpperCase() == viewModel.selectedProvince();
   });
 });
 
-var ready = function() {
+(function($, window, document) {
   viewModel.indexAction();
   viewModel.indexVolunteersAction();
   ko.applyBindings(viewModel, document.getElementById("container"));
-  $("#provinces option:first").attr("selected","selected");
-  $("#localities option:first").attr("selected","selected");
-};
+ }(window.jQuery, window, document));
 
-$(document).ready(ready);
-$(document).on('page:load', ready);

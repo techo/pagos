@@ -1,6 +1,4 @@
 # encoding: UTF-8
-<ul class="unstyled" data-bind='template: {name: "errorsTemplate", foreach: errors}'></ul>
-
 <div class = "well span4">
   <h4>Geografías</h4>
   <select id="provinces" class="span4 required" data-bind="options: provinces(), value: selectedProvince"></select>
@@ -10,11 +8,10 @@
   </select>
 </div>
 
-<div class = "well span4" style = "height: 440px">
+<div class = "well span4" style = "height: 437px">
   <h4>Voluntarios</h4>
   <div style="height:40px">
-    <input type="text" class="search-query span3" placeholder="Buscar&hellip;"><span class="fornav"><i class="icon-search"></i></span>
-    <div class="panel" style="border:2px solid #ccc; height: 349px; overflow-y: scroll; background-color:#ffffff">
+    <div class="panel" style="border:2px solid #ccc; height: 385px; overflow-y: scroll; background-color:#ffffff">
       <ul class="unstyled" data-bind="foreach: volunteers()">
         <li>
         <input type="checkbox" data-bind="value: id, checked: assigned ,event: { change: $root.createAction }"><span data-bind="text: [first_name() + ' ' + last_name()]"></span>
@@ -23,3 +20,5 @@
     </div>
   </div>
 </div>
+
+<script src="/assets/assignment/geographies.js"></script>
