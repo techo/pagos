@@ -11,7 +11,13 @@
       <%= form_for :payment, method: "post", html: {class: "form-inline", rol: "form"}  do |f| %>
         <div class="form-group">
           <%= f.label :amount, "Monto: ", class: "sr-only" %>
-          <%= f.number_field(:amount, step: 0.01, in: 0..10000, value: (@payment.amount if has_errors), class: "input-small form-control") %>
+          <%= f.number_field(:amount, 
+                             step: 0.01, 
+                             in: 0..10000, 
+                             value: (@payment.amount if has_errors),
+                             placeholder: PaymentsManager.calculating_debt( family["monto_original"], family["pagos"] ),
+                             class: "input-small form-control")
+                           %>
           <%= f.hidden_field(:family_id, value: family["id_de_familia"]) %>
           <%= f.hidden_field(:date, value: DateTime.now) %>
           <%= f.submit "Confirmar", class: "btn btn-primary" %>
