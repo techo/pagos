@@ -81,4 +81,14 @@ Pagos::Application.configure do
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   ENV["PILOTE_ROOT"] = ""
+
+  ActionMailer::Base.smtp_settings = {
+      :address              => "smtp.gmail.com",
+      :port                 => 587,
+      :domain               => "techo.org",
+      :user_name            => "no-reply@techo.org",
+      :password             => ENV['TECHO_NO_REPLY_PASSWORD'],
+      :authentication       => "plain",
+      :enable_starttls_auto => true
+  }
 end
