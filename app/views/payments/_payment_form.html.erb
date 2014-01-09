@@ -11,19 +11,19 @@
       <%= form_for :payment, method: "post", html: {class: "form-horizontal", rol: "form"}  do |f| %>
         <div class="form-group">
           <div class="control-group">
-           <%= f.label :amount, "Monto: ", class: "sr-only" %>
            <% debt = PaymentsManager.calculating_debt(family) %>
+           <%= f.label :amount, "Monto", class: "sr-only" %>
            <%= f.number_field(:amount,
                              step: 0.01,
                              in: 0..debt,
                              value: (@payment.amount if has_errors),
-                             placeholder: debt,
                              class: "input-small form-control")
-                           %>
+                             %><br/>
+           <small class="muted novecento">Deuda <%= number_to_currency(debt, separator: '.', unit: "$", format: "%u%n") %></small>
           </div>
           <div class="control-group">
             <label>
-              Comprobante
+              Depósito
               <input type="checkbox" class="aligned checkbox form-control" onChange="$('#deposit_number_<%=family["id_de_familia"]%>').toggle();"/>
             </label>
             <div id="deposit_number_<%=family["id_de_familia"]%>" style="display: none;">
