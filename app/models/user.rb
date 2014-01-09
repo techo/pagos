@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable
 
-  ROLES = %w[volunteer administrator]
+  ROLES = %w[voluntario administrador]
 
 
   validates :role, inclusion: { in: ROLES, message: 'No es un rol válido' }, allow_nil: true
@@ -17,10 +17,10 @@ class User < ActiveRecord::Base
                     format: { with: Devise.email_regexp, message: "Debe ingresar una dirección de correo válida", if: "email.present?" }
 
   def can_manage_users?
-    role == "administrator"
+    role == "administrador"
   end
   
   def can_manage_payments?
-    role == "volunteer"
+    role == "voluntario"
   end
 end

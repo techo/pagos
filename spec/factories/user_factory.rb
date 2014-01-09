@@ -3,7 +3,7 @@ FactoryGirl.define do
     first_name "SuzyA"
     last_name "A"
     email "suzyA@v.com"
-    role "administrator"
+    role "administrador"
     password "1234567890"
     password_confirmation "1234567890"
   end
@@ -12,7 +12,7 @@ FactoryGirl.define do
     first_name "SuzyV"
     last_name "V"
     email "suzyV@v.com"
-    role "volunteer"
+    role "voluntario"
     password "1234567890"
     password_confirmation "1234567890"
   end
@@ -30,7 +30,7 @@ FactoryGirl.define do
     first_name "JuanV"
     last_name "V"
     email "juanV@v.com"
-    role "volunteer"
+    role "voluntario"
     password "1234567890"
     password_confirmation "1234567890"
   end

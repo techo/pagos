@@ -49,8 +49,8 @@ describe UsersController do
       user = FactoryGirl.create(:user_without_role, email: "n@n.com")
 
       expect {
-        post :update, { "user" => { "#{user.id}" => { "role" => "volunteer" } } }
-      }.to change{user.reload.role}.to("volunteer")
+        post :update, { "user" => { "#{user.id}" => { "role" => "voluntario" } } }
+      }.to change{user.reload.role}.to("voluntario")
     end
 
     it "redirects to the edit page" do

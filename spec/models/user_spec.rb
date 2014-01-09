@@ -17,8 +17,8 @@ describe User do
     it { should validate_presence_of(:password).on(:create).with_message('El campo Contraseña es mandatorio') }
     it { should_not allow_value('test@test').for(:email).with_message(EMAIL_FORMAT_ERROR_MSG) }
     it { should_not allow_value('fake_role').for(:role).with_message('No es un rol válido') }
-    it { should allow_value('volunteer').for(:role) }
-    it { should allow_value('administrator').for(:role) }
+    it { should allow_value('voluntario').for(:role) }
+    it { should allow_value('administrador').for(:role) }
     it { should allow_value(nil).for(:role) }
 
     it 'should not validate email format if email is not present' do
