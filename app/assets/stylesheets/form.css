@@ -1,8 +1,4 @@
-.field_with_errors {
-  float: left;
-  padding-right: 5px;
-}
-
 .payment-error {
   border: 1px solid #b94a48;
 }
+

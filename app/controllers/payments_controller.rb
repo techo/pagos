@@ -6,19 +6,18 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    payment = Payment.new(payment_params)
-    if payment.save
+    @payment = Payment.new(payment_params)
+    if @payment.save
       redirect_to payments_path, flash: { success: "El pago ha sido registrado!" }
     else
       @families = PiloteHelper.get_families current_user
-      @payment = payment
       render action: "index"
     end
   end
 
   private
   def payment_params
-    params.require(:payment).permit(:family_id, :amount, :date)
+    params.require(:payment).permit(:family_id, :amount, :deposit_number, :date)
   end
 
   def verify_can_manage_payments

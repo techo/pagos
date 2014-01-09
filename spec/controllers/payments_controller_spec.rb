@@ -54,6 +54,14 @@ describe PaymentsController do
       response.should redirect_to payments_path
     end
 
+    it "should assign a payment with passed parameters" do
+        post :create, payment: { family_id: 1, amount: 1, deposit_number: "1234", date: DateTime.now }
+        assigns(:payment).family_id.should == 1
+        assigns(:payment).amount.should == 1
+        assigns(:payment).deposit_number.should == "1234"
+        assigns(:payment).date.to_date.should == DateTime.now.to_date
+    end
+
     it "displays a flash message on success" do
       post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
       flash[:success].should == "El pago ha sido registrado!"

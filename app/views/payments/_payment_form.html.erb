@@ -8,20 +8,33 @@
   <div id="collapse<%=family["id_de_familia"]%>"  class="family-drawer accordion-body collapse <%= 'in' if has_errors %>">
     <div class="accordion-inner">
       <%= form_error_messages @payment if has_errors %>
-      <%= form_for :payment, method: "post", html: {class: "form-inline", rol: "form"}  do |f| %>
+      <%= form_for :payment, method: "post", html: {class: "form-horizontal", rol: "form"}  do |f| %>
         <div class="form-group">
-          <%= f.label :amount, "Monto: ", class: "sr-only" %>
-          <% debt = PaymentsManager.calculating_debt(family) %>
-          <%= f.number_field(:amount,
+          <div class="control-group">
+           <%= f.label :amount, "Monto: ", class: "sr-only" %>
+           <% debt = PaymentsManager.calculating_debt(family) %>
+           <%= f.number_field(:amount,
                              step: 0.01,
                              in: 0..debt,
                              value: (@payment.amount if has_errors),
                              placeholder: debt,
                              class: "input-small form-control")
                            %>
-          <%= f.hidden_field(:family_id, value: family["id_de_familia"]) %>
-          <%= f.hidden_field(:date, value: DateTime.now) %>
-          <%= f.submit "Confirmar", class: "btn btn-primary" %>
+          </div>
+          <div class="control-group">
+            <label>
+              Comprobante
+              <input type="checkbox" class="aligned checkbox form-control" onChange="$('#deposit_number_<%=family["id_de_familia"]%>').toggle();"/>
+            </label>
+            <div id="deposit_number_<%=family["id_de_familia"]%>" style="display: none;">
+              <%= f.text_field :deposit_number, maxlength: 50, class: "input-medium form-control"%>
+            </div>
+            <%= f.hidden_field(:family_id, value: family["id_de_familia"]) %>
+            <%= f.hidden_field(:date, value: DateTime.now) %>
+          </div>
+          <div class="control-group">
+            <%= f.submit "Confirmar", class: "btn btn-primary" %>
+          </div>
         </div>
       <% end %>
     </div>
