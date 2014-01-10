@@ -47,6 +47,7 @@ end
 gem 'thin'
 gem 'jquery-turbolinks'
 gem 'knockoutjs-rails'
+gem 'jquery-validation-rails'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

@@ -63,7 +63,7 @@ describe UsersController do
     it "displays the list of registered volunteers" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:administrator_user)
-      
+
       user = FactoryGirl.create(:volunteer_user)
 
       users = [user.becomes(Volunteer)]
