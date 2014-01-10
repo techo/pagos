@@ -5,3 +5,11 @@
 .error {
   color: #b94a48;
 }
+
+.well {
+  background: #d4ecf9;
+  margin: 20px 0px 5px 0px;
+  border: 1px solid #5ec4ec;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
