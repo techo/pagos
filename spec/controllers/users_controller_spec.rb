@@ -57,6 +57,12 @@ describe UsersController do
       post :update, "user"=>{}
       response.should redirect_to action: 'edit'
     end
+
+    it "displays a flash message on success" do
+      user = FactoryGirl.create(:user_without_role, email: "n@n.com")
+      post :update, { "user" => { "#{user.id}" => { "role" => "voluntario" } } }
+      flash[:success].should == "Los roles han sido grabados correctamente."
+    end
   end
 
   describe "GET #get_volunteers" do

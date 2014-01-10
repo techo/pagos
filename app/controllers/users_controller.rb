@@ -11,7 +11,7 @@ class UsersController < ApplicationController
 
   def update
     User.update(params[:user].keys, update_role_params.values)
-    redirect_to action: 'edit'
+    redirect_to users_path, flash: { success: "Los roles han sido grabados correctamente." }
   end
 
   private
