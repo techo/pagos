@@ -7,7 +7,8 @@ class PiloteHelper
     begin
       families_uri = self.compose_pilote_families_uri current_user.id
       response = Net::HTTP.get(families_uri)
-      JSON.parse(response).sort_by { |family| family["jefe_de_familia"]}
+      sorted_families = JSON.parse(response).sort_by { |family| family["jefe_de_familia"]}
+      sort_families_by_geography(sorted_families)
     rescue
       JSON.parse("{}")
     end
@@ -27,5 +28,15 @@ class PiloteHelper
     volunteer = current_user.becomes(Volunteer)
     uri = "#{GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{volunteer.geographies.map{|geography| geography.village_id}.join(',')})"
     URI.parse(uri)
+  end
+
+  private
+  def self.sort_families_by_geography(sorted_families)
+    families_by_geography = {}
+    sorted_families.each do |family|
+      families_by_geography[family["geografia"]] = [] unless families_by_geography[family["geografia"]]
+      families_by_geography[family["geografia"]] << family
+    end
+    families_by_geography
   end
 end

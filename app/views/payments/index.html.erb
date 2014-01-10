@@ -1,6 +1,8 @@
 <div id="accordion" class="accordion" >
-<% @families.each do |family| %>
-  <%= render partial: "payment_form", locals: { family: family } %>
-<% end %>
+  <% @families.each do |geography, families| %>
+    <% families.each do |family|%>
+      <%= render partial: "payment_form", locals: { family: family } %>
+    <% end %>
+  <% end %>
 </div>
 <%= javascript_include_tag "payments/payments.js" %>

@@ -17,13 +17,13 @@ describe PiloteHelper do
       families.should == JSON.parse("{}")
     end
 
-    it "should return sorted families by jefe_de_familia" do
+    it "should return sorted families grouped by geografia" do
       PiloteHelper.should_receive(:compose_pilote_families_uri).and_return(uri)
-      families = '[{"jefe_de_familia":"Juan"}, {"jefe_de_familia":"Angel"}, {"jefe_de_familia":"Raul"}]'
-      sorted_families = '[{"jefe_de_familia":"Angel"}, {"jefe_de_familia":"Juan"}, {"jefe_de_familia":"Raul"}]'
+      families = '[{"geografia":"A", "jefe_de_familia":"Juan"}, {"geografia":"Z", "jefe_de_familia":"Juan"}, {"geografia":"A", "jefe_de_familia":"Z"}]'
       Net::HTTP.should_receive(:get).with(uri).and_return(families)
       families = PiloteHelper.get_families volunteer_user
-      families.should == JSON.parse(sorted_families)
+      families["A"].should == [{"geografia"=>"A", "jefe_de_familia"=>"Juan"}, {"geografia"=>"A", "jefe_de_familia"=>"Z"}]
+      families["Z"].should == [{"geografia"=>"Z", "jefe_de_familia"=>"Juan"}]
     end
   end
 
