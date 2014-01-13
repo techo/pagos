@@ -78,9 +78,6 @@ Pagos::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  # Add fonts to asset path
-  config.assets.paths << Rails.root.join("app", "assets", "fonts")
-
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   ENV["PILOTE_ROOT"] = ""
