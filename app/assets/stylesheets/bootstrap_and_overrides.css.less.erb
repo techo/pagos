@@ -34,17 +34,17 @@ body { padding-top: 60px; }
 
 @font-face {
   font-family: 'Novecentosanswide-Light';
-  src:asset-url('294EA6_0_0.eot');
-  src:asset-url('294EA6_0_0.eot?#iefix') format('embedded-opentype'),
-    asset-url('294EA6_0_0.woff') format('woff'),
-    asset-url('294EA6_0_0.ttf') format('truetype');
+  src:url('<%= asset_path("294EA6_0_0.eot")%>');
+  src:url('<%= asset_path("294EA6_0_0.eot?#iefix")%>') format('embedded-opentype'),
+    url('<%= asset_path("294EA6_0_0.woff")%>') format('woff'),
+    url('<%= asset_path("294EA6_0_0.ttf")%>') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Novecentowide-Bold';
-  src:asset-url('Novecentowide-Bold.otf');
+  src:url('<%= asset_path("Novecentowide-Bold.otf")%>)');
   font-weight: normal;
   font-style: normal;
 }
