@@ -34,5 +34,6 @@ fi
 pushd ${OPENSHIFT_REPO_DIR} > /dev/null
 echo "exec rake db:migrate RAILS_ENV=${RAILS_ENV:-production}"
 bundle exec rake db:migrate RAILS_ENV=${RAILS_ENV:-production}
+echo "exec rake db:seed RAILS_ENV=${RAILS_ENV:-production}"
 bundle exec rake db:seed RAILS_ENV=${RAILS_ENV:-production}
 popd > /dev/null
