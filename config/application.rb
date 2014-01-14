@@ -23,5 +23,5 @@ module Pagos
 
     # Add fonts to asset path
     config.assets.paths << Rails.root.join("app", "assets", "fonts")
-
+  end
 end
