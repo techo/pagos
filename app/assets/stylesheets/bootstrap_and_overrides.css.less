@@ -15,6 +15,13 @@ body { padding-top: 60px; }
 @fontAwesomeTtfPath: asset-url("fontawesome-webfont.ttf");
 @fontAwesomeSvgPath: asset-url("fontawesome-webfont.svg#fontawesomeregular");
 
+// Font Novencento
+@fontNovecentoLightEot: asset-url("294EA6_0_0.eot");
+@fontNovecentoLightEotIE: asset-url("294EA6_0_0.eot?#iefix");
+@fontNovecentoLightWoff: asset-url("294EA6_0_0.woff");
+@fontNovecentoLightTtf: asset-url("294EA6_0_0.ttf");
+@fontNovecentoBoldOtf: asset-url("Novecentowide-Bold.otf");
+
 // Font Awesome
 @import "fontawesome/font-awesome";
 
@@ -34,17 +41,17 @@ body { padding-top: 60px; }
 
 @font-face {
   font-family: 'Novecentosanswide-Light';
-  src:("<%= asset_path('294EA6_0_0.eot') %>");
-  src:("<%= asset_path('294EA6_0_0.eot?#iefix') %>") format('embedded-opentype'),
-    ("<%= asset_path('294EA6_0_0.woff') %>" format('woff'),
-    ("<%= asset_path('294EA6_0_0.ttf') %>" format('truetype');
+  src:@fontNovecentoLightEot;
+  src:@fontNovecentoLightEotIE format('embedded-opentype'),
+    @fontNovecentoLightWoff format('woff'),
+    @fontNovecentoLightTtf format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Novecentowide-Bold';
-  src:("<%= asset_path('Novecentowide-Bold.otf') %>");
+  src:@fontNovecentoBoldOtf;
   font-weight: normal;
   font-style: normal;
 }
