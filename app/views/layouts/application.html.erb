@@ -67,9 +67,9 @@
     </div>
     <% if current_user && current_user.can_manage_users? %>
       <ul class="nav nav-tabs">
-        <li class="<%= 'active' if params[:controller] == 'Home' %>"><a href="#">Inicio</a></li>
         <li class="<%= 'active' if params[:controller] == 'users' %>"><a href="/payments">Perfiles de Usuario</a></li>
         <li class="<%= 'active' if params[:controller] == 'assignments' %>"><a href="/assignments/new">Voluntarios de Pagos</a></li>
+        <li class="<%= 'active' if params[:controller] == 'reports' %>"><a href="/reports/new?report_name=HistoricalPaymentsReport">Histórico de Pagos</a></li>
       </ul>
     <% end %>
     <div class="container">

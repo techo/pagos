@@ -2,11 +2,11 @@ class PaymentsController < ApplicationController
   before_action :verify_can_manage_payments
 
   def index
-    @families = PiloteHelper.get_families current_user
+    @families = PiloteHelper.get_families [current_user]
   end
 
   def create
-    @payment = Payment.new(payment_params)
+    @payment = current_user.becomes(Volunteer).payments.new(payment_params)
     if @payment.save
       redirect_to payments_path, flash: { success: "El pago ha sido registrado!" }
     else

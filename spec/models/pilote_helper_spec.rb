@@ -41,14 +41,15 @@ describe PiloteHelper do
   end
 
   describe "compose_pilote_uri" do
-    it "should get the geographies assigned to the current user" do
+    it "should return uri to get geographies assigned to the passed users" do
       volunteer_user = FactoryGirl.build(:volunteer_user, id: 1)
       geography = FactoryGirl.build(:geography, village_id: 1234)
       User.stub(:find).with(volunteer_user.id).and_return(volunteer_user)
       User.any_instance.stub(:becomes).with(Volunteer).and_return(volunteer_user)
       volunteer_user.should_receive(:geographies).and_return([geography])
 
-      uri = PiloteHelper.compose_pilote_families_uri volunteer_user.id
+      uri = PiloteHelper.compose_pilote_families_uri [volunteer_user]
+
       uri.should == URI.parse("#{PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geography.village_id})")
     end
   end

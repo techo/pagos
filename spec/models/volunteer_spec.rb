@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Volunteer do
   describe 'properties' do
     it { should be_a(User) }
-     it { should have_many(:geographies)  }
+    it { should have_many(:geographies)  }
+    it { should have_many(:payments)  }
   end
 
   describe '#volunteers' do

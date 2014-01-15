@@ -31,7 +31,7 @@ describe PaymentsController do
       sign_in volunteer_user
 
       pilote_response = { id_familia: "1", jefe_de_hogar: "Juan" }
-      PiloteHelper.stub(:get_families).with(volunteer_user).and_return(pilote_response)
+      PiloteHelper.stub(:get_families).with([volunteer_user]).and_return(pilote_response)
       get :index
       assigns(:families).should == pilote_response
     end
@@ -40,7 +40,8 @@ describe PaymentsController do
   describe "POST create" do
     before do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      sign_in FactoryGirl.create(:volunteer_user)
+      @user = FactoryGirl.create(:volunteer_user)
+      sign_in @user
     end
 
     it "should save a payment" do
@@ -49,17 +50,23 @@ describe PaymentsController do
       }.to change{ Payment.count }.by(1)
     end
 
+    it "should add a payment to volunteer" do
+      expect {
+        post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
+      }.to change {@user.becomes(Volunteer).payments.count }.by(1)
+    end
+
     it "should redirect to payments on success" do
       post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
       response.should redirect_to payments_path
     end
 
     it "should assign a payment with passed parameters" do
-        post :create, payment: { family_id: 1, amount: 1, deposit_number: "1234", date: DateTime.now }
+        post :create, payment: { family_id: 1, amount: 1, deposit_number: "1234", date: Date.today }
         assigns(:payment).family_id.should == 1
         assigns(:payment).amount.should == 1
         assigns(:payment).deposit_number.should == "1234"
-        assigns(:payment).date.to_date.should == DateTime.now.to_date
+        assigns(:payment).date.should == Date.today
     end
 
     it "displays a flash message on success" do

@@ -1,0 +1,37 @@
+<%= form_for :report, url: {action: "create"} do |f| %>
+  <input name="report[report_name]" type="hidden" value="HistoricalPaymentsReport"/>
+<div class="form-horizontal">
+  <div class="control-group">
+    <%= f.label :from, 'Desde' %><br/>
+    <%= f.date_field :from, value: (@report.from if @report) %><br/>
+  </div>
+  <div class="control-group">
+    <%= f.label :to, 'Hasta' %><br/>
+    <%= f.date_field :to, value: (@report.to if @report)  %><br/>
+  </div>
+</div>
+<%= submit_tag "Generar", class: 'btn btn-primary' %>
+<% if @report.result %>
+<div>
+  <table class="table table-striped">
+    <tr>
+      <th>Familia</th>
+      <th>Saldo Inicial</th>
+      <th>Abono</th>
+      <th>Fecha</th>
+      <th>Saldo Final</th>
+    </tr>
+
+    <% @report.result.each do |payment| %>
+      <tr>
+      <td><%= payment["family_id"] %></td>
+      <td><%= payment["initial_balance"] %></td>
+      <td><%= payment["amount"] %></td>
+      <td><%= payment["date"] %></td>
+      <td><%= payment["final_balance"] %></td>
+    </tr>
+  <% end %> 
+  </table> 
+</div>
+<% end %> 
+  <% end %> 

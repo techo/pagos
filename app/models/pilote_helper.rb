@@ -3,9 +3,9 @@ class PiloteHelper
   GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/geografias"
 
   
-  def self.get_families(current_user)
+  def self.get_families(users)
     begin
-      families_uri = self.compose_pilote_families_uri current_user.id
+      families_uri = self.compose_pilote_families_uri users
       response = Net::HTTP.get(families_uri)
       sorted_families = JSON.parse(response).sort_by { |family| family["jefe_de_familia"]}
       sort_families_by_geography(sorted_families)
@@ -23,10 +23,16 @@ class PiloteHelper
     end
   end
 
-  def self.compose_pilote_families_uri(current_user_id)
-    current_user = User.find(current_user_id)
-    volunteer = current_user.becomes(Volunteer)
-    uri = "#{GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{volunteer.geographies.map{|geography| geography.village_id}.join(',')})"
+  def self.compose_pilote_families_uri(users)
+    geographies = ""
+
+    users.each do |user|
+      volunteer = user.becomes(Volunteer)
+      volunteer_geographies_ids = volunteer.geographies.map{|geography| geography.village_id}.join(',');
+      geographies += volunteer_geographies_ids
+    end
+
+    uri = "#{GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geographies})"
     URI.parse(uri)
   end
 
