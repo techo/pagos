@@ -29,6 +29,6 @@ Pagos::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  ENV["PILOTE_ROOT"] = "http://pilotes.ec:8888"
+  ENV["PILOTE_ROOT"] = "http://pilotes.ec:80"
   ENV["ADMIN_DEFAULT_PASSWORD"] = "0123456789"
 end
