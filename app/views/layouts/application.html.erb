@@ -57,7 +57,7 @@
                 <li><%= link_to "Entrar", new_user_session_path, class: 'novecento' %></li>
               <% end %>
               <% if current_user %>
-                <li class="navbar-text novecento">Hola <%= current_user.first_name %>!,</li>
+                <li class="navbar-text novecento">¡Hola <%= current_user.first_name %>!</li>
                 <li><%= link_to "Salir", destroy_user_session_path, method: 'delete', class: 'novecento' %></li>
               <% end %>
             </ul>
