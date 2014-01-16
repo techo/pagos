@@ -16,3 +16,4 @@
 /tmp
 
 /config/database.local.yml
+/config/application.yml
