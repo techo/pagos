@@ -1,6 +1,6 @@
 class HistoricalPaymentsReport
 
-  attr_accessor :from, :to, :result
+  attr_accessor :from, :to
 
   def initialize
     @from = Date.today.beginning_of_month
@@ -9,21 +9,23 @@ class HistoricalPaymentsReport
 
   def generate
     @payments = Payment.within_range @from, @to
-    @result = @payments.to_a.map(&:serializable_hash)
-    include_columns
 
     cumulated_payments = get_initial_balance
 
-    @result.each do |rp|
-      rp["initial_balance"] = cumulated_payments[rp["family_id"]]
-      cumulated_payments[rp["family_id"]] += rp["amount"]
-      rp["final_balance"] = cumulated_payments[rp["family_id"]]
+    result.each do |payment|
+      payment["initial_balance"] = cumulated_payments[payment["family_id"]]
+      cumulated_payments[payment["family_id"]] += payment["amount"]
+      payment["final_balance"] = cumulated_payments[payment["family_id"]]
     end
   end
 
+  def result
+    add_balance_to_payments(@payments.to_a.map(&:serializable_hash))
+  end
+
   private
-  def include_columns
-    @result.map{|record| 
+  def add_balance_to_payments(payments)
+    payments.map{ |record|
       record.merge!("initial_balance"=>0)
       record.merge!("final_balance"=>0)
     }
