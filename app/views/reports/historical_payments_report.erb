@@ -21,6 +21,7 @@
         <th>Abono</th>
         <th>Saldo Final</th>
         <th>Efectivo o Comprobante</th>
+        <th>Registrado por</th>
       </tr>
 
       <% @report.result.each do |payment| %>
@@ -31,6 +32,7 @@
         <td><%= payment["amount"] %></td>
         <td><%= payment["final_balance"] %></td>
         <td><%= payment["deposit_number"] || "Efectivo" %></td>
+        <td><%= "#{payment["volunteer"]["first_name"]} #{payment["volunteer"]["last_name"]}" %></td>
       </tr>
     <% end %> 
     </table> 

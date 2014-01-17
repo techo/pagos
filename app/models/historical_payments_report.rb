@@ -8,8 +8,7 @@ class HistoricalPaymentsReport
   end
 
   def generate
-    @payments = Payment.within_range @from, @to
-    @payments = @payments.where("volunteer_id is not null")
+    @payments = Payment.joins(:volunteer).includes(:volunteer).within_range @from, @to
     cumulated_payments = get_initial_balance
 
     result.each do |payment|
@@ -20,7 +19,7 @@ class HistoricalPaymentsReport
   end
 
   def result
-    add_balance_to_payments(@payments.to_a.map(&:serializable_hash))
+     add_balance_to_payments(@payments.to_a.map{|payment| payment.serializable_hash(:include => :volunteer) })
   end
 
   private
@@ -33,7 +32,7 @@ class HistoricalPaymentsReport
 
   def get_initial_balance
     balances = {}
-    firstPayments = @payments.minimum(:date, :group => :family_id)
+    firstPayments = @payments.group(:family_id).minimum(:date)
 
     firstPayments.each do |p|
       initial_balance = Payment.group(:family_id).where('family_id = ? and date < ? ', p[0], p[1]).sum(:amount)
