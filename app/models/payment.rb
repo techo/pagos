@@ -11,6 +11,6 @@ class Payment < ActiveRecord::Base
 
  
   def self.within_range(from, to)
-    self.where(Date: from..to ).order(:date)
+    self.where(Date: from.beginning_of_day..to.end_of_day ).order(:date)
   end
 end

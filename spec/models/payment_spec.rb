@@ -15,13 +15,20 @@ describe Payment do
   end
 
   describe "#within_range" do
-    it "should return paymentes within a range" do
+    it "should return payments within a range" do
       payment1 = FactoryGirl.create(:payment, date:Date.today-5)
       payment2 = FactoryGirl.create(:payment, date:Date.today-4)
       payment3 = FactoryGirl.create(:payment, date:Date.today-2)
 
       payments = Payment.within_range Date.today-4, Date.today
       payments.should == [payment2, payment3]
+    end
+
+    it "should return payments including current day" do
+      payment = FactoryGirl.create(:payment, date:DateTime.now)
+
+      payments = Payment.within_range Date.today-4, Date.today
+      payments.should == [payment]
     end
   end
 end

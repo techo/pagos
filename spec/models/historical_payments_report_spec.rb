@@ -53,12 +53,21 @@ describe HistoricalPaymentsReport do
       end
     end
 
+    it "should not add to result the pilote payments" do
+      pilote_payment = FactoryGirl.create(:payment, amount:50, date: Date.today-5, volunteer_id:nil)
+      @report.generate
+      expect(@report.result.count).to eq 2
+      @report.result.each{|record| record["volunteer_id"].should_not be_nil }
+    end
+    
     xit "initial balance should be the cumulated amount previous payment date" do
       @report.generate
       expected_payments.each_with_index do |record, index|
         @report.result[index]["initial_balance"].should == record["initial_balance"]
       end
     end
+
+
 
     xit "final balance should be the cumulated amount previous payment date" do
       @report.generate

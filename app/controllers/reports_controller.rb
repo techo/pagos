@@ -10,8 +10,8 @@ class ReportsController < ApplicationController
   def create
     r = create_params["report_name"].constantize
     @report = r.new
-    @report.from = create_params["from"]
-    @report.to = create_params["to"]
+    @report.from = Date.parse(create_params["from"])
+    @report.to = Date.parse(create_params["to"])
     @report.generate
     render :template => "reports/#{create_params["report_name"].underscore}"
   end

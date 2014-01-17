@@ -9,7 +9,7 @@ class HistoricalPaymentsReport
 
   def generate
     @payments = Payment.within_range @from, @to
-
+    @payments = @payments.where("volunteer_id is not null")
     cumulated_payments = get_initial_balance
 
     result.each do |payment|
