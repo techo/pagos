@@ -1,6 +1,6 @@
 class PiloteHelper
-  GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familias?geografias="
-  GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/geografias"
+  GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familia?asentamientos="
+  GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento"
 
   def self.get_families(users)
     begin
@@ -38,8 +38,8 @@ class PiloteHelper
   def self.sort_families_by_geography(sorted_families)
     families_by_geography = {}
     sorted_families.each do |family|
-      families_by_geography[family["geografia"]] = [] unless families_by_geography[family["geografia"]]
-      families_by_geography[family["geografia"]] << family
+      families_by_geography[family["asentamiento"]] = [] unless families_by_geography[family["asentamiento"]]
+      families_by_geography[family["asentamiento"]] << family
     end
     families_by_geography
   end

@@ -20,12 +20,12 @@ describe PiloteHelper do
 
     it "should return sorted families grouped by geografia" do
       PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
-      expected_families = '[{"geografia":"A", "jefe_de_familia":"Juan"}, {"geografia":"Z", "jefe_de_familia":"Juan"}, {"geografia":"A", "jefe_de_familia":"Z"}]'
+      expected_families = '[{"asentamiento":"A", "jefe_de_familia":"Juan"}, {"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}]'
       Net::HTTP.any_instance.stub(:request).and_return(stub(body: expected_families))
 
       families = PiloteHelper.get_families(volunteer_user)
-      families["A"].should == [{"geografia"=>"A", "jefe_de_familia"=>"Juan"}, {"geografia"=>"A", "jefe_de_familia"=>"Z"}]
-      families["Z"].should == [{"geografia"=>"Z", "jefe_de_familia"=>"Juan"}]
+      families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
+      families["Z"].should == [{"asentamiento"=>"Z", "jefe_de_familia"=>"Juan"}]
     end
   end
 
