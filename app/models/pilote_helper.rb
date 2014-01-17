@@ -55,6 +55,7 @@ class PiloteHelper
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+    http.ca_file = ENV["SSL_CERT_FILE"]
 
     request = Net::HTTP::Get.new(uri.request_uri)
     request.basic_auth(ENV['PILOTE_USERNAME'], ENV['PILOTE_PASSWORD'])

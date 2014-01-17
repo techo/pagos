@@ -80,7 +80,8 @@ Pagos::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  ENV["PILOTE_ROOT"] = ""
+  ENV["PILOTE_ROOT"] = "https://pilote.techo.org"
+  ENV["SSL_CERT_FILE"]= File.join(Rails.root, "certs", "startcom-bundle.pem")
 
   ActionMailer::Base.smtp_settings = {
       :address              => "smtp.gmail.com",
