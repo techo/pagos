@@ -78,7 +78,7 @@ Pagos::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { :host => 'pagos-familias.ecuador.techo.org' }
 
   ENV["PILOTE_ROOT"] = "https://pilote.techo.org"
   ENV["SSL_CERT_FILE"]= File.join(Rails.root, "certs", "startcom-bundle.pem")
