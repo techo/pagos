@@ -13,9 +13,7 @@ describe Volunteer do
     let!(:administrator_user) { FactoryGirl.build(:administrator_user, first_name: "juan") }
 
     after (:all) do
-      volunteer_user.destroy
-      administrator_user.destroy
-      volunteer_additional_user.destroy
+      User.destroy_all
     end
 
     it "should have the volunteers in the right order" do

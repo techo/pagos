@@ -35,7 +35,7 @@ describe HistoricalPaymentsReport do
 
     after (:all) do
       Payment.destroy_all
-      Volunteer.destroy_all
+      User.destroy_all
     end
 
     it "should add to result the payments between from and to" do
