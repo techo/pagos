@@ -1,6 +1,6 @@
 class HistoricalPaymentsReport
 
-  attr_accessor :from, :to
+  attr_accessor :from, :to, :result
 
   def initialize
     @from = Date.today.beginning_of_month
@@ -8,26 +8,31 @@ class HistoricalPaymentsReport
   end
 
   def generate
-    @payments = Payment.joins(:volunteer).includes(:volunteer).within_range @from, @to
-    cumulated_payments = get_initial_balance
-
-    result.each do |payment|
-      payment["initial_balance"] = cumulated_payments[payment["family_id"]]
-      cumulated_payments[payment["family_id"]] += payment["amount"]
-      payment["final_balance"] = cumulated_payments[payment["family_id"]]
+    @payments = Payment.has_volunteer.within_range @from, @to
+    @result = @payments.to_a.map do |payment|
+      payment.serializable_hash(:include => :volunteer)
     end
-  end
 
-  def result
-     add_balance_to_payments(@payments.to_a.map{|payment| payment.serializable_hash(:include => :volunteer) })
+    add_balances_to_payments
+    calculate_cumulative_payments
   end
 
   private
-  def add_balance_to_payments(payments)
-    payments.map{ |record|
+  def add_balances_to_payments
+    @result.map{ |record|
       record.merge!("initial_balance"=>0)
       record.merge!("final_balance"=>0)
     }
+  end
+
+  def calculate_cumulative_payments
+    cumulative_payments = get_initial_balance
+
+    @result.each do |payment|
+      payment["initial_balance"] = cumulative_payments[payment["family_id"]]
+      cumulative_payments[payment["family_id"]] += payment["amount"]
+      payment["final_balance"] = cumulative_payments[payment["family_id"]]
+    end
   end
 
   def get_initial_balance

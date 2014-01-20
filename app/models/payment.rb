@@ -8,9 +8,11 @@ class Payment < ActiveRecord::Base
                                     message: "El monto debe ser numérico entre 0 y 10000"}
   validates :date, presence: {message: "La fecha es mandatoria"}
   validates :deposit_number, length: {maximum: 50, message: "El número de depósito es demasiado largo"}
-  
+
   belongs_to :volunteer
- 
+
+  scope :has_volunteer, -> { where.not(:volunteer_id => nil) }
+
   def self.within_range(from, to)
     self.where(Date: from.beginning_of_day..to.end_of_day ).order(:date)
   end

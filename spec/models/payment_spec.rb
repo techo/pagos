@@ -18,6 +18,16 @@ describe Payment do
          .with_message("El monto debe ser numérico entre 0 y 10000") }
   end
 
+  describe "#has_volunteer" do
+    it "should return payments with a volunteer" do
+      volunteer = FactoryGirl.create(:volunteer_user)
+      payment1 = FactoryGirl.create(:payment, date:Date.today-5, volunteer_id: nil)
+      payment2 = FactoryGirl.create(:payment, date:Date.today-4, volunteer_id: volunteer.id)
+
+      Payment.has_volunteer.should == [payment2]
+    end
+  end
+
   describe "#within_range" do
     it "should return payments within a range" do
       payment1 = FactoryGirl.create(:payment, date:Date.today-5)

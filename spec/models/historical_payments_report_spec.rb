@@ -44,34 +44,43 @@ describe HistoricalPaymentsReport do
     end
 
     it "every record should have require report information" do
-      @report.result.each do |record| 
-        expect(record).to include("date")
-        expect(record).to include("amount")
-        expect(record).to include("deposit_number")
-        expect(record).to include("initial_balance")
-        expect(record).to include("amount")
-        expect(record).to include("final_balance")
+      @report.generate
+      @report.result.each do |record|
+        record.should include("date")
+        record.should include("amount")
+        record.should include("deposit_number")
+        record.should include("initial_balance")
+        record.should include("final_balance")
+        record.should include("amount")
       end
     end
 
-    it "should not add to result the pilote payments" do
+    it "should not add payments from pilote to the report" do
       pilote_payment = FactoryGirl.create(:payment, amount:50, date: Date.today-5, volunteer_id:nil)
       expect(@report.result.count).to eq 2
-      @report.result.each{|record| record["volunteer_id"].should_not be_nil }
     end
 
-    it "should bring the data of the volunteer that registered the payment " do
-      @report.result.each{|record| record["volunteer"]["first_name"].should == "juan" }
+    it "should include the volunteer that registered the payment " do
+      @report.generate
+      @report.result.each do |record|
+        record["volunteer"]["first_name"].should == "juan"
+      end
     end
-    
-    xit "initial balance should be the cumulated amount previous payment date" do
+
+    it "initial balance should be the cumulated amount previous payment date" do
+      @report.generate
+      @report.result.count.should == 2
+    end
+
+    it "initial balance should be the cumulated amount previous payment date" do
+      @report.generate
       expected_payments.each_with_index do |record, index|
         @report.result[index]["initial_balance"].should == record["initial_balance"]
       end
     end
 
-
-    xit "final balance should be the cumulated amount previous payment date" do
+    it "final balance should be the cumulated amount previous payment date" do
+      @report.generate
       expected_payments.each_with_index do |record, index|
         @report.result[index]["final_balance"].should == record["final_balance"]
       end
