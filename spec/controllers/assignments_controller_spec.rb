@@ -72,6 +72,10 @@ describe AssignmentsController do
         Geography.stub(:where).with(:village_id => geography.village_id).and_return(@join)
       end
 
+      after (:all) do
+        User.destroy_all
+      end
+
       it "should assign a volunteer with the volunteer_id" do
         post :create,  :format => :json, :data => { "village_id" => geography.village_id, "volunteer_id" => volunteer_user.id }
         assigns(:volunteer).should eq(volunteer_user)

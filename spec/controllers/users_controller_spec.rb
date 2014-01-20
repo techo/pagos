@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe UsersController do
+
+  after (:all) do
+    User.all
+  end
+
   describe "before filter" do
     it "redirects to root url if the current user cannot manage users" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
