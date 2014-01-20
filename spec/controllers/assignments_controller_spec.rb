@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe AssignmentsController do
+
+  after (:all) do
+    User.destroy_all
+  end
+
   describe "before filter" do
     it "redirects to root url if the current user cannot manage users" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -31,7 +36,7 @@ describe AssignmentsController do
     before (:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
         sign_in FactoryGirl.create(:administrator_user)
-        
+
         @join = double(ActiveRecord::Relation)
         @join.stub(:first).and_return(geography)
         Geography.stub(:where).with(:village_id => geography.village_id.to_s).and_return(@join)
@@ -59,44 +64,41 @@ describe AssignmentsController do
   end
 
   describe "POST create" do
-    let!(:volunteer_user) { FactoryGirl.build(:volunteer_user, id: 1) }
-    let!(:geography) { FactoryGirl.build(:geography, village_id: 1234) }
 
     describe "valid parameters" do
       before (:each) do
+
         @request.env["devise.mapping"] = Devise.mappings[:user]
         sign_in FactoryGirl.create(:administrator_user)
         @join = double(ActiveRecord::Relation)
-        @join.stub(:first_or_create).and_return(geography)
-        Volunteer.should_receive(:find).with(volunteer_user.id).and_return(volunteer_user)
-        Geography.stub(:where).with(:village_id => geography.village_id).and_return(@join)
+
+        @volunteer_user = FactoryGirl.create(:volunteer_user, id: 1)
+        @geography = FactoryGirl.create(:geography, village_id: 1234)
+        @join.stub(:first_or_create).and_return(@geography)
+        Volunteer.should_receive(:find).with(@volunteer_user.id).and_return(@volunteer_user)
+        Geography.stub(:where).with(:village_id => @geography.village_id).and_return(@join)
       end
 
-      after (:all) do
-        User.destroy_all
-      end
 
       it "should assign a volunteer with the volunteer_id" do
-        post :create,  :format => :json, :data => { "village_id" => geography.village_id, "volunteer_id" => volunteer_user.id }
-        assigns(:volunteer).should eq(volunteer_user)
+        post :create,  :format => :json, :data => { "village_id" => @geography.village_id, "volunteer_id" => @volunteer_user.id }
+        assigns(:volunteer).should eq(@volunteer_user)
       end
 
       it "should assign a geography with the village_id" do
-        post :create,  :format => :json, :data => { "village_id" => geography.village_id, "volunteer_id" => volunteer_user.id }
-        assigns(:geography).should eq(geography)
+        post :create,  :format => :json, :data => { "village_id" => @geography.village_id, "volunteer_id" => @volunteer_user.id }
+        assigns(:geography).should eq(@geography)
       end
 
       it "should return a json with a success message" do
-        post :create,  :format => :json, :data => { "village_id" => geography.village_id, "volunteer_id" => volunteer_user.id }
+        post :create,  :format => :json, :data => { "village_id" => @geography.village_id, "volunteer_id" => @volunteer_user.id }
         JSON.parse(response.body)["success"].should == true
       end
 
       it "should assign a volunteer to a geography according to the parameters" do
-        geography.save
-        volunteer_user.save
         expect {
-          post :create,  :format => :json, :data => { "village_id" => geography.village_id, "volunteer_id" => volunteer_user.id }
-        }.to change{Assignment.count }.by(1)
+          post :create, :format => :json, :data => { "village_id" => @geography.village_id, "volunteer_id" => @volunteer_user.id }
+        }.to change{Assignment.count}.by(1)
       end
     end
 
