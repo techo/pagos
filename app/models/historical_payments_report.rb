@@ -10,7 +10,8 @@ class HistoricalPaymentsReport
   def generate
     @payments = Payment.has_volunteer.within_range @from, @to
     @result = @payments.to_a.map do |payment|
-      payment.serializable_hash(:include => :volunteer)
+      volunteer = payment.volunteer.full_name
+      payment.serializable_hash.merge!("volunteer"=>volunteer, "receipt"=>payment.deposit_number||"EFECTIVO")
     end
 
     add_balances_to_payments

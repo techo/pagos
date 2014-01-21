@@ -12,7 +12,7 @@ class Payment < ActiveRecord::Base
 
   belongs_to :volunteer
 
-  scope :has_volunteer, -> { where.not(:volunteer_id => nil) }
+  scope :has_volunteer, -> { Payment.joins(:volunteer).includes(:volunteer)}
 
   def self.within_range(from, to)
     self.where(Date: from.beginning_of_day..to.end_of_day ).order(:date)

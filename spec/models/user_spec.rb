@@ -46,6 +46,13 @@ describe User do
     end
   end
 
+  describe '#full_name' do
+    it 'should return the full name of the user' do
+      user = FactoryGirl.build(:volunteer_user, first_name: "juan", last_name: "perez")
+      user.full_name.should == "juan perez"
+    end
+  end
+
   describe '#can_manage_payments?' do
     it 'is true if the user is a volunteer' do
       user = FactoryGirl.build(:volunteer_user)

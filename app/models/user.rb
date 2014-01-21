@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
                     uniqueness: { case_insensitive: true, message: 'El Correo electrónico ingresado ya está registrado' },
                     format: { with: Devise.email_regexp, message: "Debe ingresar una dirección de correo válida", if: "email.present?" }
 
+  def full_name
+    return "#{first_name} #{last_name}"
+  end
+
   def can_manage_users?
     role == "administrador"
   end

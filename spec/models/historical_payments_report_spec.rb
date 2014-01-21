@@ -18,14 +18,14 @@ describe HistoricalPaymentsReport do
   describe "#generate" do
 
     before (:each) do
-      @volunteer = FactoryGirl.create(:volunteer_user, first_name:"juan", email:"juanito@report.com")
+      @volunteer = FactoryGirl.create(:volunteer_user, first_name:"juan", last_name:"perez", email:"juanito@report.com")
       payment1 = FactoryGirl.create(:payment, amount:11, date: Date.today-10, volunteer_id:@volunteer.id, family_id:1)
-      payment2 = FactoryGirl.create(:payment, amount:12, date: Date.today-8, volunteer_id:@volunteer.id, family_id:2)
+      payment2 = FactoryGirl.create(:payment, amount:12, date: Date.today-8, volunteer_id:@volunteer.id, family_id:2, deposit_number:"1234")
       payment3 = FactoryGirl.create(:payment, amount:13, date: Date.today-6, volunteer_id:@volunteer.id, family_id:1)
 
       @expected_payments =
-        [{"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "cobro"=>"180.00" },
-         {"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "cobro"=>"200.00"}]
+        [{"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "cobro"=>"180.00", "deposit_number"=>"1234" },
+         {"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "cobro"=>"200.00", "deposit_number"=>"EFECTIVO"}]
 
       families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana","pagos"=>"60.00"},
                           {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"180.00","asentamiento"=>"Cotocollao","pagos"=>"60.00"}]
@@ -49,7 +49,7 @@ describe HistoricalPaymentsReport do
 
     it "should include the volunteer that registered the payment " do
       @report.result.each do |record|
-        record["volunteer"]["first_name"].should == "juan"
+        record["volunteer"].should == "juan perez"
       end
     end
 
@@ -84,6 +84,12 @@ describe HistoricalPaymentsReport do
     it "should include original cost of house for each payment" do
       @expected_payments.each_with_index do |record, index|
         @report.result[index]["original_cost"].should == record["cobro"]
+      end
+    end
+
+    it "if the payment is in cash deposit number should be EFECTIVO" do
+      @expected_payments.each_with_index do |record, index|
+        @report.result[index]["receipt"].should == record["deposit_number"]
       end
     end
   end

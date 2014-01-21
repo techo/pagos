@@ -33,8 +33,8 @@
         <td><%= payment["initial_balance"] %></td>
         <td><%= payment["amount"] %></td>
         <td><%= payment["final_balance"] %></td>
-        <td><%= payment["deposit_number"] || "Efectivo" %></td>
-        <td><%= "#{payment["volunteer"]["first_name"]} #{payment["volunteer"]["last_name"]}" %></td>
+        <td><%= payment["receipt"] %></td>
+        <td><%= payment["volunteer"] %></td>
       </tr>
     <% end %> 
     </table> 
