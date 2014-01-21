@@ -42,15 +42,15 @@ describe ReportsController do
     before do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:administrator_user)
+      HistoricalPaymentsReport.any_instance.stub(:generate)
     end
 
     it "should generate the current report" do
-      pending("completar la prueba")
-      #post :create, report: {report_name:"HistoricalPaymentsReport", from:Date.today-10, to:Date.today}
-      #assigns(:report).should_receive(:generate)
+      HistoricalPaymentsReport.any_instance.should_receive(:generate)
+      post :create, report: {report_name:"HistoricalPaymentsReport", from:Date.today-10, to:Date.today}
     end
 
-    it "should render view according to repord name" do
+    it "should render view according to report name" do
       post :create, report: {report_name:"HistoricalPaymentsReport", from:Date.today-10, to:Date.today}
       response.should render_template("reports/historical_payments_report")
     end
