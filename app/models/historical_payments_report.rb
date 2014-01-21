@@ -14,8 +14,8 @@ class HistoricalPaymentsReport
     end
 
     add_balances_to_payments
-    calculate_cumulative_payments
     add_pilote_info
+    calculate_cumulative_payments
   end
 
   private
@@ -30,9 +30,9 @@ class HistoricalPaymentsReport
     cumulative_payments = get_initial_balance
 
     @result.each do |payment|
-      payment["initial_balance"] = cumulative_payments[payment["family_id"]]
+      payment["initial_balance"] = payment["original_cost"].to_f - cumulative_payments[payment["family_id"]]
       cumulative_payments[payment["family_id"]] += payment["amount"]
-      payment["final_balance"] = cumulative_payments[payment["family_id"]]
+      payment["final_balance"] =  payment["original_cost"].to_f - cumulative_payments[payment["family_id"]]
     end
   end
 
@@ -55,6 +55,7 @@ class HistoricalPaymentsReport
       family_details = families_details.detect{|f| f["id_de_familia"] == payment["family_id"].to_s}
       payment.merge!("family_head"=>family_details["jefe_de_familia"])
       payment.merge!("geography"=>family_details["asentamiento"])
+      payment.merge!("original_cost"=>family_details["monto_original"])
     end
   end
 end

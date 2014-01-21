@@ -24,11 +24,11 @@ describe HistoricalPaymentsReport do
       payment3 = FactoryGirl.create(:payment, amount:13, date: Date.today-6, volunteer_id:@volunteer.id, family_id:1)
 
       @expected_payments =
-        [{"initial_balance"=>0, "final_balance"=>payment2.amount, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao"},
-         {"initial_balance"=>payment1.amount, "final_balance"=>payment3.amount+payment1.amount, "family_head"=>"Teresa", "asentamiento"=>"Collana",}]
+        [{"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "cobro"=>"180.00" },
+         {"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "cobro"=>"200.00"}]
 
-      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"120.00","asentamiento"=>"Collana","pagos"=>"60.00"},
-                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"120.00","asentamiento"=>"Cotocollao","pagos"=>"60.00"}]
+      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana","pagos"=>"60.00"},
+                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"180.00","asentamiento"=>"Cotocollao","pagos"=>"60.00"}]
       PiloteHelper.stub(:get_families_details).with([2, 1]).and_return(families_details)
 
       @report = HistoricalPaymentsReport.new
@@ -40,17 +40,6 @@ describe HistoricalPaymentsReport do
     it "should add to result the payments between from and to" do
       expect(@report.result.count).to eq 2
       @report.result.each{|record| record["date"].should be_between(@report.from, @report.to) }
-    end
-
-    it "every record should have require report information" do
-      @report.result.each do |record|
-        record.should include("date")
-        record.should include("amount")
-        record.should include("deposit_number")
-        record.should include("initial_balance")
-        record.should include("final_balance")
-        record.should include("amount")
-      end
     end
 
     it "should not add payments from pilote to the report" do
@@ -92,9 +81,9 @@ describe HistoricalPaymentsReport do
       end
     end
 
-    xit "should include original cost of house for each payment" do
+    it "should include original cost of house for each payment" do
       @expected_payments.each_with_index do |record, index|
-        @report.result[index]["geography"].should == record["asentamiento"]
+        @report.result[index]["original_cost"].should == record["cobro"]
       end
     end
   end
