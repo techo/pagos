@@ -15,6 +15,7 @@ class HistoricalPaymentsReport
 
     add_balances_to_payments
     calculate_cumulative_payments
+    add_pilote_info
   end
 
   private
@@ -45,5 +46,14 @@ class HistoricalPaymentsReport
       balances.merge!(initial_balance)
     end
     balances
+  end
+
+  def add_pilote_info
+    families = @payments.pluck(:family_id)
+    families_details = PiloteHelper.get_families_details families
+    @result.each do |payment|
+      family_details = families_details.detect{|f| f["id_de_familia"] == payment["family_id"].to_s}
+      payment.merge!("family_head"=>family_details["jefe_de_familia"])
+    end
   end
 end

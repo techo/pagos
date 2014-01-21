@@ -26,7 +26,7 @@
 
       <% @report.result.each do |payment| %>
         <tr>
-        <td><%= payment["family_id"] %></td>
+        <td><%= payment["family_head"] %></td>
         <td><%= l(payment["date"], :format => :short) %></td>
         <td><%= payment["initial_balance"] %></td>
         <td><%= payment["amount"] %></td>

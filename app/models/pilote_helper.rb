@@ -1,5 +1,8 @@
 class PiloteHelper
+  METHOD_POST = 1
+  METHOD_GET = 0
   GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familia?asentamientos="
+  GET_FAMILIES_FOR_IDS = "#{ENV["PILOTE_ROOT"]}/api/v1/familia/detalles"
   GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento"
 
   def self.get_families(users)
@@ -34,6 +37,12 @@ class PiloteHelper
     "#{GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geographies})"
   end
 
+  def self.get_families_details(families_ids)
+    form_data = {"idFamilias"=>self.build_family_request_ids(families_ids) }
+    response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data)
+    JSON.parse(response)
+  end
+
   private
   def self.sort_families_by_geography(sorted_families)
     families_by_geography = {}
@@ -50,15 +59,20 @@ class PiloteHelper
     end
   end
 
-  def self.make_https_request(path)
+  def self.make_https_request(path, method = METHOD_GET, data = nil)
     uri = URI.parse(path)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     http.ca_file = ENV["SSL_CERT_FILE"]
 
-    request = Net::HTTP::Get.new(uri.request_uri)
+    request = method == METHOD_GET ? Net::HTTP::Get.new(uri.request_uri) : Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(ENV['PILOTE_USERNAME'], ENV['PILOTE_PASSWORD'])
+    request.set_form_data(data) if data
     http.request(request).body
+  end
+
+  def self.build_family_request_ids(ids)
+    "(#{ids.join(', ')})"
   end
 end

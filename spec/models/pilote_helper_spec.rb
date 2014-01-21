@@ -4,6 +4,7 @@ describe PiloteHelper do
   describe "Families" do
     let!(:volunteer_user) { FactoryGirl.build(:volunteer_user, id: 1) }
     let!(:path) { "#{PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH}1)" }
+    let!(:families_details_path) { "#{PiloteHelper::GET_FAMILIES_FOR_IDS}" }
 
     it "should request the families of a set of geographies" do
       PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
@@ -26,6 +27,29 @@ describe PiloteHelper do
       families = PiloteHelper.get_families(volunteer_user)
       families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
       families["Z"].should == [{"asentamiento"=>"Z", "jefe_de_familia"=>"Juan"}]
+    end
+  end
+
+  describe "Families details" do
+    it "should request the families details given a set of families ids" do
+      Net::HTTP.any_instance.
+        should_receive(:request).
+        with(an_instance_of(Net::HTTP::Post)).and_return(stub(body: "{}"))
+      PiloteHelper.get_families_details [1,2,3]
+    end
+
+    it "should return a hash of families details" do
+      expected_families =
+        '[{"id_de_familia":"56602","jefe_de_familia":"Maria","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"},
+          {"id_de_familia":"56606","jefe_de_familia":"Delfilia","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"}]'
+      PiloteHelper.stub(:make_https_request).and_return(expected_families)
+      PiloteHelper.get_families_details([1, 2]).should == JSON.parse(expected_families)
+    end
+
+    it "should make a request with a list of family ids" do
+      Net::HTTP.any_instance.stub(:request).and_return(stub(body: "{}"))
+      Net::HTTP::Post.any_instance.should_receive(:set_form_data).with({"idFamilias"=>"(1, 2)"})
+      PiloteHelper.get_families_details [1,2]
     end
   end
 
