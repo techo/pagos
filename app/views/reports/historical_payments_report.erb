@@ -15,6 +15,7 @@
   <div>
     <table class="table table-striped">
       <tr>
+        <th>Comunidad</th>
         <th>Familia</th>
         <th>Fecha</th>
         <th>Saldo Inicial</th>
@@ -26,6 +27,7 @@
 
       <% @report.result.each do |payment| %>
         <tr>
+        <td><%= payment["geography"] %></td>
         <td><%= payment["family_head"] %></td>
         <td><%= l(payment["date"], :format => :short) %></td>
         <td><%= payment["initial_balance"] %></td>

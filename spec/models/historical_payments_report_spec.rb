@@ -24,11 +24,11 @@ describe HistoricalPaymentsReport do
       payment3 = FactoryGirl.create(:payment, amount:13, date: Date.today-6, volunteer_id:@volunteer.id, family_id:1)
 
       @expected_payments =
-        [{"initial_balance"=>0, "final_balance"=>payment2.amount, "family_head"=>"Ramon"},
-         {"initial_balance"=>payment1.amount, "final_balance"=>payment3.amount+payment1.amount, "family_head"=>"Teresa"}]
+        [{"initial_balance"=>0, "final_balance"=>payment2.amount, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao"},
+         {"initial_balance"=>payment1.amount, "final_balance"=>payment3.amount+payment1.amount, "family_head"=>"Teresa", "asentamiento"=>"Collana",}]
 
       families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"120.00","asentamiento"=>"Collana","pagos"=>"60.00"},
-                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"120.00","asentamiento"=>"Collana","pagos"=>"60.00"}]
+                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"120.00","asentamiento"=>"Cotocollao","pagos"=>"60.00"}]
       PiloteHelper.stub(:get_families_details).with([2, 1]).and_return(families_details)
 
       @report = HistoricalPaymentsReport.new
@@ -83,6 +83,18 @@ describe HistoricalPaymentsReport do
     it "should include head of family for each payment" do
       @expected_payments.each_with_index do |record, index|
         @report.result[index]["family_head"].should == record["family_head"]
+      end
+    end
+
+    it "should include geography of family for each payment" do
+      @expected_payments.each_with_index do |record, index|
+        @report.result[index]["geography"].should == record["asentamiento"]
+      end
+    end
+
+    xit "should include original cost of house for each payment" do
+      @expected_payments.each_with_index do |record, index|
+        @report.result[index]["geography"].should == record["asentamiento"]
       end
     end
   end
