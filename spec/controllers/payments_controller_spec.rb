@@ -56,6 +56,11 @@ describe PaymentsController do
       }.to change {@user.becomes(Volunteer).payments.count }.by(1)
     end
 
+    it "should save a payment in cash" do
+      expect {
+        post :create, payment: { family_id: 1, amount: 1, date: DateTime.now, deposit_number: "" }
+      }.to change {@user.becomes(Volunteer).payments.count }.by(1)
+    end
     it "should redirect to payments on success" do
       post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
       response.should redirect_to payments_path

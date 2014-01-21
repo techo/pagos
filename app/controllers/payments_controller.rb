@@ -17,6 +17,7 @@ class PaymentsController < ApplicationController
 
   private
   def payment_params
+    params[:payment][:deposit_number] = nil if params[:payment][:deposit_number] == ""
     params.require(:payment).permit(:family_id, :amount, :deposit_number, :date)
   end
 

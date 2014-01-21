@@ -12,6 +12,8 @@ describe Payment do
     it { should validate_presence_of(:amount).with_message("El monto es mandatorio") }
     it { should validate_presence_of(:date).with_message("La fecha es mandatoria") }
     it { should ensure_length_of(:deposit_number).is_at_most(50).with_long_message("El número de depósito es demasiado largo") }
+    it { should ensure_length_of(:deposit_number).is_at_least(4).with_short_message("El número de depósito es demasiado corto") }
+    it { should allow_value(nil).for(:deposit_number) }
     it { should validate_numericality_of(:amount)
          .is_greater_than_or_equal_to(0)
          .is_less_than_or_equal_to(10000)
