@@ -24,6 +24,15 @@ describe PaymentsManager do
       }.to change{Payment.count }.by(1)
     end
 
+    it "should save a first payment if not registered with pilote info" do
+      family = {"id_de_familia" => "1", "monto_original" => "200", "pagos" => "50"}
+      @join = double(ActiveRecord::Relation)
+      @join.stub(:count).and_return(0)
+      Payment.stub(:where).with(:family_id => 1).and_return(@join)
+      Payment.should_receive(:create).with(family_id: 1, amount: 50, date: Date.today - 1)
+      PaymentsManager.calculating_debt family
+    end
+
     it "should not save any payment if it is registered locally" do
       family = {"id_de_familia" => "1", "monto_original" => "200", "pagos" => "50"}
       @join = double(ActiveRecord::Relation)
