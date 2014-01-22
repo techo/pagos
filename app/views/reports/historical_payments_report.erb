@@ -12,7 +12,7 @@
   <%= submit_tag "Generar", class: 'btn btn-primary report' %>
 </div>
 <% if @report.result %>
-  <div>
+  <div class="clearfix">
     <table class="table table-striped">
       <tr>
         <th>Comunidad</th>
@@ -36,8 +36,8 @@
         <td><%= payment["receipt"] %></td>
         <td><%= payment["volunteer"] %></td>
       </tr>
-    <% end %> 
-    </table> 
+    <% end %>
+    </table>
   </div>
-<% end %> 
-<% end %> 
+<% end %>
+<% end %>
