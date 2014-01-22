@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+//= require ./global/jquery.validate.min
 //= require_tree ./global
 //= require twitter/bootstrap/bootstrap-transition
 //= require jquery.turbolinks
