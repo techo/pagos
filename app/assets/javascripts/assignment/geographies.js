@@ -57,6 +57,24 @@ var viewModel = {
       viewModel.volunteers(ko.mapping.fromJS(data, mapping)());
     })},
 
+  toggleAssignment: function(volunteer, event){
+    if ($(event.currentTarget).is(':checked')) {
+      viewModel.createAction(volunteer);
+    }else{
+      viewModel.deleteAction(volunteer);
+    }
+  },
+
+  deleteAction: function(volunteer){
+    $.ajax({
+      type: 'DELETE',
+      url: '/assignments/' + viewModel.selectedVillage(),
+      data: {
+        volunteer_id: volunteer.id
+      }
+    });
+  },
+
   createAction: function(volunteer) {
     var json_data =
       {
@@ -107,9 +125,9 @@ var viewModel = {
   assignedComparator: function(left, right) {
     var nameLeft=left.first_name().toLowerCase(), nameRight=right.first_name().toLowerCase();
     var nameorder = nameLeft === nameRight ? 0 : (nameLeft < nameRight ? -1 : 1);
-    
+
     if(
-        (left.assigned() && right.assigned()) || 
+        (left.assigned() && right.assigned()) ||
         (!left.assigned() && !right.assigned())
     ) {
         return nameorder;

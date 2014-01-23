@@ -9,6 +9,6 @@ Pagos::Application.routes.draw do
 
   resources :payments, only: [ :index, :create ]
   resources :geographies, only: [ :index ]
-  resources :assignments, only: [ :new, :create, :show ]
+  resources :assignments, only: [ :new, :create, :show, :destroy ]
   resources :reports, only: [ :new, :create ]
 end

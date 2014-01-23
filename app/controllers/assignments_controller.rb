@@ -32,6 +32,12 @@ class AssignmentsController < ApplicationController
     end
   end
 
+  def destroy
+    geography = Geography.where(:village_id => params[:id]).first
+    Assignment.destroy_all(:geography_id => geography.id, :volunteer_id => params[:volunteer_id])
+    head :ok
+  end
+
   def verify_can_manage_users
     redirect_to root_url unless current_user && current_user.can_manage_users?
   end

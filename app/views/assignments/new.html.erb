@@ -2,7 +2,7 @@
 <div class = "well span4">
   <h4>Geografías</h4>
   <select id="provinces" class="span4 required" data-bind="options: provinces(), value: selectedProvince"></select>
-  <select id="localities" size=20 class="span4 required" 
+  <select id="localities" size=20 class="span4 required"
     data-bind="options: localities(), optionsValue: 'idAsentamiento', value: selectedVillage,
     optionsText:function (item) { return item['ciudad'] + ' - ' + item['asentamiento'] } ">
   </select>
@@ -14,7 +14,7 @@
     <div class="panel" style="border:2px solid #ccc; height: 385px; overflow-y: scroll; background-color:#ffffff">
       <ul class="unstyled" data-bind="foreach: volunteers()">
         <li>
-        <input type="checkbox" data-bind="value: id, checked: assigned ,event: { change: $root.createAction }"><span data-bind="text: [first_name() + ' ' + last_name()]"></span>
+        <input type="checkbox" data-bind="value: id, checked: assigned ,event: { change: $root.toggleAssignment }"><span data-bind="text: [first_name() + ' ' + last_name()]"></span>
         </li>
       </ul>
     </div>

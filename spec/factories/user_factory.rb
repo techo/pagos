@@ -8,7 +8,7 @@ FactoryGirl.define do
     password_confirmation "1234567890"
   end
 
-  factory :volunteer_user, class: User do
+  factory :volunteer_user, class: Volunteer do
     first_name "SuzyV"
     last_name "V"
     email "suzyV@v.com"
@@ -25,7 +25,7 @@ FactoryGirl.define do
     password "1234567890"
     password_confirmation "1234567890"
   end
-  
+
   factory :volunteer_additional_user, class: User do
     first_name "JuanV"
     last_name "V"
