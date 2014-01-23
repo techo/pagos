@@ -11,7 +11,7 @@ class PaymentsManager
     if ( localPayments.count > 0 )
       currentPayments = localPayments.sum(:amount)
     else
-      Payment.create(family_id:family_id, amount:pilote_payments, date: Date.today - 1 )
+      Payment.create(family_id:family_id, amount:pilote_payments, voucher:"pilote", date: Date.today - 1 )
       currentPayments = pilote_payments
     end
 

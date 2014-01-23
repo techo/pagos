@@ -1,6 +1,8 @@
 # encoding: utf-8
 
 class Payment < ActiveRecord::Base
+
+
   validates :family_id, presence: {message: "El campo FamilyId es mandatorio"}
   validates :amount, presence: {message: "El monto es mandatorio"}, 
                      numericality: {greater_than_or_equal_to: 0,
@@ -9,6 +11,8 @@ class Payment < ActiveRecord::Base
   validates :date, presence: {message: "La fecha es mandatoria"}
   validates :deposit_number, length: {maximum: 50, message: "El número de depósito es demasiado largo"}
   validates :deposit_number, length: {minimum: 4, allow_nil:true, message: "El número de depósito es demasiado corto"}
+
+  validates_with Validators::PaymentValidator
 
   belongs_to :volunteer
 

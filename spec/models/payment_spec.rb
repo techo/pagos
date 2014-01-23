@@ -23,8 +23,8 @@ describe Payment do
   describe "#has_volunteer" do
     it "should return payments with a volunteer" do
       volunteer = FactoryGirl.create(:volunteer_user)
-      payment1 = FactoryGirl.create(:payment, date:Date.today-5, volunteer_id: nil)
-      payment2 = FactoryGirl.create(:payment, date:Date.today-4, volunteer_id: volunteer.id)
+      payment1 = FactoryGirl.create(:payment, voucher:"2", date:Date.today-5, volunteer_id: nil)
+      payment2 = FactoryGirl.create(:payment, voucher:"2", date:Date.today-4, volunteer_id: volunteer.id)
 
       Payment.has_volunteer.should == [payment2]
     end

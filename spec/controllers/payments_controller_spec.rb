@@ -57,36 +57,37 @@ describe PaymentsController do
 
     it "should save a payment" do
       expect {
-        post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
+        post :create, payment: { family_id: 1, voucher:"23", amount: 1, date: DateTime.now }
       }.to change{ Payment.count }.by(1)
     end
 
     it "should add a payment to volunteer" do
       expect {
-        post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
+        post :create, payment: { family_id: 1, voucher:"23", amount: 1, date: DateTime.now }
       }.to change {@user.becomes(Volunteer).payments.count }.by(1)
     end
 
     it "should save a payment in cash" do
       expect {
-        post :create, payment: { family_id: 1, amount: 1, date: DateTime.now, deposit_number: "" }
+        post :create, payment: { family_id: 1, amount: 1, voucher: "23", date: DateTime.now, deposit_number: "" }
       }.to change {@user.becomes(Volunteer).payments.count }.by(1)
     end
     it "should redirect to payments on success" do
-      post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
+      post :create, payment: { family_id: 1, amount: 1, voucher:"23", date: DateTime.now }
       response.should redirect_to payments_path
     end
 
     it "should assign a payment with passed parameters" do
-        post :create, payment: { family_id: 1, amount: 1, deposit_number: "1234", date: Date.today }
+        post :create, payment: { family_id: 1, amount: 1, deposit_number: "1234", voucher: "4321", date: Date.today }
         assigns(:payment).family_id.should == 1
         assigns(:payment).amount.should == 1
         assigns(:payment).deposit_number.should == "1234"
+        assigns(:payment).voucher.should == "4321"
         assigns(:payment).date.should == Date.today
     end
 
     it "displays a flash message on success" do
-      post :create, payment: { family_id: 1, amount: 1, date: DateTime.now }
+      post :create, payment: { family_id: 1, amount: 1, voucher:"23", date: DateTime.now }
       flash[:success].should == "El pago ha sido registrado!"
     end
 

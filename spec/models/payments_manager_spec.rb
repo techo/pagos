@@ -29,7 +29,7 @@ describe PaymentsManager do
       @join = double(ActiveRecord::Relation)
       @join.stub(:count).and_return(0)
       Payment.stub(:where).with(:family_id => 1).and_return(@join)
-      Payment.should_receive(:create).with(family_id: 1, amount: 50, date: Date.today - 1)
+      Payment.should_receive(:create).with(family_id: 1, amount: 50, voucher: "pilote", date: Date.today - 1)
       PaymentsManager.calculating_debt family
     end
 

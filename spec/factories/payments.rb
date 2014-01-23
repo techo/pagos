@@ -5,5 +5,6 @@ FactoryGirl.define do
   factory :payment do
     amount 1000
     family_id 5
+    voucher "232"
   end
 end
