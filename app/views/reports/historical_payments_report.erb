@@ -5,11 +5,15 @@
     <%= f.label :from, 'Desde' %>
     <%= f.date_field :from, value: (@report.from if @report) %>
   </div>
-  <div class="control-group span4">
+  <div class="control-group span3">
     <%= f.label :to, 'Hasta' %>
     <%= f.date_field :to, value: (@report.to if @report)  %>
   </div>
-  <%= submit_tag "Generar", class: 'btn btn-primary report' %>
+  <div class="control-group span2">
+    <br>
+    <button type="submit" value="Generar" name="commit" class="btn btn-primary report">Generar</button>
+    <button type="submit" value="csv" name="format" class="btn btn-primary report">Exportar</button>
+  </div>
 </div>
 <% if @report.result %>
   <div class="clearfix">

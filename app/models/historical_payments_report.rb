@@ -1,5 +1,8 @@
-class HistoricalPaymentsReport
+require "csv"
 
+class HistoricalPaymentsReport
+  COLUMNS = ["Comunidad", "Familia", "Fecha", "Saldo Inicial", "Abono", "Saldo Final", "Efectivo o Comprobante", "Registrado por"]
+  FIELDS = [:geography, :family_head, :date, :initial_balance, :amount, :final_balance, :receipt, :volunteer]
   attr_accessor :from, :to, :result
 
   def initialize
@@ -17,6 +20,19 @@ class HistoricalPaymentsReport
     add_balances_to_payments
     add_pilote_info
     calculate_cumulative_payments
+  end
+
+  def to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << COLUMNS
+      @result.each do |payment|
+        row = []
+        FIELDS.each do |field|
+          row << payment[field.to_s]
+        end
+        csv << row
+      end
+    end
   end
 
   private

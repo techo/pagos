@@ -13,7 +13,10 @@ class ReportsController < ApplicationController
     @report.from = Date.parse(create_params["from"])
     @report.to = Date.parse(create_params["to"])
     @report.generate
-    render :template => "reports/#{create_params["report_name"].underscore}"
+    respond_to do |format|
+      format.html{ render :template => "reports/#{create_params["report_name"].underscore}" }
+      format.csv { send_data @report.to_csv, :filename => "report_#{create_params['from']}_to_#{create_params['to']}.csv" }
+    end
   end
 
   private
