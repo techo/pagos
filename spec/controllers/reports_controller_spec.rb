@@ -71,7 +71,7 @@ describe ReportsController do
     it "should render data in csv format" do
       post :create, format: :csv, report: {report_name:"HistoricalPaymentsReport", from:"2014-01-01", to:"2014-01-11"}
       response.should_not render_template("reports/historical_payments_report")
-      response.headers['Content-Disposition'].should == 'attachment; filename="report_2014-01-01_to_2014-01-11.csv"'
+      response.headers['Content-Disposition'].should == 'attachment; filename="historical_payments_report_2014-01-01_to_2014-01-11.csv"'
       response.headers['Content-Type'].should == "text/csv"
       response.body.should == "Comunidad,Familia,Fecha,Saldo Inicial,Abono,Saldo Final,Efectivo o Comprobante,Registrado por\nCollana,Teresa,2014-01-02 00:00:00 UTC,200.0,1000.0,-800.0,EFECTIVO,SuzyV V\nCotocollao,Ramon,2014-01-02 00:00:00 UTC,180.0,1000.0,-820.0,EFECTIVO,SuzyV V\n"
     end
