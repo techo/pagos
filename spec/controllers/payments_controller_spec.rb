@@ -27,7 +27,7 @@ describe PaymentsController do
   describe "GET index" do
     it "should assign the families from the Pilote API" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
-      volunteer_user = FactoryGirl.create(:volunteer_user)
+      volunteer_user = FactoryGirl.create(:volunteer_user).becomes(User)
       sign_in volunteer_user
 
       pilote_response = { id_familia: "1", jefe_de_hogar: "Juan" }
