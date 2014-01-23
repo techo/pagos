@@ -15,8 +15,9 @@ describe PiloteHelper do
 
     it "should handle families request failures" do
       Net::HTTP.stub(:get).and_raise(Errno::ECONNREFUSED)
+      Rails.logger.should_receive(:error)
       families = PiloteHelper.get_families volunteer_user
-      families.should == JSON.parse("{}")
+      families.has_key?(:error).should == true
     end
 
     it "should return sorted families grouped by geografia" do

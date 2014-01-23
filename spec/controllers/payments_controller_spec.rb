@@ -25,15 +25,26 @@ describe PaymentsController do
   end
 
   describe "GET index" do
-    it "should assign the families from the Pilote API" do
-      @request.env["devise.mapping"] = Devise.mappings[:user]
-      volunteer_user = FactoryGirl.create(:volunteer_user).becomes(User)
-      sign_in volunteer_user
 
+    before (:each) do
+      @request.env["devise.mapping"] = Devise.mappings[:user]
+      @volunteer_user = FactoryGirl.create(:volunteer_user).becomes(User)
+      sign_in @volunteer_user
+    end
+
+    it "should assign the families from the Pilote API" do
       pilote_response = { id_familia: "1", jefe_de_hogar: "Juan" }
-      PiloteHelper.stub(:get_families).with([volunteer_user]).and_return(pilote_response)
+      PiloteHelper.stub(:get_families).with([@volunteer_user]).and_return(pilote_response)
       get :index
       assigns(:families).should == pilote_response
+    end
+
+    it "should send an error message if get families from pilote fails" do
+      pilote_response = { :error=>true }
+      PiloteHelper.stub(:get_families).with([@volunteer_user]).and_return(pilote_response)
+      get :index
+      assigns(:families).should == {}
+      flash[:error].should == "No se pudo conectar con Pilote"
     end
   end
 

@@ -3,6 +3,10 @@ class PaymentsController < ApplicationController
 
   def index
     @families = PiloteHelper.get_families [current_user]
+    if ( @families.has_key?(:error) )
+      @families = {}
+      flash[:error] = "No se pudo conectar con Pilote"
+    end
   end
 
   def create

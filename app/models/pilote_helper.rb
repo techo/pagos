@@ -12,7 +12,8 @@ class PiloteHelper
       families = group_by_family(response)
       sort_families_by_geography(families)
     rescue Exception => e
-      JSON.parse("{}")
+      Rails.logger.error(e.backtrace)
+      {:error=>false}
     end
   end
 
