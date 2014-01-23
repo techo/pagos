@@ -24,11 +24,11 @@ describe HistoricalPaymentsReport do
       payment3 = FactoryGirl.create(:payment, amount:13, date: Date.today-6, volunteer_id:@volunteer.id, family_id:1)
 
       @expected_payments =
-        [{"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "cobro"=>"180.00", "deposit_number"=>"1234" },
-         {"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "cobro"=>"200.00", "deposit_number"=>"EFECTIVO"}]
+        [{"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi", "cobro"=>"180.00", "deposit_number"=>"1234" },
+         {"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi", "cobro"=>"200.00", "deposit_number"=>"EFECTIVO"}]
 
-      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana","pagos"=>"60.00"},
-                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"180.00","asentamiento"=>"Cotocollao","pagos"=>"60.00"}]
+      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"},
+                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"180.00","asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"}]
       PiloteHelper.stub(:get_families_details).with([2, 1]).and_return(families_details)
 
       @report = HistoricalPaymentsReport.new
@@ -77,7 +77,7 @@ describe HistoricalPaymentsReport do
 
     it "should include geography of family for each payment" do
       @expected_payments.each_with_index do |record, index|
-        @report.result[index]["geography"].should == record["asentamiento"]
+        @report.result[index]["geography"].should == "#{record["provincia"]} - #{record["ciudad"]} - #{record["asentamiento"]}"
       end
     end
 

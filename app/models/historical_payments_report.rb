@@ -71,7 +71,7 @@ class HistoricalPaymentsReport
     @result.each do |payment|
       family_details = families_details.detect{|f| f["id_de_familia"] == payment["family_id"].to_s}
       payment.merge!("family_head"=>family_details["jefe_de_familia"])
-      payment.merge!("geography"=>family_details["asentamiento"])
+      payment.merge!("geography"=>"#{family_details["provincia"]} - #{family_details["ciudad"]} - #{family_details["asentamiento"]}")
       payment.merge!("original_cost"=>family_details["monto_original"])
     end
   end
