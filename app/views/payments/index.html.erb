@@ -1,7 +1,7 @@
 <div id="accordion" class="accordion" >
-  <% @families.each do |geography, families| %>
+  <% @families.keys.sort.each do |geography| %>
     <div class="well"><h4><%= geography %></h4></div>
-    <% families.each do |family|%>
+    <% @families[geography].each do |family|%>
       <%= render partial: "payment_form", locals: { family: family } %>
     <% end %>
   <% end %>
