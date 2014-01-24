@@ -66,13 +66,20 @@ class HistoricalPaymentsReport
   end
 
   def add_pilote_info
-    families = @payments.pluck(:family_id)
+    families = @payments.pluck(:family_id).uniq
     families_details = PiloteHelper.get_families_details families
     @result.each do |payment|
       family_details = families_details.detect{|f| f["id_de_familia"] == payment["family_id"].to_s}
       payment.merge!("family_head"=>family_details["jefe_de_familia"])
       payment.merge!("geography"=>"#{family_details["provincia"]} - #{family_details["ciudad"]} - #{family_details["asentamiento"]}")
       payment.merge!("original_cost"=>family_details["monto_original"])
+    end
+    sort_results
+  end
+
+  def sort_results
+    @result.sort_by! do |record|
+      [record["geography"], record["family_head"], record["date"]]
     end
   end
 end
