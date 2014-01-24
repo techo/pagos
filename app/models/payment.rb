@@ -12,7 +12,7 @@ class Payment < ActiveRecord::Base
   validates :deposit_number, length: {maximum: 50, message: "El número de depósito es demasiado largo"}
   validates :deposit_number, length: {minimum: 4, allow_nil:true, message: "El número de depósito es demasiado corto"}
 
-  validates_with Validators::PaymentValidator
+  validates_with Validators::PaymentValidator, fields: [:voucher]
 
   belongs_to :volunteer
 

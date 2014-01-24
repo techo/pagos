@@ -24,12 +24,16 @@
            <small class="muted novecento">Deuda <%= number_to_currency(debt, separator: '.', unit: "$", format: "%u%n") %></small>
           </div>
           <div class="control-group">
+           <%= f.label :voucher, "Voucher", class: "sr-only" %>
+                <%= f.text_field :voucher, maxlength: 50, class: "input-small form-control", :'data-msg-required' => "Este campo es requerido" %>
+          </div>
+          <div class="control-group">
             <label>
               Depósito
               <input type="checkbox" class="aligned checkbox form-control" data-familyid="<%=family["id_de_familia"]%>" />
             </label>
             <div id="deposit_number_<%=family["id_de_familia"]%>" style="display: none;">
-              <%= f.text_field :deposit_number, maxlength: 50, class: "input-medium form-control required", :'data-msg-required' => "Este campo es requerido", deposit:'' %>
+              <%= f.text_field :deposit_number, maxlength: 50, class: "input-medium form-control required", :'data-msg-required' => "Este campo es requerido" %>
             </div>
             <%= f.hidden_field(:family_id, value: family["id_de_familia"]) %>
             <%= f.hidden_field(:date, value: DateTime.now) %>

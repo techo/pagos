@@ -6,6 +6,7 @@ class PiloteHelper
   GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento"
 
   def self.get_families(users)
+    users = [users] unless users.is_a? Array
     begin
       families_path = compose_pilote_families_path(users)
       response = JSON.parse(make_https_request(families_path))

@@ -6,6 +6,11 @@ describe PiloteHelper do
     let!(:path) { "#{PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH}1)" }
     let!(:families_details_path) { "#{PiloteHelper::GET_FAMILIES_FOR_IDS}" }
 
+    it "should wrap into array if users is singular" do
+      PiloteHelper.should_receive(:compose_pilote_families_path).with([volunteer_user])
+      PiloteHelper.get_families volunteer_user
+    end
+
     it "should request the families of a set of geographies" do
       PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
       Net::HTTP.stub(:get).and_return({})
