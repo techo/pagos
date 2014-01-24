@@ -13,6 +13,7 @@ class ReportsController < ApplicationController
     @report.from = Date.parse(create_params["from"])
     @report.to = Date.parse(create_params["to"])
     @report.generate
+    flash[:error] = "No hay registros para el intervalo seleccionado" if @report.result.blank?
     respond_to do |format|
       format.html{ render :template => "reports/#{create_params["report_name"].underscore}" }
       format.csv { send_data @report.to_csv, :filename => "#{create_params["report_name"].underscore}_#{create_params['from']}_to_#{create_params['to']}.csv" }

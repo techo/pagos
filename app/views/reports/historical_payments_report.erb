@@ -15,7 +15,7 @@
     <button type="submit" value="csv" name="format" class="btn btn-primary report">Exportar</button>
   </div>
 </div>
-<% if @report.result %>
+<% unless @report.result.blank? %>
   <div class="clearfix">
     <table class="table table-striped">
       <tr>

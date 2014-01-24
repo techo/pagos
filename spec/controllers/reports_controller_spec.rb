@@ -46,8 +46,10 @@ describe ReportsController do
     end
 
     it "should generate the current report" do
-      HistoricalPaymentsReport.any_instance.should_receive(:generate)
+      report = HistoricalPaymentsReport.new
+      HistoricalPaymentsReport.any_instance.should_receive(:generate).and_return(report)
       post :create, report: {report_name:"HistoricalPaymentsReport", from:Date.today-10, to:Date.today}
+      flash[:error].should == "No hay registros para el intervalo seleccionado"
     end
 
     it "should render view according to report name" do
