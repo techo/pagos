@@ -22,4 +22,26 @@ class PaymentsManager
     end
   end
 
+  def save_payment(payment, volunteer)
+    if payment.valid?
+      payment.volunteer = volunteer
+      payment.debt = calculate_debt payment.family_id
+      payment.save
+      return true
+    end
+    false
+  end
+
+  private
+
+  def calculate_debt family_id
+    last_payment = Payment.where(family_id: family_id).order(:date).last
+
+    if last_payment
+      last_payment.debt
+    else
+      family = PiloteHelper.get_families_details([family_id]).first
+      family["monto_original"].to_f - family["pagos"].to_f
+    end
+  end
 end
