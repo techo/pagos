@@ -53,6 +53,9 @@ describe PaymentsController do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       @user = FactoryGirl.create(:volunteer_user)
       sign_in @user
+
+      family_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Quito", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"}]
+      PiloteHelper.stub(:get_families_details).with([1]).and_return(family_details)
     end
 
     it "should save a payment" do
@@ -88,7 +91,7 @@ describe PaymentsController do
 
     it "displays a flash message on success" do
       post :create, payment: { family_id: 1, amount: 1, voucher:"23", date: DateTime.now }
-      flash[:success].should == "El pago ha sido registrado!"
+      flash[:success].should == "El pago de $1 de Teresa ha sido registrado exitosamente!"
     end
 
     it "re-renders the index action for invalid Payment" do
