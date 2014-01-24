@@ -9,9 +9,12 @@
     <div class="accordion-inner">
       <%= form_error_messages @payment if has_errors %>
       <%= form_for :payment, method: "post", html: {class: "form-horizontal", rol: "form"}  do |f| %>
+        <% debt = PaymentsManager.calculating_debt(family) %>
         <div class="form-group">
+          <div>
+            <label><strong>Deuda <%= number_to_currency(debt, separator: '.', unit: "$", format: "%u%n") %></strong></label></br>
+          </div>
           <div class="control-group">
-           <% debt = PaymentsManager.calculating_debt(family) %>
            <%= f.label :amount, "Monto", class: "sr-only" %>
            <%= f.number_field(:amount,
                              step: 0.01,
@@ -21,7 +24,6 @@
                              :'data-msg-required' => "Este campo es requerido",
                              :'data-msg-max' => "El valor debe ser menor igual que {0}")
                              %><br/>
-           <small class="muted novecento">Deuda <%= number_to_currency(debt, separator: '.', unit: "$", format: "%u%n") %></small>
           </div>
           <div class="control-group">
            <%= f.label :voucher, "Voucher", class: "sr-only" %>
