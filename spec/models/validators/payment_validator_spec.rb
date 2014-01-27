@@ -3,9 +3,10 @@ require 'spec_helper'
 describe Validators::PaymentValidator do
 
   describe "#validate" do
+
     it "should be valid if has voucher when amount > 0" do
-      payment = Payment.new(family_id: 1, date: Date.today, voucher: "102", amount: 10)
-      payment.valid?.should == true
+      payment = Payment.new(family_id: 1, date: Date.today, voucher: "102", amount: 10, debt: 10)
+      payment.should be_valid
     end
 
     it "should be invalid if no voucher when amount > 0" do
@@ -18,7 +19,6 @@ describe Validators::PaymentValidator do
       payment.valid?
       payment.errors.messages[:voucher].should include("El voucher es mandatorio")
     end
-
   end
 end
 

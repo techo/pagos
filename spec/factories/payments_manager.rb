@@ -15,6 +15,7 @@ FactoryGirl.define do
     amount 2
     voucher "123"
     family_id 1
+    debt 1000
   end
 
   factory :invalid_payment, class: Payment do
@@ -22,5 +23,6 @@ FactoryGirl.define do
     date Date.today
     voucher nil
     family_id 1
+    debt 0
   end
 end

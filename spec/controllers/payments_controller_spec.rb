@@ -72,9 +72,10 @@ describe PaymentsController do
 
     it "should save a payment in cash" do
       expect {
-        post :create, payment: { family_id: 1, amount: 1, voucher: "23", date: DateTime.now, deposit_number: "" }
+        post :create, family_name: "Teresa", payment: { family_id: 1, amount: 1, voucher: "23", date: DateTime.now, deposit_number: "" }
       }.to change {@user.becomes(Volunteer).payments.count }.by(1)
     end
+
     it "should redirect to payments on success" do
       post :create, payment: { family_id: 1, amount: 1, voucher:"23", date: DateTime.now }
       response.should redirect_to payments_path
@@ -90,8 +91,8 @@ describe PaymentsController do
     end
 
     it "displays a flash message on success" do
-      post :create, payment: { family_id: 1, amount: 1, voucher:"23", date: DateTime.now }
-      flash[:success].should == "El pago de $1 de Teresa ha sido registrado exitosamente!"
+      post :create, payment: { family_id: 1, amount: 1, voucher:"23", date: DateTime.now, family_name: "Teresa"}
+      flash[:success].should == "El pago de $1.0 de Teresa ha sido registrado exitosamente!"
     end
 
     it "re-renders the index action for invalid Payment" do

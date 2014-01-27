@@ -10,12 +10,13 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    @payment = current_user.becomes(Volunteer).payments.new(payment_params)
-    if @payment.save
-      family = PiloteHelper.get_families_details([payment_params[:family_id].to_i]).first
-      redirect_to payments_path, flash: { success: "El pago de $#{payment_params[:amount]} de #{family['jefe_de_familia']} ha sido registrado exitosamente!" }
+    @payment = Payment.new(payment_params, debt: 0)
+    @volunteer = current_user.becomes(Volunteer)
+    manager = PaymentsManager.new
+
+    if manager.save_payment(@payment, @volunteer)
+      redirect_to payments_path, flash: { success: "El pago de $#{@payment.amount} de #{params["payment"]["family_name"]} ha sido registrado exitosamente!" }
     else
-      @families = PiloteHelper.get_families current_user
       render action: "index"
     end
   end

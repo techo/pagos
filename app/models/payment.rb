@@ -11,12 +11,17 @@ class Payment < ActiveRecord::Base
   validates :date, presence: {message: "La fecha es mandatoria"}
   validates :deposit_number, length: {maximum: 50, message: "El número de depósito es demasiado largo"}
   validates :deposit_number, length: {minimum: 4, allow_nil:true, message: "El número de depósito es demasiado corto"}
+  validates :debt, numericality: {greater_than_or_equal_to: 0}
 
   validates_with Validators::PaymentValidator, fields: [:voucher]
 
   belongs_to :volunteer
 
   scope :has_volunteer, -> { Payment.joins(:volunteer).includes(:volunteer)}
+
+  def self.last_family_payment(family_id)
+    Payment.where(:family_id => family_id).order(:date).last
+  end
 
   def self.within_range(from, to)
     self.where(Date: from.beginning_of_day..to.end_of_day ).order(:date)

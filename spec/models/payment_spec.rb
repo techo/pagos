@@ -18,6 +18,8 @@ describe Payment do
          .is_greater_than_or_equal_to(0)
          .is_less_than_or_equal_to(10000)
          .with_message("El monto debe ser numérico entre 0 y 10000") }
+    it { should validate_numericality_of(:debt)
+         .is_greater_than_or_equal_to(0) }
   end
 
   describe "#has_volunteer" do
@@ -27,6 +29,17 @@ describe Payment do
       payment2 = FactoryGirl.create(:payment, voucher:"2", date:Date.today-4, volunteer_id: volunteer.id)
 
       Payment.has_volunteer.should == [payment2]
+    end
+  end
+
+  describe "#last_family_payment" do
+    it "should return the last family payment by date" do
+      payment1 = FactoryGirl.create(:payment, family_id:1, date:Date.today-4)
+      payment2 = FactoryGirl.create(:payment, family_id:1,  date:Date.today-5)
+      payment3 = FactoryGirl.create(:payment, family_id:2, date:Date.today-2)
+
+      last_payment = Payment.last_family_payment payment1.family_id
+      last_payment.should == payment1
     end
   end
 

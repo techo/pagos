@@ -9,7 +9,7 @@
     <div class="accordion-inner">
       <%= form_error_messages @payment if has_errors %>
       <%= form_for :payment, method: "post", html: {class: "form-horizontal", rol: "form"}  do |f| %>
-        <% debt = PaymentsManager.calculating_debt(family) %>
+        <% debt = family["monto_original"].to_f - family["pagos"].to_f %>
         <div class="form-group">
           <div>
             <label><strong>Deuda <%= number_to_currency(debt, separator: '.', unit: "$", format: "%u%n") %></strong></label></br>
@@ -40,6 +40,7 @@
             </div>
             <%= f.hidden_field(:family_id, value: family["id_de_familia"]) %>
             <%= f.hidden_field(:date, value: DateTime.now) %>
+            <%= f.hidden_field(:family_name, value: family["jefe_de_familia"]) %>
           </div>
           <div class="control-group">
             <%= f.submit "Confirmar", class: "btn btn-primary", confirm: ""%>
