@@ -33,6 +33,15 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'pry-rails'
   gem 'pry-nav'
+  gem 'spinach-rails'
+end
+
+group :test do
+  gem 'database_cleaner'
+  gem 'vcr'
+  gem 'poltergeist'
+  # gem 'webmock'
+  # gem 'selenium-webdriver'
 end
 
 gem 'less-rails'
