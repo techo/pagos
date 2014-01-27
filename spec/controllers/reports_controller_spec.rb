@@ -42,7 +42,6 @@ describe ReportsController do
     before do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:administrator_user)
-      HistoricalPaymentsReport.any_instance.stub(:generate)
     end
 
     it "should generate the current report" do
@@ -50,10 +49,17 @@ describe ReportsController do
       HistoricalPaymentsReport.any_instance.should_receive(:generate).and_return(report)
       post :create, report: {report_name:"HistoricalPaymentsReport", from:Date.today-10, to:Date.today}
       flash[:error].should == "No hay registros para el intervalo seleccionado"
+      response.should redirect_to new_report_url(report_name: "HistoricalPaymentsReport")
     end
 
     it "should render view according to report name" do
-      post :create, report: {report_name:"HistoricalPaymentsReport", from:Date.today-10, to:Date.today}
+      volunteer = FactoryGirl.create(:volunteer_user)
+      FactoryGirl.create(:payment, date: Date.parse("2014-01-03"), volunteer_id: volunteer.id, family_id: 1)
+      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"}]
+      PiloteHelper.should_receive(:get_families_details).with([1]).and_return(families_details)
+
+      post :create, report: {report_name:"HistoricalPaymentsReport", from:"2014-01-02", to:"2014-01-20"}
+      response.should_not redirect_to new_report_url
       response.should render_template("reports/historical_payments_report")
     end
   end

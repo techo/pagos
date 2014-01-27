@@ -3,11 +3,11 @@
 <div class="form-horizontal">
   <div class="control-group span4">
     <%= f.label :from, 'Desde' %>
-    <%= f.date_field :from, value: (@report.from if @report) %>
+    <%= f.date_field :from, value: (@report.from if @report), readonly: true %>
   </div>
   <div class="control-group span3">
     <%= f.label :to, 'Hasta' %>
-    <%= f.date_field :to, value: (@report.to if @report)  %>
+    <%= f.date_field :to, value: (@report.to if @report), readonly: true  %>
   </div>
   <div class="control-group span2">
     <br>
