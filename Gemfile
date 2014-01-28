@@ -40,8 +40,8 @@ group :test do
   gem 'database_cleaner'
   gem 'vcr'
   gem 'poltergeist'
-  # gem 'webmock'
-  # gem 'selenium-webdriver'
+  gem 'webmock'
+  gem 'selenium-webdriver'
 end
 
 gem 'less-rails'

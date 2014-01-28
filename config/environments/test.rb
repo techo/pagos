@@ -34,6 +34,9 @@ Pagos::Application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  ENV["PILOTE_ROOT"] = "http://pilotes.ec:8888"
+  ENV["PILOTE_ROOT"] = "https://pilotes.ec:8888"
+  ENV["PILOTE_USERNAME"] = "USERNAME"
+  ENV["PILOTE_PASSWORD"] = "PASSWORD"
+
   ENV["ADMIN_DEFAULT_PASSWORD"] = "0123456789"
 end

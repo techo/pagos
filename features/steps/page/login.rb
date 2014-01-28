@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 module Page
-  class Login < Base
+  class Login < Spinach::FeatureSteps
     def initialize(email, password)
       @email = email
       @password = password
