@@ -82,6 +82,7 @@ Pagos::Application.configure do
 
   ENV["PILOTE_ROOT"] = "https://pilote.techo.org"
   ENV["SSL_CERT_FILE"]= File.join(Rails.root, "certs", "startcom-bundle.pem")
+  ENV["PILOTE_COUNTRY_CODE"] = "10"
 
   ActionMailer::Base.smtp_settings = {
       :address              => "smtp.gmail.com",

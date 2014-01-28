@@ -17,6 +17,7 @@ class PaymentsController < ApplicationController
     if manager.save_payment(@payment, @volunteer)
       redirect_to payments_path, flash: { success: "El pago de $#{@payment.amount} de #{params["payment"]["family_name"]} ha sido registrado exitosamente!" }
     else
+      @families = PiloteHelper.get_families [current_user]
       render action: "index"
     end
   end

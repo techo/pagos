@@ -56,7 +56,7 @@ describe PiloteHelper do
 
     it "should make a request with a list of family ids" do
       Net::HTTP.any_instance.stub(:request).and_return(stub(body: "{}"))
-      Net::HTTP::Post.any_instance.should_receive(:set_form_data).with({"idFamilias"=>"(1, 2)"})
+      Net::HTTP::Post.any_instance.should_receive(:set_form_data).with({"idFamilias"=>"(1, 2)", "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}"})
       PiloteHelper.get_families_details [1,2]
     end
   end
@@ -85,7 +85,7 @@ describe PiloteHelper do
 
       path = PiloteHelper.compose_pilote_families_path [volunteer_user]
 
-      path.should == "#{PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geography.village_id})"
+      path.should == "#{PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geography.village_id})&pais=#{ENV["PILOTE_COUNTRY_CODE"]}"
     end
   end
 

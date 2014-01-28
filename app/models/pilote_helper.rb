@@ -3,7 +3,7 @@ class PiloteHelper
   METHOD_GET = 0
   GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familia?asentamientos="
   GET_FAMILIES_FOR_IDS = "#{ENV["PILOTE_ROOT"]}/api/v1/familia/detalles"
-  GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento"
+  GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento?pais=#{ENV["PILOTE_COUNTRY_CODE"]}"
   POST_PAYMENT_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/pago"
 
   def self.get_families(users)
@@ -37,12 +37,13 @@ class PiloteHelper
       geographies += volunteer_geographies_ids
     end
 
-    "#{GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geographies})"
+    "#{GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geographies})&pais=#{ENV["PILOTE_COUNTRY_CODE"]}"
   end
 
   def self.get_families_details(families_ids)
-    form_data = {"idFamilias"=>self.build_family_request_ids(families_ids) }
+    form_data = {"idFamilias"=>self.build_family_request_ids(families_ids), "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}" }
     response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data).body
+    response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data)
     JSON.parse(response)
   end
 
