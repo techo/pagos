@@ -13,7 +13,7 @@ $(function(){
                 }
               }).on('changeDate', function(e){
                 var newDate = new Date(e.date)
-                newDate.setDate(newDate.getDate() + 1);
+                newDate.setDate(newDate.getDate());
                 to_date.setValue(newDate);
                 from_date.hide();
                 $to.get(0).focus();
