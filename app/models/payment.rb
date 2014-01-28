@@ -11,7 +11,7 @@ class Payment < ActiveRecord::Base
   validates :date, presence: {message: "La fecha es mandatoria"}
   validates :deposit_number, length: {maximum: 50, message: "El número de depósito es demasiado largo"}
   validates :deposit_number, length: {minimum: 4, allow_nil:true, message: "El número de depósito es demasiado corto"}
-  validates :debt, numericality: {greater_than_or_equal_to: 0}
+  validates :debt, numericality: {greater_than_or_equal_to: 0, message: "El monto pagado no puede ser mayor a la deuda"}
 
   validates_with Validators::PaymentValidator, fields: [:voucher]
 
