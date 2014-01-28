@@ -17,6 +17,10 @@ module Page
       page.has_content?('Has iniciado sesión correctamente.')
     end
 
+    def login_failed?
+      page.has_content?('Correo o contraseña inválidos.')
+    end
+
     private
     def fill_form
       fill_in "Correo electrónico:", with: @email
