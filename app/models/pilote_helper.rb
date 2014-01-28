@@ -45,6 +45,10 @@ class PiloteHelper
     JSON.parse(response)
   end
 
+  def self.save_pilote_payment payment_pilote
+    puts payment_pilote
+  end
+
   private
   def self.sort_families_by_geography(sorted_families)
     families_by_geography = {}

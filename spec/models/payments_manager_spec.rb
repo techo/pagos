@@ -9,7 +9,9 @@ describe PaymentsManager do
     let!(:volunteer) { FactoryGirl.create(:volunteer) }
     let!(:manager) { PaymentsManager.new }
 
-    before(:all) do
+    before(:each) do
+      PiloteHelper.stub(:save_pilote_payment).and_return(true)
+      PiloteHelper.stub(:make_https_request)
     end
 
     it "should assigns the payment to the volunteer" do
@@ -54,19 +56,54 @@ describe PaymentsManager do
       Payment.stub(:last_family_payment).with(valid_payment.family_id).and_return(previous_payment)
       manager.save_payment valid_payment, volunteer
       valid_payment.debt.should == previous_payment.debt - valid_payment.amount
-
     end
 
-    it "should register the payment in pilote" do
-      pending("not implemented")
+    it "should register a cash payment in pilote" do
+      set_pilote_correct_answer
+      comment = "EFECTIVO - #{volunteer.full_name}"
+      pilote_payment = {:id_familia=>valid_payment.family_id, :cantidad=>valid_payment.amount, :fecha=>valid_payment.date, :voucher=>valid_payment.voucher, :comentario=>comment }
+      PiloteHelper.should_receive(:save_pilote_payment).with(pilote_payment)
+
+      manager.save_payment valid_payment, volunteer
+    end
+
+    it "should register a deposit payment in pilote" do
+      set_pilote_correct_answer
+      valid_payment.deposit_number = "12345"
+      valid_payment.voucher = "12345"
+      comment = "COMPROBANTE - #{volunteer.full_name}"
+      pilote_payment = {:id_familia=>valid_payment.family_id, :cantidad=>valid_payment.amount, :fecha=>valid_payment.date, :voucher=>valid_payment.voucher, :comentario=>comment }
+      PiloteHelper.should_receive(:save_pilote_payment).with(pilote_payment)
+
+      manager.save_payment valid_payment, volunteer
+    end
+
+    it "should not register a visit in pilote" do
+      set_pilote_correct_answer
+      valid_payment.amount = 0
+      valid_payment.deposit_number = nil
+      PiloteHelper.should_not_receive(:save_pilote_payment)
+
+      manager.save_payment valid_payment, volunteer
     end
 
     it "should not save payment if pilote sync fails" do
-      pending("not implemented")
+      PiloteHelper.stub(:save_pilote_payment).and_return(false)
+      set_pilote_correct_answer
+      expect{
+        manager.save_payment valid_payment, volunteer
+      }.to change{ Payment.count }.by(0)
     end
 
+    it "should not register a payment in pilote if payment is invalid" do
+      set_pilote_correct_answer
+      PiloteHelper.should_not_receive(:save_pilote_payment)
+
+      manager.save_payment invalid_payment, volunteer
+    end
   end
 
+  private
   def set_pilote_correct_answer
     pilote_response = [{"id_de_familia"=>56602,"jefe_de_familia"=>"Maria Rosario Fernandez Duchitanga","monto_original"=>120.00,"asentamiento"=>"Collana","ciudad"=>"Ludo, Sigsig","provincia"=>"Azuay","pagos"=>60.00}]
     PiloteHelper.stub(:get_families_details).and_return(pilote_response)

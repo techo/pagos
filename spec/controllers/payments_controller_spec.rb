@@ -56,6 +56,7 @@ describe PaymentsController do
 
       family_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Quito", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"}]
       PiloteHelper.stub(:get_families_details).with([1]).and_return(family_details)
+      PiloteHelper.stub(:save_pilote_payment).and_return(true)
     end
 
     it "should save a payment" do

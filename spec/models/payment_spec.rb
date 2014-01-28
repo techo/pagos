@@ -60,4 +60,21 @@ describe Payment do
       payments.should == [payment]
     end
   end
+
+  describe "#payment_type" do
+    it "should return EFECTIVO if there is not a deposit number" do
+      payment = FactoryGirl.build(:payment, deposit_number:nil)
+      payment.type.should == "EFECTIVO"
+    end
+
+    it "should return COMPROBANTE if there is a deposit number" do
+      payment = FactoryGirl.build(:payment, deposit_number:"123")
+      payment.type.should == "COMPROBANTE"
+    end
+
+    it "should return VISITA if amount is zero" do
+      payment = FactoryGirl.build(:payment, amount:0, deposit_number:nil)
+      payment.type.should == "VISITA"
+    end
+  end
 end

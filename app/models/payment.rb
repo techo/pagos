@@ -26,4 +26,10 @@ class Payment < ActiveRecord::Base
   def self.within_range(from, to)
     self.where(Date: from.beginning_of_day..to.end_of_day ).order(:date)
   end
+
+  def type
+    return "EFECTIVO" if amount>0 && deposit_number.nil?
+    return "COMPROBANTE" if deposit_number
+    return "VISITA" if amount == 0
+  end
 end
