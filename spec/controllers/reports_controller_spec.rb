@@ -69,8 +69,8 @@ describe ReportsController do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:administrator_user)
       volunteer = FactoryGirl.create(:volunteer_user)
-      FactoryGirl.create(:payment, date: Date.parse("2014-01-02"), volunteer_id: volunteer.id, family_id: 1)
-      FactoryGirl.create(:payment, date: Date.parse("2014-01-02"), volunteer_id: volunteer.id, family_id: 2)
+      FactoryGirl.create(:payment, date: Date.parse("2014-01-02"), volunteer_id: volunteer.id, family_id: 1, amount:20, debt:120)
+      FactoryGirl.create(:payment, date: Date.parse("2014-01-02"), volunteer_id: volunteer.id, family_id: 2, amount:15, debt:105)
       families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"},
                           {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"180.00","asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"}]
       PiloteHelper.stub(:get_families_details).with([1, 2]).and_return(families_details)
@@ -81,7 +81,7 @@ describe ReportsController do
       response.should_not render_template("reports/historical_payments_report")
       response.headers['Content-Disposition'].should == 'attachment; filename="historical_payments_report_2014-01-01_to_2014-01-11.csv"'
       response.headers['Content-Type'].should == "text/csv"
-      response.body.should == "Comunidad,Familia,Fecha,Saldo Inicial,Abono,Saldo Final,Efectivo o Comprobante,Registrado por\nManabi - Montecristi - Collana,Teresa,2014-01-02 00:00:00 UTC,200.0,1000.0,-800.0,EFECTIVO,SuzyV V\nManabi - Montecristi - Cotocollao,Ramon,2014-01-02 00:00:00 UTC,180.0,1000.0,-820.0,EFECTIVO,SuzyV V\n"
+      response.body.should == "Comunidad,Familia,Fecha,Saldo Inicial,Abono,Saldo Final,Efectivo o Comprobante,Registrado por\nManabi - Montecristi - Collana,Teresa,2014-01-02 00:00:00 UTC,140.0,20.0,120,EFECTIVO,SuzyV V\nManabi - Montecristi - Cotocollao,Ramon,2014-01-02 00:00:00 UTC,120.0,15.0,105,EFECTIVO,SuzyV V\n"
     end
   end
 

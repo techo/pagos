@@ -19,16 +19,16 @@ describe HistoricalPaymentsReport do
 
     before (:each) do
       @volunteer = FactoryGirl.create(:volunteer_user, first_name:"juan", last_name:"perez", email:"juanito@report.com")
-      payment1 = FactoryGirl.create(:payment, amount:11, voucher:"23", date: Date.today-10, volunteer_id:@volunteer.id, family_id:1)
-      payment2 = FactoryGirl.create(:payment, amount:12, voucher:"23", date: Date.today-8, volunteer_id:@volunteer.id, family_id:2, deposit_number:"1234")
-      payment3 = FactoryGirl.create(:payment, amount:13, voucher:"23", date: Date.today-6, volunteer_id:@volunteer.id, family_id:1)
+      payment1 = FactoryGirl.create(:payment, amount:11, voucher:"23", date: Date.today-10, volunteer_id:@volunteer.id, family_id:1, debt:189)
+      payment2 = FactoryGirl.create(:payment, amount:12, voucher:"23", date: Date.today-8, volunteer_id:@volunteer.id, family_id:2, deposit_number:"1234", debt:168)
+      payment3 = FactoryGirl.create(:payment, amount:13, voucher:"23", date: Date.today-6, volunteer_id:@volunteer.id, family_id:1, debt:176)
 
       @expected_payments =
-        [{"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi", "cobro"=>"200.00", "deposit_number"=>"EFECTIVO"},
-          {"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi", "cobro"=>"180.00", "deposit_number"=>"1234" }]
+        [{"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi", "deposit_number"=>"EFECTIVO"},
+          {"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi", "deposit_number"=>"1234" }]
 
-      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","monto_original"=>"200.00","asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"},
-                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","monto_original"=>"180.00","asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi","pagos"=>"60.00"}]
+      families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi"},
+                          {"id_de_familia"=>"2","jefe_de_familia"=>"Ramon","asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi"}]
       PiloteHelper.stub(:get_families_details).with([2, 1]).and_return(families_details)
 
       @report = HistoricalPaymentsReport.new
