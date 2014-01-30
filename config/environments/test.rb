@@ -37,6 +37,7 @@ Pagos::Application.configure do
   ENV["PILOTE_ROOT"] = "https://pilotes.ec:8888"
   ENV["PILOTE_USERNAME"] = "USERNAME"
   ENV["PILOTE_PASSWORD"] = "PASSWORD"
+  ENV["PILOTE_COUNTRY_CODE"] = "10"
 
   ENV["ADMIN_DEFAULT_PASSWORD"] = "0123456789"
 end
