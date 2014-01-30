@@ -14,7 +14,6 @@ class PaymentsController < ApplicationController
     @volunteer = current_user.becomes(Volunteer)
     manager = PaymentsManager.new
 
-    binding.pry
     if manager.save_payment(@payment, @volunteer)
       redirect_to payments_path, flash: { success: "El pago de $#{@payment.amount} de #{params["payment"]["family_name"]} ha sido registrado exitosamente!" }
     else
