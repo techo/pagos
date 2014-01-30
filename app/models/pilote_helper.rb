@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 class PiloteHelper
   METHOD_POST = 1
   METHOD_GET = 0
@@ -10,8 +12,9 @@ class PiloteHelper
     users = [users] unless users.is_a? Array
     begin
       families_path = compose_pilote_families_path(users)
-      response = JSON.parse(make_https_request(families_path).body)
-      families = group_by_family(response)
+      families = JSON.parse(make_https_request(families_path).body)
+      encode_families(families)
+      group_by_family(families)
       sort_families_by_geography(families)
     rescue Exception => e
       Rails.logger.error(e.backtrace)
@@ -43,7 +46,8 @@ class PiloteHelper
   def self.get_families_details(families_ids)
     form_data = {"idFamilias"=>self.build_family_request_ids(families_ids), "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}" }
     response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data).body
-    JSON.parse(response)
+    response = JSON.parse(response)
+    response = encode_families(response)
   end
 
   def self.save_pilote_payment pilote_payment
@@ -59,6 +63,13 @@ class PiloteHelper
       families_by_geography[family["asentamiento"]] << family
     end
     families_by_geography
+  end
+
+  def self.encode_families(families)
+    families.each do |family|
+      family["jefe_de_familia"] = EncodingHelper.encode_utf_8(family["jefe_de_familia"])
+    end
+    families
   end
 
   def self.group_by_family(families)

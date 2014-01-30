@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require "spec_helper"
 
 describe PiloteHelper do
@@ -23,6 +25,15 @@ describe PiloteHelper do
       Rails.logger.should_receive(:error)
       families = PiloteHelper.get_families volunteer_user
       families.has_key?(:error).should == true
+    end
+
+    it "should encoding head of families name" do
+      PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
+      pilote_families = '[{"asentamiento":"A", "jefe_de_familia":"To\u00c3\u00b1o"}, {"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}]'
+      Net::HTTP.any_instance.stub(:request).and_return(stub(body: pilote_families))
+
+      families = PiloteHelper.get_families(volunteer_user)
+      families["A"][0]["jefe_de_familia"].should == "Toño"
     end
 
     it "should return sorted families grouped by geografia" do
@@ -58,6 +69,16 @@ describe PiloteHelper do
       Net::HTTP.any_instance.stub(:request).and_return(stub(body: "{}"))
       Net::HTTP::Post.any_instance.should_receive(:set_form_data).with({"idFamilias"=>"(1, 2)", "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}"})
       PiloteHelper.get_families_details [1,2]
+    end
+
+    it "should encoding head of families name" do
+      pilote_families =
+        '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"}]'
+        response = double(Net::HTTPSuccess, is_a?: false)
+      response.stub(:body).and_return(pilote_families)
+      PiloteHelper.stub(:make_https_request).and_return(response)
+      families = PiloteHelper.get_families_details([1])
+      families[0]["jefe_de_familia"].should == "Toño"
     end
   end
 

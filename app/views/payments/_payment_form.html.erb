@@ -2,7 +2,7 @@
 <div class="accordion-group <%= 'payment-error' if has_errors %>">
   <div class="accordion-heading">
     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" data-toggle="true" href="#collapse<%=family["id_de_familia"]%>">
-      <%= encode_utf_8 family["jefe_de_familia"]%>
+      <%= family["jefe_de_familia"]%>
     </a>
   </div>
   <div id="collapse<%=family["id_de_familia"]%>"  class="family-drawer accordion-body collapse <%= 'in' if has_errors %>">
