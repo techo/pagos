@@ -4,12 +4,13 @@ class PiloteHelper
   GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familia?asentamientos="
   GET_FAMILIES_FOR_IDS = "#{ENV["PILOTE_ROOT"]}/api/v1/familia/detalles"
   GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento"
+  POST_PAYMENT_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/pago"
 
   def self.get_families(users)
     users = [users] unless users.is_a? Array
     begin
       families_path = compose_pilote_families_path(users)
-      response = JSON.parse(make_https_request(families_path))
+      response = JSON.parse(make_https_request(families_path).body)
       families = group_by_family(response)
       sort_families_by_geography(families)
     rescue Exception => e
@@ -20,7 +21,7 @@ class PiloteHelper
 
   def self.get_geographies
     begin
-      response = make_https_request(GET_GEOGRAPHIES_PATH)
+      response = make_https_request(GET_GEOGRAPHIES_PATH).body
       JSON.parse(response)
     rescue Exception => e
       JSON.parse("{}")
@@ -41,12 +42,14 @@ class PiloteHelper
 
   def self.get_families_details(families_ids)
     form_data = {"idFamilias"=>self.build_family_request_ids(families_ids) }
-    response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data)
+    response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data).body
     JSON.parse(response)
   end
 
-  def self.save_pilote_payment payment_pilote
-    puts payment_pilote
+  def self.save_pilote_payment pilote_payment
+    puts pilote_payment
+    #response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
+    #response.is_a?(Net::HTTPSuccess)
   end
 
   private
@@ -75,7 +78,7 @@ class PiloteHelper
     request = method == METHOD_GET ? Net::HTTP::Get.new(uri.request_uri) : Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(ENV['PILOTE_USERNAME'], ENV['PILOTE_PASSWORD'])
     request.set_form_data(data) if data
-    http.request(request).body
+    http.request(request)
   end
 
   def self.build_family_request_ids(ids)

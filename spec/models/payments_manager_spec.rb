@@ -61,7 +61,8 @@ describe PaymentsManager do
     it "should register a cash payment in pilote" do
       set_pilote_correct_answer
       comment = "EFECTIVO - #{volunteer.full_name}"
-      pilote_payment = {:id_familia=>valid_payment.family_id, :cantidad=>valid_payment.amount, :fecha=>valid_payment.date, :voucher=>valid_payment.voucher, :comentario=>comment }
+      date = valid_payment.date.to_date.to_formatted_s(:db)
+      pilote_payment = {"familia"=>valid_payment.family_id, "cantidad"=>valid_payment.amount, "fecha"=>date, "voucher"=>valid_payment.voucher, "comentario"=>comment }
       PiloteHelper.should_receive(:save_pilote_payment).with(pilote_payment)
 
       manager.save_payment valid_payment, volunteer
@@ -72,7 +73,8 @@ describe PaymentsManager do
       valid_payment.deposit_number = "12345"
       valid_payment.voucher = "12345"
       comment = "COMPROBANTE - #{volunteer.full_name}"
-      pilote_payment = {:id_familia=>valid_payment.family_id, :cantidad=>valid_payment.amount, :fecha=>valid_payment.date, :voucher=>valid_payment.voucher, :comentario=>comment }
+      date = valid_payment.date.to_date.to_formatted_s(:db)
+      pilote_payment = {"familia"=>valid_payment.family_id, "cantidad"=>valid_payment.amount, "fecha"=>date, "voucher"=>valid_payment.voucher, "comentario"=>comment }
       PiloteHelper.should_receive(:save_pilote_payment).with(pilote_payment)
 
       manager.save_payment valid_payment, volunteer

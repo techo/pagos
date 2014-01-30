@@ -48,7 +48,9 @@ describe PiloteHelper do
       expected_families =
         '[{"id_de_familia":"56602","jefe_de_familia":"Maria","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"},
           {"id_de_familia":"56606","jefe_de_familia":"Delfilia","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"}]'
-      PiloteHelper.stub(:make_https_request).and_return(expected_families)
+      response = double(Net::HTTPSuccess, is_a?: false)
+      response.stub(:body).and_return(expected_families)
+      PiloteHelper.stub(:make_https_request).and_return(response)
       PiloteHelper.get_families_details([1, 2]).should == JSON.parse(expected_families)
     end
 
@@ -84,6 +86,44 @@ describe PiloteHelper do
       path = PiloteHelper.compose_pilote_families_path [volunteer_user]
 
       path.should == "#{PiloteHelper::GET_FAMILIES_FOR_GEOGRAPHIES_PATH}(#{geography.village_id})"
+    end
+  end
+
+  describe "#save_pilote_payment" do
+
+    before (:each) do
+      @pilote_payment = {"familia"=>"1", "cantidad"=>"2", "fecha"=>"2014-10-10", "voucher"=>"123", "comentario"=>"ninguno" }
+    end
+
+    it "should post a payment in pilote" do
+      Net::HTTP.any_instance.
+        should_receive(:request).
+        with(an_instance_of(Net::HTTP::Post)).and_return(stub(body: "{}"))
+      PiloteHelper.save_pilote_payment @pilote_payment
+    end
+
+    it "should make a request with payment data" do
+      Net::HTTP.any_instance.stub(:request).and_return(stub(body: "{}"))
+      Net::HTTP::Post.any_instance.should_receive(:set_form_data).with(@pilote_payment)
+      PiloteHelper.save_pilote_payment @pilote_payment
+    end
+
+    it "should return true if response is successful" do
+      response = double(Net::HTTPSuccess, is_a?: true)
+      response.stub(:body).and_return("{response:ok}")
+      Net::HTTP.any_instance.stub(:request).and_return(response)
+      Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
+      result = PiloteHelper.save_pilote_payment @pilote_payment
+      result.should == true
+    end
+
+    it "should return false if response has errors" do
+      response = double(Net::HTTPSuccess, is_a?: false)
+      response.stub(:body).and_return( "{error:true}")
+      Net::HTTP.any_instance.stub(:request).and_return(response)
+      Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
+      result = PiloteHelper.save_pilote_payment @pilote_payment
+      result.should == false
     end
   end
 end
