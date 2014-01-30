@@ -47,9 +47,8 @@ class PiloteHelper
   end
 
   def self.save_pilote_payment pilote_payment
-    puts pilote_payment
-    #response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
-    #response.is_a?(Net::HTTPSuccess)
+    response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
+    response.is_a?(Net::HTTPSuccess)
   end
 
   private
