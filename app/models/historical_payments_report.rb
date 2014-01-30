@@ -15,7 +15,7 @@ class HistoricalPaymentsReport
     @result = @payments.to_a.map do |payment|
       volunteer = payment.volunteer.full_name
       payment.serializable_hash.merge!("volunteer"=>volunteer, 
-                                       "receipt"=>payment.deposit_number||"EFECTIVO",
+                                       "receipt"=> generate_deposit_number(payment),
                                        "initial_balance"=>payment.debt+payment.amount,
                                        "final_balance"=>payment.debt)
     end
@@ -37,6 +37,13 @@ class HistoricalPaymentsReport
   end
 
   private
+
+  def generate_deposit_number(payment)
+    return "VISITA" if payment.amount == 0
+    return "EFECTIVO" if payment.deposit_number.nil?
+    return payment.deposit_number
+  end
+
   def add_pilote_info
     families = @payments.pluck(:family_id).uniq
     families_details = PiloteHelper.get_families_details families

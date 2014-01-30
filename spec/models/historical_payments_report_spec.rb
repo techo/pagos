@@ -22,9 +22,11 @@ describe HistoricalPaymentsReport do
       payment1 = FactoryGirl.create(:payment, amount:11, voucher:"23", date: Date.today-10, volunteer_id:@volunteer.id, family_id:1, debt:189)
       payment2 = FactoryGirl.create(:payment, amount:12, voucher:"23", date: Date.today-8, volunteer_id:@volunteer.id, family_id:2, deposit_number:"1234", debt:168)
       payment3 = FactoryGirl.create(:payment, amount:13, voucher:"23", date: Date.today-6, volunteer_id:@volunteer.id, family_id:1, debt:176)
+      payment4 = FactoryGirl.create(:payment, amount:0, voucher:nil, date: Date.today-7, volunteer_id:@volunteer.id, family_id:1, debt:189)
 
       @expected_payments =
-        [{"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi", "deposit_number"=>"EFECTIVO"},
+        [ {"initial_balance"=>189, "final_balance"=>189, "family_head"=>"Teresa", "asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi", "deposit_number"=>"VISITA"},
+          {"initial_balance"=>189, "final_balance"=>176, "family_head"=>"Teresa", "asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi", "deposit_number"=>"EFECTIVO"},
           {"initial_balance"=>180, "final_balance"=>168, "family_head"=>"Ramon", "asentamiento"=>"Cotocollao", "ciudad" => "Montecristi", "provincia" => "Manabi", "deposit_number"=>"1234" }]
 
       families_details = [{"id_de_familia"=>"1","jefe_de_familia"=>"Teresa","asentamiento"=>"Collana", "ciudad" => "Montecristi", "provincia" => "Manabi"},
@@ -38,13 +40,13 @@ describe HistoricalPaymentsReport do
     end
 
     it "should add to result the payments between from and to" do
-      expect(@report.result.count).to eq 2
+      expect(@report.result.count).to eq 3
       @report.result.each{|record| record["date"].should be_between(@report.from, @report.to) }
     end
 
     it "should not add payments from pilote to the report" do
       pilote_payment = FactoryGirl.create(:payment, amount:50, voucher:"23", date: Date.today-5, volunteer_id:nil)
-      expect(@report.result.count).to eq 2
+      expect(@report.result.count).to eq 3
     end
 
     it "should include the volunteer that registered the payment " do
@@ -54,7 +56,7 @@ describe HistoricalPaymentsReport do
     end
 
     it "initial balance should be the cumulated amount previous payment date" do
-      @report.result.count.should == 2
+      @report.result.count.should == 3
     end
 
     it "initial balance should be the cumulated amount previous payment date" do
@@ -88,6 +90,12 @@ describe HistoricalPaymentsReport do
     end
 
     it "if the payment is in cash deposit number should be EFECTIVO" do
+      @expected_payments.each_with_index do |record, index|
+        @report.result[index]["receipt"].should == record["deposit_number"]
+      end
+    end
+
+    it "if the payment was a visit the deposit number should be EFECTIVO" do
       @expected_payments.each_with_index do |record, index|
         @report.result[index]["receipt"].should == record["deposit_number"]
       end
