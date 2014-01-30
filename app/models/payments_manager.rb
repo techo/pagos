@@ -5,7 +5,7 @@ class PaymentsManager
     payment.volunteer = volunteer
     if payment.valid?
       saved = save_pilote(payment) if payment.amount > 0
-      payment.save if saved
+      saved = payment.save if saved || payment.amount == 0
       return saved
     end
     false

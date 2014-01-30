@@ -27,7 +27,7 @@ describe PaymentsManager do
       }.to change{ Payment.count }.by(1)
     end
 
-    it "should not save an invalid payment" do
+    it "should not save aspec/models/payments_manager_spec.rb.orign invalid payment" do
       set_pilote_correct_answer
       expect{
         manager.save_payment invalid_payment, volunteer
@@ -87,6 +87,23 @@ describe PaymentsManager do
       PiloteHelper.should_not_receive(:save_pilote_payment)
 
       manager.save_payment valid_payment, volunteer
+    end
+
+    it "should register a visit locally" do
+      set_pilote_correct_answer
+      valid_payment.amount = 0
+      valid_payment.deposit_number = nil
+
+      expect{
+        manager.save_payment valid_payment, volunteer
+      }.to change{ Payment.count }.by(1)
+    end
+
+    it "should return true if visit was registered" do
+      set_pilote_correct_answer
+      valid_payment.amount = 0
+      valid_payment.deposit_number = nil
+      manager.save_payment(valid_payment, volunteer).should == true
     end
 
     it "should not save payment if pilote sync fails" do
