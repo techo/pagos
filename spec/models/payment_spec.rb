@@ -19,7 +19,7 @@ describe Payment do
          .is_less_than_or_equal_to(10000)
          .with_message("El monto debe ser numérico entre 0 y 10000") }
     it { should validate_numericality_of(:debt)
-         .is_greater_than_or_equal_to(0).with_message("El monto pagado no puede ser mayor a la deuda") }
+         .is_greater_than_or_equal_to(0) }
   end
 
   describe "#has_volunteer" do
@@ -75,6 +75,26 @@ describe Payment do
     it "should return VISITA if amount is zero" do
       payment = FactoryGirl.build(:payment, amount:0, deposit_number:nil)
       payment.type.should == "VISITA"
+    end
+  end
+
+  describe "#short_description" do
+    it "should return 'EFECTIVO' plus the volunteer name for cash payment" do
+      volunteer = FactoryGirl.build(:volunteer_user)
+      payment = FactoryGirl.build(:payment, deposit_number:nil, volunteer: volunteer)
+      payment.short_description.should == "#{payment.type} - #{volunteer.full_name}"
+    end
+
+    it "should return 'COMPROBANTE' plus deposit number plus the volunteer name for deposit payment" do
+      volunteer = FactoryGirl.build(:volunteer_user)
+      payment = FactoryGirl.build(:payment, deposit_number:"123", volunteer: volunteer)
+      payment.short_description.should == "#{payment.type}: #{payment.deposit_number} - #{volunteer.full_name}"
+    end
+
+    it "should return 'VISITA' plus deposit number plus the volunteer name for a visit" do
+      volunteer = FactoryGirl.build(:volunteer_user)
+      payment = FactoryGirl.build(:payment, amount: 0, deposit_number:nil, volunteer: volunteer)
+      payment.short_description.should == "#{payment.type} - #{volunteer.full_name}"
     end
   end
 end

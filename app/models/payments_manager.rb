@@ -4,12 +4,8 @@ class PaymentsManager
     calculate_current_debt payment
     payment.volunteer = volunteer
     if payment.valid?
-      saved = save_pilote payment, volunteer if payment.amount > 0 
-      if saved
-        payment.save
-      else
-        payment.errors.add(:base, "Ha ocurrido un error al sincronizar el pago con Pilote")
-      end
+      saved = save_pilote(payment) if payment.amount > 0
+      payment.save if saved
       return saved
     end
     false
@@ -31,10 +27,12 @@ class PaymentsManager
     payment.debt = get_last_family_debt(payment.family_id) - payment.amount unless payment.amount.nil?
   end
 
-  def save_pilote(payment, volunteer)
-    comment = "#{payment.type} - #{volunteer.full_name}"
+  def save_pilote(payment)
+    comment = payment.short_description
     date = payment.date.to_date.to_formatted_s(:db)
-    pilote_payment = {"familia"=>payment.family_id.to_s, "cantidad"=>payment.amount.to_s, "fecha"=>date, "voucher"=>payment.voucher, "comentario"=>comment }
+    pilote_payment = {"familia"=>payment.family_id, "cantidad"=>payment.amount, "fecha"=>date, "voucher"=>payment.voucher, "comentario"=>comment }
     PiloteHelper.save_pilote_payment pilote_payment
   end
+
+
 end

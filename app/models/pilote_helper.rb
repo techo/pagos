@@ -1,8 +1,8 @@
 class PiloteHelper
   METHOD_POST = 1
   METHOD_GET = 0
-  GET_FAMILIES_FOR_IDS = "#{ENV["PILOTE_ROOT"]}/api/v1/familia/detalles"
   GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familia?asentamientos="
+  GET_FAMILIES_FOR_IDS = "#{ENV["PILOTE_ROOT"]}/api/v1/familia/detalles"
   GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento?pais=#{ENV["PILOTE_COUNTRY_CODE"]}"
   POST_PAYMENT_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/pago"
 
@@ -48,7 +48,7 @@ class PiloteHelper
 
   def self.save_pilote_payment pilote_payment
     response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
-    response.is_a?(Net::HTTPCreated)
+    response.is_a?(Net::HTTPSuccess)
   end
 
   private
@@ -62,7 +62,7 @@ class PiloteHelper
   end
 
   def self.group_by_family(families)
-    sorted_families = families.sort_by do |family|
+    families.sort_by do |family|
       family["jefe_de_familia"]
     end
   end

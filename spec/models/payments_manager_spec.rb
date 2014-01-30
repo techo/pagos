@@ -59,15 +59,22 @@ describe PaymentsManager do
     end
 
     it "should register a cash payment in pilote" do
-      pilote_payment = setup_pilote_payment_sync("EFECTIVO")
+      set_pilote_correct_answer
+      comment = "EFECTIVO - #{volunteer.full_name}"
+      date = valid_payment.date.to_date.to_formatted_s(:db)
+      pilote_payment = {"familia"=>valid_payment.family_id, "cantidad"=>valid_payment.amount, "fecha"=>date, "voucher"=>valid_payment.voucher, "comentario"=>comment }
       PiloteHelper.should_receive(:save_pilote_payment).with(pilote_payment)
+
       manager.save_payment valid_payment, volunteer
     end
 
     it "should register a deposit payment in pilote" do
-      valid_payment.deposit_number = "12345"
+      set_pilote_correct_answer
+      valid_payment.deposit_number = "9348394568749586"
       valid_payment.voucher = "12345"
-      pilote_payment = setup_pilote_payment_sync("COMPROBANTE")
+      comment = "COMPROBANTE: #{valid_payment.deposit_number} - #{volunteer.full_name}"
+      date = valid_payment.date.to_date.to_formatted_s(:db)
+      pilote_payment = {"familia"=>valid_payment.family_id, "cantidad"=>valid_payment.amount, "fecha"=>date, "voucher"=>valid_payment.voucher, "comentario"=>comment }
       PiloteHelper.should_receive(:save_pilote_payment).with(pilote_payment)
 
       manager.save_payment valid_payment, volunteer
@@ -90,26 +97,11 @@ describe PaymentsManager do
       }.to change{ Payment.count }.by(0)
     end
 
-    it "should add a sync error to payment if pilote sync fails" do
-      PiloteHelper.stub(:save_pilote_payment).and_return(false)
-      set_pilote_correct_answer
-      manager.save_payment valid_payment, volunteer
-      valid_payment.errors[:base].should include("Ha ocurrido un error al sincronizar el pago con Pilote")
-    end
-
     it "should not register a payment in pilote if payment is invalid" do
       set_pilote_correct_answer
       PiloteHelper.should_not_receive(:save_pilote_payment)
 
       manager.save_payment invalid_payment, volunteer
-    end
-
-    private
-    def setup_pilote_payment_sync(payment_type)
-      set_pilote_correct_answer
-      comment = "#{payment_type} - #{volunteer.full_name}"
-      date = valid_payment.date.to_date.to_formatted_s(:db)
-      return {"familia"=>valid_payment.family_id.to_s, "cantidad"=>valid_payment.amount.to_s, "fecha"=>date, "voucher"=>valid_payment.voucher, "comentario"=>comment }
     end
   end
 
@@ -118,5 +110,4 @@ describe PaymentsManager do
     pilote_response = [{"id_de_familia"=>56602,"jefe_de_familia"=>"Maria Rosario Fernandez Duchitanga","monto_original"=>120.00,"asentamiento"=>"Collana","ciudad"=>"Ludo, Sigsig","provincia"=>"Azuay","pagos"=>60.00}]
     PiloteHelper.stub(:get_families_details).and_return(pilote_response)
   end
-
 end
