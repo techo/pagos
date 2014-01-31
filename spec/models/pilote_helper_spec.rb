@@ -146,5 +146,17 @@ describe PiloteHelper do
       result = PiloteHelper.save_pilote_payment @pilote_payment
       result.should == false
     end
+
+    it "should not attempt to save if in integration environment" do
+      ENV["IS_INTEGRATION"] = 'true'
+      Net::HTTP.any_instance.should_not_receive(:request)
+      PiloteHelper.save_pilote_payment(@pilote_payment)
+    end
+
+    it "should not attempt to save if in integration environment" do
+      ENV["IS_INTEGRATION"] = 'true'
+      Rails.logger.should_receive(:info).with("Saving Pilote payment: #{@pilote_payment.inspect}")
+      PiloteHelper.save_pilote_payment(@pilote_payment)
+    end
   end
 end

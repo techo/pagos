@@ -40,4 +40,5 @@ Pagos::Application.configure do
   ENV["PILOTE_COUNTRY_CODE"] = "10"
 
   ENV["ADMIN_DEFAULT_PASSWORD"] = "0123456789"
+  ENV["IS_INTEGRATION"] = 'false'
 end

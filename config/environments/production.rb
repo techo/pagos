@@ -93,4 +93,6 @@ Pagos::Application.configure do
       :authentication       => "plain",
       :enable_starttls_auto => true
   }
+
+  ENV["IS_INTEGRATION"] = (ENV['OPENSHIFT_APP_NAME'] == 'integracion').to_s
 end
