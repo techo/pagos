@@ -30,7 +30,7 @@ describe PiloteHelper do
     it "should encoding head of families name" do
       PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
       pilote_families = '[{"asentamiento":"A", "jefe_de_familia":"To\u00c3\u00b1o"}, {"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}]'
-      Net::HTTP.any_instance.stub(:request).and_return(stub(body: pilote_families))
+      Net::HTTP.any_instance.stub(:request).and_return(double(body: pilote_families))
 
       families = PiloteHelper.get_families(volunteer_user)
       families["A"][0]["jefe_de_familia"].should == "Toño"
@@ -39,7 +39,7 @@ describe PiloteHelper do
     it "should return sorted families grouped by geografia" do
       PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
       expected_families = '[{"asentamiento":"A", "jefe_de_familia":"Juan"}, {"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}]'
-      Net::HTTP.any_instance.stub(:request).and_return(stub(body: expected_families))
+      Net::HTTP.any_instance.stub(:request).and_return(double(body: expected_families))
 
       families = PiloteHelper.get_families(volunteer_user)
       families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
@@ -51,7 +51,7 @@ describe PiloteHelper do
     it "should request the families details given a set of families ids" do
       Net::HTTP.any_instance.
         should_receive(:request).
-        with(an_instance_of(Net::HTTP::Post)).and_return(stub(body: "{}"))
+        with(an_instance_of(Net::HTTP::Post)).and_return(double(body: "{}"))
       PiloteHelper.get_families_details [1,2,3]
     end
 
@@ -66,7 +66,7 @@ describe PiloteHelper do
     end
 
     it "should make a request with a list of family ids" do
-      Net::HTTP.any_instance.stub(:request).and_return(stub(body: "{}"))
+      Net::HTTP.any_instance.stub(:request).and_return(double(body: "{}"))
       Net::HTTP::Post.any_instance.should_receive(:set_form_data).with({"idFamilias"=>"(1, 2)", "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}"})
       PiloteHelper.get_families_details [1,2]
     end
@@ -116,15 +116,19 @@ describe PiloteHelper do
       @pilote_payment = {"familia"=>"1", "cantidad"=>"2", "fecha"=>"2014-10-10", "voucher"=>"123", "comentario"=>"ninguno" }
     end
 
+    after(:each) do
+      ENV["IS_INTEGRATION"] = 'false'
+    end
+
     it "should post a payment in pilote" do
       Net::HTTP.any_instance.
         should_receive(:request).
-        with(an_instance_of(Net::HTTP::Post)).and_return(stub(body: "{}"))
+        with(an_instance_of(Net::HTTP::Post)).and_return(double(body: "{}"))
       PiloteHelper.save_pilote_payment @pilote_payment
     end
 
     it "should make a request with payment data" do
-      Net::HTTP.any_instance.stub(:request).and_return(stub(body: "{}"))
+      Net::HTTP.any_instance.stub(:request).and_return(double(body: "{}"))
       Net::HTTP::Post.any_instance.should_receive(:set_form_data).with(@pilote_payment)
       PiloteHelper.save_pilote_payment @pilote_payment
     end
