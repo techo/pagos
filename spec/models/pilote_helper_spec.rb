@@ -80,6 +80,37 @@ describe PiloteHelper do
       families = PiloteHelper.get_families_details([1])
       families[0]["jefe_de_familia"].should == "Toño"
     end
+
+    it "should encoding asentamiento" do
+      pilote_families =
+        '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a","pagos":"60.00"}]'
+        response = double(Net::HTTPSuccess, is_a?: false)
+      response.stub(:body).and_return(pilote_families)
+      PiloteHelper.stub(:make_https_request).and_return(response)
+      families = PiloteHelper.get_families_details([1])
+      families[0]["asentamiento"].should == "Collaña"
+    end
+
+    it "should encoding provincia" do
+      pilote_families =
+        '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a", "provincia":"Colla\u00c3\u00b1a", "ciudad":"Colla\u00c3\u00b1a", "pagos":"60.00"}]'
+        response = double(Net::HTTPSuccess, is_a?: false)
+      response.stub(:body).and_return(pilote_families)
+      PiloteHelper.stub(:make_https_request).and_return(response)
+      families = PiloteHelper.get_families_details([1])
+      families[0]["provincia"].should == "Collaña"
+    end
+
+    
+    it "should encoding provincia" do
+      pilote_families =
+        '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a", "provincia":"Colla\u00c3\u00b1a", "ciudad":"Colla\u00c3\u00b1a", "pagos":"60.00"}]'
+        response = double(Net::HTTPSuccess, is_a?: false)
+      response.stub(:body).and_return(pilote_families)
+      PiloteHelper.stub(:make_https_request).and_return(response)
+      families = PiloteHelper.get_families_details([1])
+      families[0]["ciudad"].should == "Collaña"
+    end
   end
 
   describe "geographies" do

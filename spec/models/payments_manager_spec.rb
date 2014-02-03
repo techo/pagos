@@ -29,7 +29,7 @@ describe PaymentsManager do
     end
 
     it "should assign the payment to the volunteer even though the debt is nil from Pilote side" do
-      pilote_response = [{"id_de_familia"=>56602,"jefe_de_familia"=>"Maria Rosario Fernandez Duchitanga","asentamiento"=>"Collana","ciudad"=>"Ludo, Sigsig","provincia"=>"Azuay"}]
+      pilote_response = [{"id_de_familia"=>56602,"jefe_de_familia"=>"Maria Rosario Fernandez Duchitanga","asentamiento"=>"Collana","ciudad"=>"Ludo, Sigsig","provincia"=>"Azuay", "pagos"=>""}]
       PiloteHelper.stub(:get_families_details).and_return(pilote_response)
       manager.save_payment valid_payment, volunteer
       valid_payment.volunteer.should == volunteer
@@ -42,7 +42,7 @@ describe PaymentsManager do
       }.to change{ Payment.count }.by(1)
     end
 
-    it "should not save aspec/models/payments_manager_spec.rb.orign invalid payment" do
+    it "should not save an invalid payment" do
       set_pilote_correct_answer
       expect{
         manager.save_payment invalid_payment, volunteer

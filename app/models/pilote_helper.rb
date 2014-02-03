@@ -67,9 +67,16 @@ class PiloteHelper
 
   def self.encode_families(families)
     families.each do |family|
-      family["jefe_de_familia"] = EncodingHelper.encode_utf_8(family["jefe_de_familia"])
+      encode_field(family, "jefe_de_familia")
+      encode_field(family, "asentamiento")
+      encode_field(family, "provincia")
+      encode_field(family, "ciudad")
     end
     families
+  end
+
+  def self.encode_field(family, field)
+    family[field] = EncodingHelper.encode_utf_8(family[field]) if !family[field].blank?
   end
 
   def self.group_by_family(families)
