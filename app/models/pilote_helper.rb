@@ -56,7 +56,7 @@ class PiloteHelper
       true
     else
       response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
-      response.is_a?(Net::HTTPSuccess)
+      response.is_a?(Net::HTTPCreated)
     end
   end
 

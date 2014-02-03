@@ -134,21 +134,13 @@ describe PiloteHelper do
     end
 
     it "should return true if response is successful" do
-      response = double(Net::HTTPSuccess, is_a?: true)
-      response.stub(:body).and_return("{response:ok}")
-      Net::HTTP.any_instance.stub(:request).and_return(response)
-      Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
-      result = PiloteHelper.save_pilote_payment @pilote_payment
-      result.should == true
+      setup_save_pilote_payment(true)
+      PiloteHelper.save_pilote_payment(@pilote_payment).should == true
     end
 
     it "should return false if response has errors" do
-      response = double(Net::HTTPSuccess, is_a?: false)
-      response.stub(:body).and_return( "{error:true}")
-      Net::HTTP.any_instance.stub(:request).and_return(response)
-      Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
-      result = PiloteHelper.save_pilote_payment @pilote_payment
-      result.should == false
+      setup_save_pilote_payment(false)
+      PiloteHelper.save_pilote_payment(@pilote_payment).should == false
     end
 
     it "should not attempt to save if in integration environment" do
@@ -162,5 +154,15 @@ describe PiloteHelper do
       Rails.logger.should_receive(:info).with("Saving Pilote payment: #{@pilote_payment.inspect}")
       PiloteHelper.save_pilote_payment(@pilote_payment).should be_true
     end
+
+
+     private
+     def setup_save_pilote_payment(response_value)
+       response = double(Net::HTTPCreated)
+       response.stub(:is_a?).with(Net::HTTPCreated).and_return(response_value)
+       response.stub(:body).and_return("{}")
+       Net::HTTP.any_instance.stub(:request).and_return(response)
+       Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
+     end
   end
 end

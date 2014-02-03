@@ -19,7 +19,7 @@ describe Payment do
          .is_less_than_or_equal_to(10000)
          .with_message("El monto debe ser numérico entre 0 y 10000") }
     it { should validate_numericality_of(:debt)
-         .is_greater_than_or_equal_to(0) }
+         .is_greater_than_or_equal_to(0).with_message("El monto pagado no puede ser mayor a la deuda") }
   end
 
   describe "#has_volunteer" do
