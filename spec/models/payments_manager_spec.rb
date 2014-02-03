@@ -28,6 +28,13 @@ describe PaymentsManager do
       valid_payment.volunteer.should == volunteer
     end
 
+    it "should assign the payment to the volunteer even though the debt is nil from Pilote side" do
+      pilote_response = [{"id_de_familia"=>56602,"jefe_de_familia"=>"Maria Rosario Fernandez Duchitanga","asentamiento"=>"Collana","ciudad"=>"Ludo, Sigsig","provincia"=>"Azuay"}]
+      PiloteHelper.stub(:get_families_details).and_return(pilote_response)
+      manager.save_payment valid_payment, volunteer
+      valid_payment.volunteer.should == volunteer
+    end
+
     it "should save a valid payment" do
       set_pilote_correct_answer
       expect{
