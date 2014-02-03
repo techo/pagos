@@ -80,7 +80,7 @@ class PiloteHelper
 
   def self.sort_by_family_head(families)
     families.sort_by do |family|
-      family["jefe_de_familia"]
+      family["jefe_de_familia"].downcase
     end
   end
 

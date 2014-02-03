@@ -48,11 +48,11 @@ describe PiloteHelper do
 
     it "should return sorted families grouped by geografia and sorted by family head's name" do
       PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
-      expected_families = '[{"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}, {"asentamiento":"A", "jefe_de_familia":"Juan"}]'
+      expected_families = '[{"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}, {"asentamiento":"A", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"juan"}]'
       Net::HTTP.any_instance.stub(:request).and_return(double(body: expected_families))
 
       families = PiloteHelper.get_families(volunteer_user)
-      families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
+      families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"juan"}, {"asentamiento" => "A", "jefe_de_familia" => "Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
       families["Z"].should == [{"asentamiento"=>"Z", "jefe_de_familia"=>"Juan"}]
     end
   end
