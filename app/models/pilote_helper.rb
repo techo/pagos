@@ -53,6 +53,7 @@ class PiloteHelper
   def self.save_pilote_payment pilote_payment
     if ENV["IS_INTEGRATION"] == 'true'
       Rails.logger.info("Saving Pilote payment: #{pilote_payment.inspect}")
+      true
     else
       response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
       response.is_a?(Net::HTTPSuccess)
