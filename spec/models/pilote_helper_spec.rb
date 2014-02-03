@@ -45,6 +45,16 @@ describe PiloteHelper do
       families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
       families["Z"].should == [{"asentamiento"=>"Z", "jefe_de_familia"=>"Juan"}]
     end
+
+    it "should return sorted families grouped by geografia and sorted by family head's name" do
+      PiloteHelper.stub(:compose_pilote_families_path).and_return(path)
+      expected_families = '[{"asentamiento":"Z", "jefe_de_familia":"Juan"}, {"asentamiento":"A", "jefe_de_familia":"Z"}, {"asentamiento":"A", "jefe_de_familia":"Juan"}]'
+      Net::HTTP.any_instance.stub(:request).and_return(double(body: expected_families))
+
+      families = PiloteHelper.get_families(volunteer_user)
+      families["A"].should == [{"asentamiento"=>"A", "jefe_de_familia"=>"Juan"}, {"asentamiento"=>"A", "jefe_de_familia"=>"Z"}]
+      families["Z"].should == [{"asentamiento"=>"Z", "jefe_de_familia"=>"Juan"}]
+    end
   end
 
   describe "Families details" do
@@ -101,7 +111,7 @@ describe PiloteHelper do
       families[0]["provincia"].should == "Collaña"
     end
 
-    
+
     it "should encoding provincia" do
       pilote_families =
         '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a", "provincia":"Colla\u00c3\u00b1a", "ciudad":"Colla\u00c3\u00b1a", "pagos":"60.00"}]'

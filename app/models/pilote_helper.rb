@@ -14,8 +14,7 @@ class PiloteHelper
       families_path = compose_pilote_families_path(users)
       families = JSON.parse(make_https_request(families_path).body)
       encode_families(families)
-      group_by_family(families)
-      sort_families_by_geography(families)
+      group_families_by_geography(families)
     rescue Exception => e
       Rails.logger.error(e.backtrace)
       {:error=>false}
@@ -56,13 +55,13 @@ class PiloteHelper
   end
 
   private
-  def self.sort_families_by_geography(sorted_families)
-    families_by_geography = {}
-    sorted_families.each do |family|
-      families_by_geography[family["asentamiento"]] = [] unless families_by_geography[family["asentamiento"]]
-      families_by_geography[family["asentamiento"]] << family
+  def self.group_families_by_geography(families)
+    grouped_families = families.group_by do |family|
+      family['asentamiento']
     end
-    families_by_geography
+    grouped_families.each do |key, families|
+      grouped_families[key] = sort_by_family_head families
+    end
   end
 
   def self.encode_families(families)
@@ -79,7 +78,7 @@ class PiloteHelper
     family[field] = EncodingHelper.encode_utf_8(family[field]) if !family[field].blank?
   end
 
-  def self.group_by_family(families)
+  def self.sort_by_family_head(families)
     families.sort_by do |family|
       family["jefe_de_familia"]
     end
