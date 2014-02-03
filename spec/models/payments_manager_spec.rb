@@ -20,6 +20,14 @@ describe PaymentsManager do
       valid_payment.volunteer.should == volunteer
     end
 
+    it "should assign the payment to the volunteer even though the debt is nil instead of 0" do
+      previous_payment = FactoryGirl.build(:valid_payment, date: Date.today, debt: nil)
+      previous_payment.save(validate: false)
+      set_pilote_correct_answer
+      manager.save_payment valid_payment, volunteer
+      valid_payment.volunteer.should == volunteer
+    end
+
     it "should save a valid payment" do
       set_pilote_correct_answer
       expect{

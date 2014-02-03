@@ -14,9 +14,8 @@ class PaymentsManager
   private
   def get_last_family_debt family_id
     last_payment = Payment.last_family_payment family_id
-
     if last_payment
-      last_payment.debt
+      last_payment.debt || 0
     else
       family = PiloteHelper.get_families_details([family_id]).first
       family["monto_original"].to_f - family["pagos"].to_f
