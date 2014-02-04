@@ -159,4 +159,14 @@ describe HistoricalPaymentsReport do
       end
     end
   end
+
+  describe "Empty results" do
+    it "should not get families details from pilote if there is not payments in the range" do
+      HistoricalPaymentsReport.any_instance.should_not_receive(:add_pilote_info)
+      @report = HistoricalPaymentsReport.new
+      @report.from = Date.today - 9
+      @report.to = Date.today
+      @report.generate
+    end
+  end
 end

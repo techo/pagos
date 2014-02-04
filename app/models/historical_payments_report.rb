@@ -21,7 +21,7 @@ class HistoricalPaymentsReport
                                        "date"             =>  payment.date.strftime("%Y-%m-%d"))
     end
 
-    add_pilote_info
+    add_pilote_info if @payments.count > 0
   end
 
   def to_csv(options = {})
