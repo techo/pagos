@@ -43,6 +43,7 @@ class PiloteHelper
   end
 
   def self.get_families_details(families_ids)
+    validates_families_details_params(families_ids)
     form_data = {"idFamilias"=>self.build_family_request_ids(families_ids), "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}" }
     response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data).body
     response = JSON.parse(response)
@@ -94,10 +95,17 @@ class PiloteHelper
     request = method == METHOD_GET ? Net::HTTP::Get.new(uri.request_uri) : Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(ENV['PILOTE_USERNAME'], ENV['PILOTE_PASSWORD'])
     request.set_form_data(data) if data
-    http.request(request)
+    Rails.logger.info("Request: method: #{request.method}, url: #{path}, data: #{data}")
+    response = http.request(request)
+    Rails.logger.info("Response: code: #{response.code}, body: #{response.body.truncate(100)}")
+    return response
   end
 
   def self.build_family_request_ids(ids)
     "(#{ids.join(', ')})"
+  end
+
+  def self.validates_families_details_params(params)
+    raise ArgumentError.new if (!params.instance_of?(Array) || params.size == 0)
   end
 end
