@@ -41,7 +41,7 @@ describe HistoricalPaymentsReport do
 
     it "should add to result the payments between from and to" do
       expect(@report.result.count).to eq 3
-      @report.result.each{|record| record["date"].should be_between(@report.from, @report.to) }
+      @report.result.each{|record| Date.parse(record["date"]).should be_between(@report.from, @report.to) }
     end
 
     it "should not add payments from pilote to the report" do
@@ -150,7 +150,11 @@ describe HistoricalPaymentsReport do
       order.each_with_index do |details, index|
         result = @report.result[index]
         details.each do |key, value|
-          result[key].should == value
+          if key == 'date'
+            Date.parse(result[key]).should == value
+          else
+            result[key].should == value
+          end
         end
       end
     end

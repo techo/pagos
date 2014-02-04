@@ -14,10 +14,11 @@ class HistoricalPaymentsReport
     @payments = Payment.has_volunteer.within_range @from, @to
     @result = @payments.to_a.map do |payment|
       volunteer = payment.volunteer.full_name
-      payment.serializable_hash.merge!("volunteer"=>volunteer, 
-                                       "receipt"=> generate_deposit_number(payment),
-                                       "initial_balance"=>payment.debt+payment.amount,
-                                       "final_balance"=>payment.debt)
+      payment.serializable_hash.merge!("volunteer"        =>  volunteer,
+                                       "receipt"          =>  generate_deposit_number(payment),
+                                       "initial_balance"  =>  payment.debt+payment.amount,
+                                       "final_balance"    =>  payment.debt,
+                                       "date"             =>  payment.date.strftime("%d/%m/%Y"))
     end
 
     add_pilote_info
