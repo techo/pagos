@@ -38,5 +38,4 @@ class PaymentsManager
     PiloteHelper.save_pilote_payment pilote_payment
   end
 
-
 end
