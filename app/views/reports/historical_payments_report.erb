@@ -1,18 +1,19 @@
 <%= form_for :report, url: {action: "create"} do |f| %>
   <input name="report[report_name]" type="hidden" value="HistoricalPaymentsReport"/>
-<div class="form-horizontal">
-  <div class="control-group span4">
-    <%= f.label :from, 'Desde' %>
-    <%= f.date_field :from, value: (@report.from if @report), readonly: true %>
-  </div>
-  <div class="control-group span3">
-    <%= f.label :to, 'Hasta' %>
-    <%= f.date_field :to, value: (@report.to if @report), readonly: true  %>
-  </div>
-  <div class="control-group span2">
-    <br>
-    <button type="submit" value="Generar" name="commit" class="btn btn-primary report">Generar</button>
-    <button type="submit" value="csv" name="format" class="btn btn-primary report">Exportar</button>
+<div class="form-horizontal" id="reports-generation-form">
+  <div class="container">
+    <div class="control-group span2">
+      <%= f.label :from, 'Desde' %>
+      <%= f.date_field :from, value: (@report.from if @report), readonly: true, class: "span2" %>
+    </div>
+    <div class="control-group span2">
+      <%= f.label :to, 'Hasta' %>
+      <%= f.date_field :to, value: (@report.to if @report), readonly: true, class: "span2"  %>
+    </div>
+    <div class="control-group span3 button-container">
+      <button type="submit" value="Generar" name="commit" class="btn btn-primary report">Generar</button>
+      <button type="submit" value="csv" name="format" class="btn btn-primary report">Exportar</button>
+    </div>
   </div>
 </div>
 <% unless @report.result.blank? %>
