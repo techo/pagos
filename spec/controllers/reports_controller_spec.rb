@@ -81,7 +81,7 @@ describe ReportsController do
       response.should_not render_template("reports/historical_payments_report")
       response.headers['Content-Disposition'].should == 'attachment; filename="historical_payments_report_2014-01-01_to_2014-01-11.csv"'
       response.headers['Content-Type'].should == "text/csv"
-      response.body.should == "Comunidad,Familia,Fecha,Saldo Inicial,Abono,Saldo Final,Efectivo o Comprobante,Registrado por\nManabi - Montecristi - Collana,Teresa,02/01/2014,140.0,20.0,120,EFECTIVO,SuzyV V\nManabi - Montecristi - Cotocollao,Ramon,02/01/2014,120.0,15.0,105,EFECTIVO,SuzyV V\n"
+      response.body.should == "Comunidad,Familia,Fecha,Saldo Inicial,Abono,Saldo Final,Efectivo o Comprobante,Registrado por\nManabi - Montecristi - Collana,Teresa,2014-01-02,140.0,20.0,120,EFECTIVO,SuzyV V\nManabi - Montecristi - Cotocollao,Ramon,2014-01-02,120.0,15.0,105,EFECTIVO,SuzyV V\n"
     end
   end
 
