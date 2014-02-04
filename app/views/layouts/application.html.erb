@@ -40,10 +40,10 @@
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
+        <div class="container">
           <a class="brand-logo" href="/">
             <%= image_tag 'techo_logo.png' %>
           </a>
-        <div class="container">
           <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -65,14 +65,14 @@
         </div><%= yield :head %>
       </div>
     </div>
-    <% if current_user && current_user.can_manage_users? %>
-      <ul class="nav nav-tabs">
-        <li class="<%= 'active' if params[:controller] == 'users' %>"><a href="/payments">Perfiles de Usuario</a></li>
-        <li class="<%= 'active' if params[:controller] == 'assignments' %>"><a href="/assignments/new">Voluntarios de Pagos</a></li>
-        <li class="<%= 'active' if params[:controller] == 'reports' %>"><a href="/reports/new?report_name=HistoricalPaymentsReport">Histórico de Pagos</a></li>
-      </ul>
-    <% end %>
     <div class="container">
+      <% if current_user && current_user.can_manage_users? %>
+        <ul class="nav nav-tabs">
+          <li class="<%= 'active' if params[:controller] == 'users' %>"><a href="/payments">Perfiles de Usuario</a></li>
+          <li class="<%= 'active' if params[:controller] == 'assignments' %>"><a href="/assignments/new">Voluntarios de Pagos</a></li>
+          <li class="<%= 'active' if params[:controller] == 'reports' %>"><a href="/reports/new?report_name=HistoricalPaymentsReport">Histórico de Pagos</a></li>
+        </ul>
+      <% end %>
         <div class="row">
           <div class="span12">
             <%= bootstrap_flash %>
