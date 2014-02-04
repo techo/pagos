@@ -18,7 +18,7 @@ class HistoricalPaymentsReport
                                        "receipt"          =>  generate_deposit_number(payment),
                                        "initial_balance"  =>  payment.debt+payment.amount,
                                        "final_balance"    =>  payment.debt,
-                                       "date"             =>  payment.date.strftime("%d/%m/%Y"))
+                                       "date"             =>  payment.date.strftime("%Y-%m-%d"))
     end
 
     add_pilote_info
