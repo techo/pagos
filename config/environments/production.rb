@@ -95,4 +95,8 @@ Pagos::Application.configure do
   }
 
   ENV["IS_INTEGRATION"] = (ENV['OPENSHIFT_APP_NAME'] == 'integracion').to_s
+
+  if ENV["IS_INTEGRATION"] == 'true'
+    ENV["PILOTE_ROOT"] = "https://desarrollo.techo.org:8083/sandbox"
+  end
 end
