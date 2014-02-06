@@ -27,6 +27,7 @@ class PaymentsController < ApplicationController
     params[:payment][:deposit_number] = nil if params[:payment][:deposit_number] == ""
     params.require(:payment).permit(:family_id, :voucher, :amount, :deposit_number, :date)
   end
+
   def verify_can_manage_payments
     redirect_to root_url unless current_user && current_user.can_manage_payments?
   end
