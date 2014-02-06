@@ -1,15 +1,18 @@
 # encoding: UTF-8
 
 class PiloteHelper
+  METHOD_POST = 1
+  METHOD_GET = 0
   GET_FAMILIES_FOR_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/familia?asentamientos="
   GET_FAMILIES_FOR_IDS = "#{ENV["PILOTE_ROOT"]}/api/v1/familia/detalles"
   GET_GEOGRAPHIES_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/asentamiento?pais=#{ENV["PILOTE_COUNTRY_CODE"]}"
   POST_PAYMENT_PATH = "#{ENV["PILOTE_ROOT"]}/api/v1/pago"
 
   def self.get_families(users)
+    users = [users] unless users.is_a? Array
     begin
-      families_path = compose_pilote_families_path(Array(users))
-      families = JSON.parse(make_https_request(families_path, Net::HTTP::Get).body)
+      families_path = compose_pilote_families_path(users)
+      families = JSON.parse(make_https_request(families_path).body)
       encode_families(families)
       group_families_by_geography(families)
     rescue Exception => e
@@ -19,10 +22,12 @@ class PiloteHelper
   end
 
   def self.get_geographies
-    response = make_https_request(GET_GEOGRAPHIES_PATH, Net::HTTP::Get).body
-    JSON.parse(response)
-  rescue Exception => e
-    JSON.parse("{}")
+    begin
+      response = make_https_request(GET_GEOGRAPHIES_PATH).body
+      JSON.parse(response)
+    rescue Exception => e
+      JSON.parse("{}")
+    end
   end
 
   def self.compose_pilote_families_path(users)
@@ -40,13 +45,13 @@ class PiloteHelper
   def self.get_families_details(families_ids)
     validates_families_details_params(families_ids)
     form_data = {"idFamilias"=>self.build_family_request_ids(families_ids), "idPais"=>"#{ENV["PILOTE_COUNTRY_CODE"]}" }
-    response = make_https_request(GET_FAMILIES_FOR_IDS, Net::HTTP::Post, form_data).body
+    response = make_https_request(GET_FAMILIES_FOR_IDS, METHOD_POST, form_data).body
     response = JSON.parse(response)
     response = encode_families(response)
   end
 
   def self.save_pilote_payment pilote_payment
-    response = make_https_request(POST_PAYMENT_PATH, Net::HTTP::Post, pilote_payment)
+    response = make_https_request(POST_PAYMENT_PATH, METHOD_POST, pilote_payment)
     response.is_a?(Net::HTTPCreated)
   end
 
@@ -80,20 +85,20 @@ class PiloteHelper
     end
   end
 
-  def self.make_https_request(path, method, data = nil)
+  def self.make_https_request(path, method = METHOD_GET, data = nil)
     uri = URI.parse(path)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     http.ca_file = ENV["SSL_CERT_FILE"]
 
-    request = method.new(uri.request_uri)
+    request = method == METHOD_GET ? Net::HTTP::Get.new(uri.request_uri) : Net::HTTP::Post.new(uri.request_uri)
     request.basic_auth(ENV['PILOTE_USERNAME'], ENV['PILOTE_PASSWORD'])
     request.set_form_data(data) if data
     Rails.logger.info("Request: method: #{request.method}, url: #{path}, data: #{data}")
     response = http.request(request)
     Rails.logger.info("Response: code: #{response.code}, body: #{response.body.truncate(100)}")
-    response
+    return response
   end
 
   def self.build_family_request_ids(ids)
