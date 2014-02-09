@@ -89,7 +89,7 @@ describe PiloteHelper do
       expected_families =
         '[{"id_de_familia":"56602","jefe_de_familia":"Maria","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"},
           {"id_de_familia":"56606","jefe_de_familia":"Delfilia","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"}]'
-      response = double(Net::HTTPSuccess, is_a?: false)
+        response = double(Net::HTTPSuccess, is_a?: false)
       response.stub(:body).and_return(expected_families)
       PiloteHelper.stub(:make_https_request).and_return(response)
       PiloteHelper.get_families_details([1, 2]).should == JSON.parse(expected_families)
@@ -104,7 +104,7 @@ describe PiloteHelper do
     it "should encoding head of families name" do
       pilote_families =
         '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Collana","pagos":"60.00"}]'
-        response = double(Net::HTTPSuccess, is_a?: false)
+      response = double(Net::HTTPSuccess, is_a?: false)
       response.stub(:body).and_return(pilote_families)
       PiloteHelper.stub(:make_https_request).and_return(response)
       families = PiloteHelper.get_families_details([1])
@@ -114,7 +114,7 @@ describe PiloteHelper do
     it "should encoding asentamiento" do
       pilote_families =
         '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a","pagos":"60.00"}]'
-        response = double(Net::HTTPSuccess, is_a?: false)
+      response = double(Net::HTTPSuccess, is_a?: false)
       response.stub(:body).and_return(pilote_families)
       PiloteHelper.stub(:make_https_request).and_return(response)
       families = PiloteHelper.get_families_details([1])
@@ -124,7 +124,7 @@ describe PiloteHelper do
     it "should encoding provincia" do
       pilote_families =
         '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a", "provincia":"Colla\u00c3\u00b1a", "ciudad":"Colla\u00c3\u00b1a", "pagos":"60.00"}]'
-        response = double(Net::HTTPSuccess, is_a?: false)
+      response = double(Net::HTTPSuccess, is_a?: false)
       response.stub(:body).and_return(pilote_families)
       PiloteHelper.stub(:make_https_request).and_return(response)
       families = PiloteHelper.get_families_details([1])
@@ -134,7 +134,7 @@ describe PiloteHelper do
     it "should encoding provincia" do
       pilote_families =
         '[{"id_de_familia":"1","jefe_de_familia":"To\u00c3\u00b1o","monto_original":"120.00","asentamiento":"Colla\u00c3\u00b1a", "provincia":"Colla\u00c3\u00b1a", "ciudad":"Colla\u00c3\u00b1a", "pagos":"60.00"}]'
-        response = double(Net::HTTPSuccess, is_a?: false)
+      response = double(Net::HTTPSuccess, is_a?: false)
       response.stub(:body).and_return(pilote_families)
       PiloteHelper.stub(:make_https_request).and_return(response)
       families = PiloteHelper.get_families_details([1])
@@ -203,33 +203,13 @@ describe PiloteHelper do
       PiloteHelper.save_pilote_payment(@pilote_payment).should == false
     end
 
-    xit "should attempt to save even if in integration environment" do
-      ENV["IS_INTEGRATION"] = 'true'
-      setup_save_pilote_payment(true)
-      Rails.logger.should_not_receive(:info)
-      PiloteHelper.save_pilote_payment(@pilote_payment).should be_true
+    private
+    def setup_save_pilote_payment(response_value)
+      response = double(Net::HTTPCreated).as_null_object
+      response.stub(:is_a?).with(Net::HTTPCreated).and_return(response_value)
+      response.stub(:body).and_return("{}")
+      Net::HTTP.any_instance.stub(:request).and_return(response)
+      Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
     end
-
-    xit "should not attempt to save if in integration environment" do
-      ENV["IS_INTEGRATION"] = 'true'
-      Net::HTTP.any_instance.should_not_receive(:request)
-      PiloteHelper.save_pilote_payment(@pilote_payment).should be_true
-    end
-
-    xit "should not attempt to save if in integration environment" do
-      ENV["IS_INTEGRATION"] = 'true'
-      Rails.logger.should_receive(:info).with("Saving Pilote payment: #{@pilote_payment.inspect}")
-      PiloteHelper.save_pilote_payment(@pilote_payment).should be_true
-    end
-
-
-     private
-     def setup_save_pilote_payment(response_value)
-       response = double(Net::HTTPCreated).as_null_object
-       response.stub(:is_a?).with(Net::HTTPCreated).and_return(response_value)
-       response.stub(:body).and_return("{}")
-       Net::HTTP.any_instance.stub(:request).and_return(response)
-       Net::HTTP::Post.any_instance.stub(:set_form_data).with(@pilote_payment)
-     end
   end
 end
