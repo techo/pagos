@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe AssignmentsController do
 
-  after (:all) do
-    User.destroy_all
-  end
-
   describe "before filter" do
     it "redirects to root url if the current user cannot manage users" do
       @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -67,12 +63,11 @@ describe AssignmentsController do
 
     describe "valid parameters" do
       before (:each) do
-
         @request.env["devise.mapping"] = Devise.mappings[:user]
         sign_in FactoryGirl.create(:administrator_user)
         @join = double(ActiveRecord::Relation)
 
-        @volunteer_user = FactoryGirl.create(:volunteer_user, id: 1)
+        @volunteer_user = FactoryGirl.create(:volunteer_user)
         @geography = FactoryGirl.create(:geography, village_id: 1234)
         @join.stub(:first_or_create).and_return(@geography)
         Volunteer.should_receive(:find).with(@volunteer_user.id).and_return(@volunteer_user)
