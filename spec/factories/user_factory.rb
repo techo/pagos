@@ -6,7 +6,6 @@ FactoryGirl.define do
     role "administrador"
     password "1234567890"
     password_confirmation "1234567890"
-    sequence(:id) { |n| n }
   end
 
   factory :volunteer_user, class: Volunteer do
@@ -16,7 +15,6 @@ FactoryGirl.define do
     role "voluntario"
     password "1234567890"
     password_confirmation "1234567890"
-    sequence(:id) { |n| n }
   end
 
   factory :user_without_role, class: User do
@@ -26,7 +24,6 @@ FactoryGirl.define do
     role nil
     password "1234567890"
     password_confirmation "1234567890"
-    sequence(:id) { |n| n }
   end
 
   factory :volunteer_additional_user, class: User do
@@ -36,7 +33,5 @@ FactoryGirl.define do
     role "voluntario"
     password "1234567890"
     password_confirmation "1234567890"
-    sequence(:id) { |n| n }
   end
-
 end
