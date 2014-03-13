@@ -18,4 +18,6 @@
 /config/database.local.yml
 /config/application.yml
 
+/node_modules
+
 .DS_Store
