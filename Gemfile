@@ -27,9 +27,6 @@ gem 'jbuilder', '~> 1.2'
 # Authentication gems
 gem 'devise'
 
-# AngularJS Rails
-gem 'angularjs-rails'
-
 
 group :development, :test do
   gem 'rspec-rails'
