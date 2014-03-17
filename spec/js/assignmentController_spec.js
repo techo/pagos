@@ -4,7 +4,7 @@ describe("Assigments Controllers", function(){
   var pagosAgent;
   var geographies = {'geografia': 'pepe'};
 
-  beforeEach(module('pagosServices'));
+  beforeEach(module('pagosController'));
 
   beforeEach(module(function($provide){
     $provide.value('pagosAgent', pagosAgent);

@@ -29,7 +29,7 @@ Pagos::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  ENV["PILOTE_ROOT"] = "https://pilotes.ec:80"
+  ENV["PILOTE_ROOT"] = "https://pilotes.ec:8080"
   ENV["ADMIN_DEFAULT_PASSWORD"] = "0123456789"
   ENV["PILOTE_COUNTRY_CODE"] = "10"
   ENV["IS_INTEGRATION"] = 'false'

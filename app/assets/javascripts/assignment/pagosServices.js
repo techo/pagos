@@ -1,7 +1,10 @@
 var pagosServices = angular.module('pagosServices', []);
 
-pagosServices.controller('AssignmentController', ['$scope', 'pagosAgent', function($scope, pagosAgent){
-  pagosAgent.getGeographies().then(function(geographies){
-    $scope.geographies = geographies;
-  });
+pagosServices.factory('pagosAgent', ['$http', function($http){
+
+return {
+  getGeographies: function() {
+        return $http.get('https://pilotes.ec:8080/api/v1/asentamiento?pais=10')}
+  };
+
 }]);
