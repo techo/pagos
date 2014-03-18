@@ -22,24 +22,30 @@ describe("Assigments Controllers", function(){
   describe("AssigmentController", function(){
     var scope, controller;
 
-    beforeEach(inject(function($rootScope, $controller){
+    beforeEach(inject(function($rootScope, $filter, $controller){
       scope = $rootScope.$new();
-      controller = $controller('assignmentController', { '$scope': scope, 'pagosAgent': pagosAgent })
+      controller = $controller('assignmentController', { '$scope': scope, '$filter': $filter, 'pagosAgent': pagosAgent })
+      scope.$digest();
     }));
 
     it('should assign geographies to scope', function(){
-      scope.$digest();
       expect(scope.geographies).toBe(geographies.data);
     });
 
     it('should assign provinces from geographies', function(){
-      scope.$digest();
       expect(scope.provinces).toEqual(provinces)
     });
 
     it('should have a selected province', function(){
-      scope.$digest();
       expect(scope.selectedProvince).toBe(provinces[0]);
+    });
+
+    it('should filter geographies for selected province', function(){
+      scope.selectedProvince = provinces[0];
+      var response = scope.getFilteredVillages();
+      var expectedVillages = [geographies.data[0], geographies.data[1]];
+
+      expect(response).toEqual(expectedVillages);
     });
 
   });

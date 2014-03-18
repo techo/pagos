@@ -5,7 +5,7 @@
 <div class = "well span4" ng-app="appPagos" ng-controller="assignmentController">
   <h4>Geografías</h4>
   <select class="span4 required" ng-model="selectedProvince" ng-options="province for province in provinces"></select>
-  <select size=20 class="span4 required" ng-model="selectedVillage" ng-options="geography.asentamiento for geography in geographies | filter:{provincia: selectedProvince}">
+  <select size=20 class="span4 required" ng-model="selectedVillage" ng-options="geography.asentamiento for geography in getFilteredVillages()">
   </select>
 </div>
 
