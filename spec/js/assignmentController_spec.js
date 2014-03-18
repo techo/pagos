@@ -28,10 +28,6 @@ describe("Assigments Controllers", function(){
       scope.$digest();
     }));
 
-    it('should assign geographies to scope', function(){
-      expect(scope.geographies).toBe(geographies.data);
-    });
-
     it('should assign provinces from geographies', function(){
       expect(scope.provinces).toEqual(provinces)
     });
@@ -41,11 +37,15 @@ describe("Assigments Controllers", function(){
     });
 
     it('should filter geographies for selected province', function(){
-      scope.selectedProvince = provinces[0];
-      var response = scope.getFilteredVillages();
-      var expectedVillages = [geographies.data[0], geographies.data[1]];
+      var expectedGeographies = [geographies.data[0], geographies.data[1]];
 
-      expect(response).toEqual(expectedVillages);
+      expect(scope.geographies).toEqual(expectedGeographies);
+    });
+
+    it('should have a selected village by default', function(){
+      scope.selectedProvince = provinces[1];
+      scope.$digest();
+      expect(scope.selectedVillage).toBe(geographies.data[2]);
     });
 
   });
