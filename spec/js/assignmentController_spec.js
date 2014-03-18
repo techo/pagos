@@ -2,7 +2,8 @@
 
 describe("Assigments Controllers", function(){
   var pagosAgent;
-  var geographies = {"data":[{"idAsentamiento":"2387","asentamiento":"Quingeo","ciudad":"Cuenca","provincia":"Azuay"},{"idAsentamiento":"3198","asentamiento":"Collana","ciudad":"Ludo, Sigsig","provincia":"Azuay"}]};
+  var geographies = {"data":[{"idAsentamiento":"2387","asentamiento":"Quingeo","ciudad":"Cuenca","provincia":"Azuay"},{"idAsentamiento":"3198","asentamiento":"Collana","ciudad":"Ludo, Sigsig","provincia":"Azuay"}, {"idAsentamiento":"3198","asentamiento":"San Juan","ciudad":"Riobamba","provincia":"Chimborazo"}]};
+  var provinces = ['Azuay', 'Chimborazo']
 
   beforeEach(module('pagosController'));
 
@@ -29,6 +30,16 @@ describe("Assigments Controllers", function(){
     it('should assign geographies to scope', function(){
       scope.$digest();
       expect(scope.geographies).toBe(geographies.data);
+    });
+
+    it('should assign provinces from geographies', function(){
+      scope.$digest();
+      expect(scope.provinces).toEqual(provinces)
+    });
+
+    it('should have a selected province', function(){
+      scope.$digest();
+      expect(scope.selectedProvince).toBe(provinces[0]);
     });
 
   });
