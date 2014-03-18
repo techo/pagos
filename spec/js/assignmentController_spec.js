@@ -2,7 +2,7 @@
 
 describe("Assigments Controllers", function(){
   var pagosAgent;
-  var geographies = {'geografia': 'pepe'};
+  var geographies = {"data":[{"idAsentamiento":"2387","asentamiento":"Quingeo","ciudad":"Cuenca","provincia":"Azuay"},{"idAsentamiento":"3198","asentamiento":"Collana","ciudad":"Ludo, Sigsig","provincia":"Azuay"}]};
 
   beforeEach(module('pagosController'));
 
@@ -23,12 +23,12 @@ describe("Assigments Controllers", function(){
 
     beforeEach(inject(function($rootScope, $controller){
       scope = $rootScope.$new();
-      controller = $controller('AssignmentController', { '$scope': scope, 'pagosAgent': pagosAgent })
+      controller = $controller('assignmentController', { '$scope': scope, 'pagosAgent': pagosAgent })
     }));
 
     it('should assign geographies to scope', function(){
-      scope.$apply();
-      expect(scope.geographies).toBe(geographies);
+      scope.$digest();
+      expect(scope.geographies).toBe(geographies.data);
     });
 
   });

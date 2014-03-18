@@ -18,3 +18,4 @@
 //= require_tree ./global
 //= require twitter/bootstrap/bootstrap-transition
 //= require jquery.turbolinks
+//= require ./angularjs/angular.js
