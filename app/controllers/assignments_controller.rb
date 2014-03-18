@@ -1,10 +1,6 @@
 class AssignmentsController < ApplicationController
   before_action :verify_can_manage_users
 
-  def new
-
-  end
-
   def create
     if ( params["data"].nil? || params["data"]["volunteer_id"].nil? )
       success = false
