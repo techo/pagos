@@ -2,23 +2,25 @@
 <script src="/assets/assignment/app.js"></script>
 <script src="/assets/assignment/pagosController.js"></script>
 <script src="/assets/assignment/pagosServices.js"></script>
-<div class = "well span4" ng-app="appPagos" ng-controller="assignmentController">
-  <h4>Geografías</h4>
-  <select class="span4 required" ng-model="selectedProvince" ng-options="province for province in provinces"></select>
-  <select size=20 class="span4 required" ng-model="selectedVillage" ng-options="geography.asentamiento for geography in geographies">
-  </select>
-</div>
+<div ng-app="appPagos" ng-controller="assignmentController">
+  <div class = "well span4" >
+    <h4>Geografías</h4>
+    <select class="span4 required" ng-model="selectedProvince" ng-options="province for province in provinces"></select>
+    <select size=20 class="span4 required" ng-model="selectedVillage" ng-options="geography.asentamiento for geography in geographies">
+    </select>
+  </div>
 
-<div class = "well span4" style = "height: 437px">
-  <h4>Voluntarios</h4>
-  <div style="height:40px">
-    <div class="panel" style="border:2px solid #ccc; height: 385px; overflow-y: scroll; background-color:#ffffff">
-      <ul class="unstyled" data-bind="foreach: volunteers()" id="volunteers-list">
-        <li class="volunteer">
-        <input type="checkbox" class="volunteer-checkbox" data-bind="value: id, checked: assigned ,event: { change: $root.toggleAssignment }">
-        <span class="volunteer-name" data-bind="text: [first_name() + ' ' + last_name()]"></span>
-        </li>
-      </ul>
+  <div class = "well span4" style = "height: 437px">
+    <h4>Voluntarios</h4>
+    <div style="height:40px">
+      <div class="panel" style="border:2px solid #ccc; height: 385px; overflow-y: scroll; background-color:#ffffff">
+        <ul class="unstyled">
+          <li ng-repeat="volunteer in volunteers">
+          <input type="checkbox" ng-checked='volunteer.selected'>
+          <span class="volunteer-name">{{volunteer.first_name + ' ' + volunteer.last_name}}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

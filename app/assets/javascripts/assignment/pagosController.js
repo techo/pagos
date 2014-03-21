@@ -1,6 +1,6 @@
 var pagosController = angular.module('pagosController', []);
 
-pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosAgent', function($scope, $filter, pagosAgent){
+pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosAgent', 'volunteerAgent', function($scope, $filter, pagosAgent, volunteerAgent){
   pagosAgent.getGeographies().then(function(geographies){
 
     $scope.provinces = [];
@@ -19,4 +19,22 @@ pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosA
     });
   });
 
+  volunteerAgent.getVolunteers().then(function(volunteers) {
+    volunteers.data.forEach(function(volunteer){
+      setupSelectedVillageWatch();
+    });
+
+    $scope.volunteers = volunteers.data;
+  });
+
+  function setupSelectedVillageWatch(){
+    $scope.$watch('selectedVillage', function(newValue, oldValue){
+      volunteerAgent.getVolunteersAssignedToGeography(newValue.idAsentamiento)
+      .then(function(assigned_volunteers){
+        $scope.volunteers.forEach(function(volunteer){
+          volunteer.selected = (assigned_volunteers.data.indexOf(volunteer.id) != -1);
+        });
+      });
+    });
+  }
 }]);
