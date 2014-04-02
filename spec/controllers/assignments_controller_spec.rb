@@ -48,7 +48,7 @@ describe AssignmentsController do
       Assignment.stub(:where).with(:geography_id => geography.id).and_return([assignment])
       get :show, :format => :json, id: geography.village_id
 
-      response.body.should == [assignment].to_json
+      response.body.should == [assignment].to_json(only: [:id, :geography_id, :volunteer_id])
     end
 
     it "should return empty json if geography is not registered" do

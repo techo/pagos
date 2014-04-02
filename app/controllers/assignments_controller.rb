@@ -19,7 +19,7 @@ class AssignmentsController < ApplicationController
     village_id = params[:id]
     @geography = Geography.where(:village_id => village_id).first
     if ( @geography  )
-      render :json => Assignment.where(:geography_id => @geography.id).to_json
+      render :json => Assignment.where(:geography_id => @geography.id), except: [:created_at, :updated_at]
     else
       render :json => [].to_json
     end
