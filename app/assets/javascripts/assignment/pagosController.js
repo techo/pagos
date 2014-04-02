@@ -31,15 +31,47 @@ pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosA
     $scope.$watch('selectedVillage', function(newValue, oldValue){
       volunteerAgent.getVolunteersAssignedToGeography(newValue.idAsentamiento)
       .then(function(assigned_volunteers){
-        $scope.volunteers.forEach(function(volunteer){
-          volunteer.selected = (assigned_volunteers.data.indexOf(volunteer.id) != -1);
-        });
+        $scope.assignments = assigned_volunteers.data;
+        updateVolunteerSelection();
       });
     });
   }
 
-  $scope.saveAssignment = function(volunteerId){
-    idAsentamiento = $scope.selectedVillage.idAsentamiento;
-    volunteerAgent.saveVolunteerAssignment(volunteerId, idAsentamiento);
+  function updateVolunteerSelection(){
+    $scope.volunteers.forEach(function(volunteer){
+      setSelectedVolunteer(volunteer);
+    });
+  }
+
+  function setSelectedVolunteer(volunteer){
+    volunteer.selected = false;
+    $scope.assignments.forEach(function(assignment){
+      if(assignment.volunteer_id == volunteer.id)
+        volunteer.selected = true;
+    })
+  };
+
+  function getAssignmentIdForVolunteer(volunteerId){
+    var result = -1;
+    var index = 0;
+    var length = $scope.assignments.length;
+    while(index < length && result == -1){
+      if($scope.assignments[index].volunteer_id == volunteerId)
+        result = $scope.assignments[index].id;
+      index++;
+    }
+    return result;
+  }
+
+  $scope.saveAssignment = function(volunteer){
+    var idAsentamiento = $scope.selectedVillage.idAsentamiento;
+    if(volunteer.selected){
+      volunteerAgent.saveVolunteerAssignment(volunteer.id, idAsentamiento);
+      setupSelectedVillageWatch();
+    }
+    else{
+      var assignmentId = getAssignmentIdForVolunteer(volunteer.id);
+      volunteerAgent.removeVolunteerAssignment(assignmentId);
+    }
   };
 }]);

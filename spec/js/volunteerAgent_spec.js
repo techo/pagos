@@ -31,7 +31,7 @@ describe('pagosServices', function(){
     });
 
     describe('#getVolunteersAssignedToGeography', function(){
-      it('should return all assigned volunteers ids for selected geography', function(){
+      it('should return all assignments for selected geography', function(){
         service.getVolunteersAssignedToGeography().then(function(assigments){
           expect(assigments).toBe(assigned_response);
         });
@@ -39,7 +39,7 @@ describe('pagosServices', function(){
     });
 
     describe('#saveVolunteerAssignment', function(){
-      it('should save volunteer assigment to geography', function(){
+      it('should save volunteer assignment to geography', function(){
         var volunteerId = 1;
         var data = {data: {volunteer_id: volunteerId, village_id: geographyId}};
         http.expectPOST(PILOTES_ASSIGNMENTS, data).respond(201,'');
@@ -49,11 +49,10 @@ describe('pagosServices', function(){
     });
 
     describe('#removeVolunteerAssignment', function(){
-      it('should remove volunteer assigment to geography', function(){
-        var volunteerId = 1;
-        var data = {volunteer_id: volunteerId, village_id: geographyId};
-        http.expect('DELETE', PILOTES_ASSIGNMENTS, data).respond(201,'');
-        service.removeVolunteerAssignment(volunteerId, geographyId);
+      it('should remove volunteer assignment to geography', function(){
+        var assignmentId = 1;
+        http.expect('DELETE', PILOTES_ASSIGNMENTS + assignmentId).respond(201,'');
+        service.removeVolunteerAssignment(assignmentId);
         http.flush();
       });
     });

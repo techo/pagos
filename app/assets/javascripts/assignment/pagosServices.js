@@ -21,9 +21,8 @@ pagosServices.factory('volunteerAgent', ['$http', function($http){
       var data =  {data: {volunteer_id: volunteerId, village_id: geographyId}};
       return $http.post('/assignments/', data);
     },
-    removeVolunteerAssignment: function(volunteerId, geographyId){
-      var params =  {data: {volunteer_id: volunteerId, village_id: geographyId}};
-      return $http.delete('/assignments/', params);
+    removeVolunteerAssignment: function(assignmentId){
+      return $http.delete('/assignments/' + assignmentId);
     }
   }
 }]);

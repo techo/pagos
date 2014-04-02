@@ -16,7 +16,7 @@
       <div class="panel" style="border:2px solid #ccc; height: 385px; overflow-y: scroll; background-color:#ffffff">
         <ul class="unstyled">
           <li ng-repeat="volunteer in volunteers">
-          <input type="checkbox" ng-model="volunteerAssignment" ng-change="saveAssignment(volunteer.id)" ng-checked='volunteer.selected'>
+          <input type="checkbox" ng-model="volunteer.selected" ng-change="saveAssignment(volunteer)" ng-checked='volunteer.selected'>
           <span class="volunteer-name">{{volunteer.first_name + ' ' + volunteer.last_name}}</span>
           </li>
         </ul>
