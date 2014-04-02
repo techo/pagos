@@ -20,6 +20,10 @@ pagosServices.factory('volunteerAgent', ['$http', function($http){
     saveVolunteerAssignment: function(volunteerId, geographyId){
       var data =  {data: {volunteer_id: volunteerId, village_id: geographyId}};
       return $http.post('/assignments/', data);
+    },
+    removeVolunteerAssignment: function(volunteerId, geographyId){
+      var params =  {data: {volunteer_id: volunteerId, village_id: geographyId}};
+      return $http.delete('/assignments/', params);
     }
   }
 }]);

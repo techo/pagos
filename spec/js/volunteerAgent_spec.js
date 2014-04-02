@@ -47,6 +47,16 @@ describe('pagosServices', function(){
         http.flush();
       });
     });
+
+    describe('#removeVolunteerAssignment', function(){
+      it('should remove volunteer assigment to geography', function(){
+        var volunteerId = 1;
+        var data = {volunteer_id: volunteerId, village_id: geographyId};
+        http.expect('DELETE', PILOTES_ASSIGNMENTS, data).respond(201,'');
+        service.removeVolunteerAssignment(volunteerId, geographyId);
+        http.flush();
+      });
+    });
   });
 });
 
