@@ -123,21 +123,14 @@ describe AssignmentsController do
     before (:each) do
       @request.env["devise.mapping"] = Devise.mappings[:user]
       sign_in FactoryGirl.create(:administrator_user)
-      @join = double(ActiveRecord::Relation)
 
       @volunteer_user = FactoryGirl.create(:volunteer_user)
       @geography = FactoryGirl.create(:geography, village_id: 1234)
-      @join.stub(:first_or_create).and_return(@geography)
-      # Volunteer.should_receive(:find).with(@volunteer_user.id).and_return(@volunteer_user)
-      # Geography.stub(:where).with(:village_id => @geography.village_id).and_return(@join)
+      @assignment = FactoryGirl.create(:assignment, geography_id:@geography.id, volunteer_id: @volunteer_user.id)
     end
 
     it "should detach a volunteer from a geography" do
-      post :create,  :format => :json, :data => { "village_id" => @geography.village_id, "volunteer_id" => @volunteer_user.id }
-      @geography.reload
-      @geography.volunteers.should include(@volunteer_user)
-
-      delete :destroy, :format => :json, :id => @geography.village_id, :volunteer_id => @volunteer_user.id
+      delete :destroy, :format => :json, :id => @assignment.id
       @geography.reload
       @geography.volunteers.should_not include(@volunteer_user)
     end

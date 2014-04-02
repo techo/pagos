@@ -12,9 +12,7 @@ class AssignmentsController < ApplicationController
       @geography.volunteers << @volunteer.becomes(Volunteer)
       success = true
     end
-    respond_to do |format|
-      format.json { render json: {:success => success,  :errors => success ? nil : "error"}}
-    end
+    render json: {:success => success,  :errors => success ? nil : "error"}
   end
 
   def show
@@ -29,8 +27,7 @@ class AssignmentsController < ApplicationController
   end
 
   def destroy
-    geography = Geography.where(:village_id => params[:id]).first
-    Assignment.destroy_all(:geography_id => geography.id, :volunteer_id => params[:volunteer_id])
+    Assignment.destroy(params[:id])
     head :ok
   end
 
@@ -38,8 +35,4 @@ class AssignmentsController < ApplicationController
     redirect_to root_url unless current_user && current_user.can_manage_users?
   end
 
-  private
-  def assignments_params
-    params.require("data").permit("village_id", "volunteer_id")
-  end
 end
