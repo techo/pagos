@@ -37,4 +37,9 @@ pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosA
       });
     });
   }
+
+  $scope.saveAssignment = function(volunteerId){
+    idAsentamiento = $scope.selectedVillage.idAsentamiento;
+    volunteerAgent.saveVolunteerAssignment(volunteerId, idAsentamiento);
+  };
 }]);

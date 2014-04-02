@@ -54,5 +54,13 @@ describe('pagosServices', function(){
         expect(assigments).toBe(assigned_response);
       });
     });
+
+    it('should save volunteer assigment to geography', function(){
+      var volunteerId = 1;
+      var data = {data: {volunteer_id: volunteerId, village_id: geographyId}};
+      http.expectPOST(PILOTES_ASSIGNMENTS, data).respond(201,'');
+      service.saveVolunteerAssignment(volunteerId, geographyId);
+      http.flush();
+    });
   });
 });

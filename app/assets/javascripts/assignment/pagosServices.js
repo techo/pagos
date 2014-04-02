@@ -16,6 +16,10 @@ pagosServices.factory('volunteerAgent', ['$http', function($http){
     },
     getVolunteersAssignedToGeography: function(geographyId){
       return $http.get('/assignments/' + geographyId);
+    },
+    saveVolunteerAssignment: function(volunteerId, geographyId){
+      var data =  {data: {volunteer_id: volunteerId, village_id: geographyId}};
+      return $http.post('/assignments/', data);
     }
   }
 }]);

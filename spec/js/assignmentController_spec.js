@@ -20,17 +20,22 @@ describe("Assigments Controllers", function(){
       return deferred.promise;
     }};
 
-    volunteerAgent = 
-      { getVolunteers: function(){
-      var deferred = $q.defer();
-      deferred.resolve(volunteers);
-      return deferred.promise;
-    },
-     getVolunteersAssignedToGeography: function(value){
-      var deferred = $q.defer();
-      deferred.resolve(assigned);
-      return deferred.promise;
-    }};
+    volunteerAgent = { 
+      getVolunteers: function(){
+        var deferred = $q.defer();
+        deferred.resolve(volunteers);
+        return deferred.promise;
+      },
+      getVolunteersAssignedToGeography: function(value){
+        var deferred = $q.defer();
+        deferred.resolve(assigned);
+        return deferred.promise;
+      },
+      saveVolunteerAssignment: function(volunteerId, geographyId){
+        var deferred = $q.defer();
+        deferred.resolve({result: 'OK'});
+        return deferred.promise;
+      }};
   }));
 
   describe("AssigmentController", function(){
@@ -38,6 +43,7 @@ describe("Assigments Controllers", function(){
 
     beforeEach(inject(function($rootScope, $filter, $controller){
       scope = $rootScope.$new();
+      spyOn(volunteerAgent, 'saveVolunteerAssignment');
       controller = $controller('assignmentController', { '$scope': scope,'pagosAgent': pagosAgent, 'volunteerAgent': volunteerAgent })
       scope.$digest();
     }));
@@ -72,6 +78,14 @@ describe("Assigments Controllers", function(){
         scope.volunteers.forEach(function(volunteer){
           expect(volunteer.selected).toEqual(volunteer.id == volunteerId);
         });
+      });
+    });
+
+    describe("assigmentSave", function(){
+      it('should assign a volunteer to selected village', function(){
+        var volunteerId = 1;
+        scope.saveAssignment(volunteerId);
+        expect(volunteerAgent.saveVolunteerAssignment).toHaveBeenCalledWith(volunteerId, geographies.data[0].idAsentamiento);
       });
     });
   });
