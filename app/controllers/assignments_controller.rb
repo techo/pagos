@@ -19,8 +19,7 @@ class AssignmentsController < ApplicationController
     village_id = params[:id]
     @geography = Geography.where(:village_id => village_id).first
     if ( @geography  )
-      volunteerIds = @geography.volunteers.map{|volunteer| volunteer.id}
-      render :json => volunteerIds.to_json
+      render :json => Assignment.where(:geography_id => @geography.id).to_json
     else
       render :json => [].to_json
     end

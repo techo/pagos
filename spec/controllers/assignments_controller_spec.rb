@@ -28,6 +28,7 @@ describe AssignmentsController do
   describe "GET show" do
     let!(:geography) { FactoryGirl.build(:geography, village_id: 1234) }
     let!(:volunteer_user) { FactoryGirl.build(:volunteer_user, id: 1) }
+    let!(:assignment) { FactoryGirl.build(:assignment, geography: geography, volunteer: volunteer_user)}
 
     before (:each) do
         @request.env["devise.mapping"] = Devise.mappings[:user]
@@ -44,10 +45,10 @@ describe AssignmentsController do
     end
 
     it "should return all ids of volunteers for a geography" do
-      Geography.any_instance.should_receive(:volunteers).and_return([volunteer_user])
+      Assignment.stub(:where).with(:geography_id => geography.id).and_return([assignment])
       get :show, :format => :json, id: geography.village_id
 
-      response.body.should == [volunteer_user.id].to_json
+      response.body.should == [assignment].to_json
     end
 
     it "should return empty json if geography is not registered" do
