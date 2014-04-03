@@ -30,5 +30,9 @@ module Page
       id = volunteer.id
       all("input").select{|x| x[:value].to_i == id}.first.click
     end
+
+    def first_volunteer_is_selected?
+      first("input").checked? == true
+    end
   end
 end

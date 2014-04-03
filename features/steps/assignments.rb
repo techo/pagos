@@ -24,12 +24,12 @@ class Spinach::Features::Assignments < Spinach::FeatureSteps
   end
 
   step 'I select the checkbox of a volunteer' do
-    @page.assign_volunteer(@volunteer)
+    @page.assign_volunteer(@volunteer2)
   end
 
   step 'the volunteer is automatically assigned to that location' do
     sleep(1)
-    @volunteer.assignments.count.must_equal 1
+    @volunteer2.assignments.count.must_equal 1
   end
 
   step 'I am logged in as an administrator' do
@@ -40,6 +40,12 @@ class Spinach::Features::Assignments < Spinach::FeatureSteps
   end
 
   step 'I have few volunteers' do
-    @volunteer = FactoryGirl.create(:volunteer_user)
+    @volunteer1 = FactoryGirl.create(:volunteer_user)
+    @volunteer2 = FactoryGirl.create(:volunteer_user, first_name: "Zofia la coja", email: 'pepe@gmail.com')
+
+  end
+
+  step 'the list of volunteers is ordered in selected volunteers first' do
+    @page.first_volunteer_is_selected?.must_equal true
   end
 end

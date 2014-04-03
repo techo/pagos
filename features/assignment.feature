@@ -14,3 +14,4 @@ Feature: Assignments
     Then I should see all the associated with that location
     When I select the checkbox of a volunteer
     Then the volunteer is automatically assigned to that location
+    And the list of volunteers is ordered in selected volunteers first
