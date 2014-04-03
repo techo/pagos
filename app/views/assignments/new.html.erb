@@ -6,7 +6,7 @@
   <div class = "well span4" >
     <h4>Geografías</h4>
     <select class="span4 required" ng-model="selectedProvince" ng-options="province for province in provinces"></select>
-    <select size=20 class="span4 required" ng-model="selectedVillage" ng-options="geography.asentamiento for geography in geographies">
+    <select size=20 class="span4 required" ng-model="selectedVillage" ng-options="geography.hierarchy for geography in geographies">
     </select>
   </div>
 
@@ -16,7 +16,7 @@
       <div class="panel" style="border:2px solid #ccc; height: 385px; overflow-y: scroll; background-color:#ffffff">
         <ul class="unstyled">
           <li ng-repeat="volunteer in volunteers">
-          <input type="checkbox" ng-model="volunteer.selected" ng-change="saveAssignment(volunteer)" ng-checked='volunteer.selected'>
+          <input type="checkbox" value="{{ volunteer.id }}" ng-model="volunteer.selected" ng-change="saveAssignment(volunteer)" ng-checked='volunteer.selected'>
           <span class="volunteer-name">{{volunteer.first_name + ' ' + volunteer.last_name}}</span>
           </li>
         </ul>

@@ -6,6 +6,7 @@ pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosA
     $scope.provinces = [];
     $scope.geographies = [];
     geographies.data.forEach(function(item){
+      item.hierarchy = [item.ciudad, item.asentamiento].join(" - ");
       if ( $scope.provinces.indexOf(item.provincia) === -1 ){
         $scope.provinces.push(item.provincia)
       };
