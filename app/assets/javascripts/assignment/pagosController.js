@@ -29,11 +29,15 @@ pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosA
 
   function setupSelectedVillageWatch(){
     $scope.$watch('selectedVillage', function(newValue, oldValue){
-      volunteerAgent.getVolunteersAssignedToGeography(newValue.idAsentamiento)
-      .then(function(assigned_volunteers){
-        $scope.assignments = assigned_volunteers.data;
-        updateVolunteerSelection();
-      });
+      updateSelectedVillageVolunteers(newValue);
+    });
+  }
+
+  function updateSelectedVillageVolunteers(newValue){
+    volunteerAgent.getVolunteersAssignedToGeography(newValue.idAsentamiento)
+    .then(function(assigned_volunteers){
+      $scope.assignments = assigned_volunteers.data;
+      updateVolunteerSelection();
     });
   }
 
@@ -67,7 +71,7 @@ pagosController.controller('assignmentController', ['$scope', '$filter', 'pagosA
     var idAsentamiento = $scope.selectedVillage.idAsentamiento;
     if(volunteer.selected){
       volunteerAgent.saveVolunteerAssignment(volunteer.id, idAsentamiento);
-      setupSelectedVillageWatch();
+      updateSelectedVillageVolunteers();
     }
     else{
       var assignmentId = getAssignmentIdForVolunteer(volunteer.id);
